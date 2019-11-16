@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Created-By: IntelliJ IDEA
+Built-By: anonym_co
+Build-Jdk: 12.0.1
+Implementation-Title: springboot
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: com.healthykitchen
+Main-Class: ${start-class}
+
