@@ -14,3 +14,5 @@
 
 ![用例图](https://github.com/Lanxin-Liu/JavaEECourseDesign/blob/master/%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84.png)
 
+### 更新说明
+- 2019.11.16更新：测试数据库连接，访问localhost:8080/userlist可以打印现有的user的用户名与介绍

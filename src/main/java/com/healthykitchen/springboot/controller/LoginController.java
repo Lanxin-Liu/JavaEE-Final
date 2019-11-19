@@ -2,7 +2,7 @@ package com.healthykitchen.springboot.controller;
 
 /**
  * @className:
- * @description:
+ * @description: 登录&登出&注册
  * @author: anonym_co
  * @date: 13:17 2019/11/13
  * @version: v1.0
@@ -56,11 +56,43 @@ public class LoginController {
         }
     }
 
-    @PostMapping("api/register")
+//    @PostMapping("api/register")
+//    @ResponseBody
+//    public Result register(@RequestBody User user) {
+//        String username = user.getUsername();
+//        String password = user.getPassword();
+//        username = HtmlUtils.htmlEscape(username);
+//        user.setUsername(username);
+//
+//        boolean exist = userService.isExist(username);
+//
+//        if (exist) {
+//            String message = "用户名已被使用";
+//            return ResultFactory.buildFailResult(message);
+//        }
+//
+//        // 默认生成 16 位盐
+//        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
+//        int times = 2;
+//        String encodedPassword = new SimpleHash("md5", password, salt, times).toString();
+//
+//        user.setPassword(encodedPassword);
+//        userService.add(user);
+//
+//        return ResultFactory.buildSuccessResult(user);
+//    }
+
+    /**
+     * 注册类：后续GetMapping应该改成PostMapping，现在有bug
+     *
+     * @param username
+     * @param password
+     * @return
+     */
+    @GetMapping("api/register")
     @ResponseBody
-    public Result register(@RequestBody User user) {
-        String username = user.getUsername();
-        String password = user.getPassword();
+    public Result register(@RequestParam(value = "username",required = true) String username,@RequestParam(value = "password",required = true) String password) {
+        User user = new User();
         username = HtmlUtils.htmlEscape(username);
         user.setUsername(username);
 
@@ -71,17 +103,17 @@ public class LoginController {
             return ResultFactory.buildFailResult(message);
         }
 
-        // 默认生成 16 位盐
-        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
-        int times = 2;
-        String encodedPassword = new SimpleHash("md5", password, salt, times).toString();
-
-        user.setPassword(encodedPassword);
+//        // 默认生成 16 位盐
+//        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
+//        int times = 2;
+//        String encodedPassword = new SimpleHash("md5", password, salt, times).toString();
+//
+//        user.setPassword(encodedPassword);
+        user.setPassword(password);
         userService.add(user);
 
         return ResultFactory.buildSuccessResult(user);
     }
-
     @ResponseBody
     @GetMapping("api/logout")
     public Result logout() {

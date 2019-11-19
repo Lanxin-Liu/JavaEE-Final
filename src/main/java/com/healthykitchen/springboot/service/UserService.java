@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @className: UserService
- * @description:
+ * @description: 用户登录/用户注册/用户关注(未实现)/收藏菜谱
  * @author: anonym_co
  * @date: 14:05 2019/11/13
  * @version: v1.0
