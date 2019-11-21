@@ -13,6 +13,10 @@ public class Tag {
 
     private String tagName;
 
+    public Tag() {
+        this.tagName = "";
+    }
+
     public int getTagId() {
         return tagId;
     }
