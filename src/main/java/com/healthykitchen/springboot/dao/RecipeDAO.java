@@ -1,11 +1,11 @@
 package com.healthykitchen.springboot.dao;
 
 import com.healthykitchen.springboot.pojo.Recipe;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
 
 /**
  * @className:
@@ -15,6 +15,6 @@ import javax.persistence.criteria.CriteriaBuilder;
  * @version: v1.0
  */
 @Repository
-public interface RecipeDAO extends JpaRepository<Recipe, Integer> {
+public interface RecipeDAO {
 
 }

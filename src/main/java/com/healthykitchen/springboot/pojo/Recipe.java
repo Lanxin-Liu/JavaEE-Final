@@ -1,9 +1,5 @@
 package com.healthykitchen.springboot.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-
 /**
  * @className:
  * @description:
@@ -11,39 +7,29 @@ import javax.persistence.*;
  * @date: 15:40 2019/11/17
  * @version: v1.0
  */
-@Entity
-@Table(name = "Recipe")
-@JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
 
 public class Recipe {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "recipe_id")
     private int recipeId;
 
-    @Column(name = "recipe_name")
     private String name;
 
-    @Column(name = "recipe_time")
     private String time;
 
-    @Column(name = "tag")
     private int tag;
 
-    @Column(name = "image")
     private byte[] image;
 
-    @Column(name = "like_num")
     private int like_num;
 
-    @Column(name = "collect_num")
     private int collect_num;
 
-    @Column(name = "size")
     private int size;
 
-    @Column(name = "recipe_user_id")
     private int userId;
+
+    public Recipe() {
+
+    }
 
     public int getRecipeId() {
         return recipeId;

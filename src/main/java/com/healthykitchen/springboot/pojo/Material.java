@@ -1,8 +1,5 @@
 package com.healthykitchen.springboot.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
 
 /**
  * @className:
@@ -11,19 +8,11 @@ import javax.persistence.*;
  * @date: 20:23 2019/11/19
  * @version: v1.0
  */
-@Entity
-@Table(name = "Material")
-@JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
 public class Material {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "material_id")
     private int mId;
 
-    @Column(name = "calorie")
     private int calorie;
 
-    @Column(name = "material_name")
     private String mName;
 
     public int getmId() {

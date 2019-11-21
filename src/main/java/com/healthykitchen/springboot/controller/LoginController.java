@@ -83,7 +83,7 @@ public class LoginController {
 //    }
 
     /**
-     * 注册类：后续GetMapping应该改成PostMapping，现在有bug
+     * 注册：后续GetMapping应该改成PostMapping，现在有bug
      *
      * @param username
      * @param password
@@ -92,9 +92,8 @@ public class LoginController {
     @GetMapping("api/register")
     @ResponseBody
     public Result register(@RequestParam(value = "username",required = true) String username,@RequestParam(value = "password",required = true) String password) {
-        User user = new User();
+        User user = new User(username, password);
         username = HtmlUtils.htmlEscape(username);
-        user.setUsername(username);
 
         boolean exist = userService.isExist(username);
 
@@ -109,7 +108,6 @@ public class LoginController {
 //        String encodedPassword = new SimpleHash("md5", password, salt, times).toString();
 //
 //        user.setPassword(encodedPassword);
-        user.setPassword(password);
         userService.add(user);
 
         return ResultFactory.buildSuccessResult(user);

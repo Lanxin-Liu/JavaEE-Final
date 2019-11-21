@@ -1,8 +1,13 @@
 package com.healthykitchen.springboot.dao;
 
 import com.healthykitchen.springboot.pojo.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -13,10 +18,15 @@ import org.springframework.stereotype.Repository;
  * @version: v1.0
  */
 @Repository
-public interface UserDAO extends JpaRepository<User,Integer>{
+public interface UserDAO {
 
-    User findByUsernameAndPassword(String username,String password);
+    @Select("select user_name,password from User_info")
+    List<User> getUserlist();
 
+    @Select("select * from User_info where user_name = #{username}")
     User findByUsername(String username);
+
+    @Insert("insert into User_info (user_name, password)values(#{username},#{password})")
+    void addUser(User user);
 
 }

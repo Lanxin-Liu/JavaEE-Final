@@ -1,9 +1,5 @@
 package com.healthykitchen.springboot.pojo;
 
-import org.hibernate.engine.jdbc.BinaryStream;
-
-import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 /**
@@ -14,37 +10,47 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @version: v1.0
  */
 
-@Entity
-@Table(name = "user_info")
-@JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
     private int id;
 
-    @Column(name = "user_name")
     private String username;
 
-    @Column(name = "password")
     private String password;
 
-    @Column(name = "image")
     private byte[] image;
 
-    @Column(name = "intro")
     private String intro;
 
-    @Column(name = "gender")
     private String gender;
 
-    @Column(name = "followed_num")
     private int followed_num;
 
-    @Column(name = "following_num")
     private int following_num;
+
+    public User(){}
+
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.gender = "";
+        this.intro = "";
+        // 默认图像路径
+//        this.image = default;
+    }
+
+//    public User(int id, String username, String password, byte[] image, String intro, String gender, int followed_num, int following_num)
+//    {
+//        this.id = id;
+//        this.username = username;
+//        this.password = password;
+//        this.image = image;
+//        this.intro = intro;
+//        this.gender = gender;
+//        this.followed_num = followed_num;
+//        this.following_num = following_num;
+//    }
 
     public int getId() {
         return id;

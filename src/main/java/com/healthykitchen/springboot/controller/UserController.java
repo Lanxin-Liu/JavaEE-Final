@@ -25,12 +25,13 @@ public class UserController {
 
     @GetMapping("/userlist")
     @ResponseBody
-    public Map<String,String> getUserList() {
-        List<User> userlist = userdao.findAll();
-        Map<String ,String > map = new HashMap<String,String>();
-        for (User u:userlist) {
-            map.put(u.getUsername(),u.getIntro());
+    public List<String> getUserList() {
+        List<User> userlist = userdao.getUserlist();
+        List<String> username =new ArrayList<String>();
+
+        for(User u:userlist){
+            username.add(u.getUsername());
         }
-        return map;
+        return username;
     }
 }
