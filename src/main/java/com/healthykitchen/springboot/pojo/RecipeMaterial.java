@@ -14,9 +14,9 @@ import java.io.Serializable;
 public class RecipeMaterial implements Serializable{
 
 
-    private int rId;
+    private int recipeId;
 
-    private int mId;
+    private int materialId;
 
     public int getrId() {
         return rId;
