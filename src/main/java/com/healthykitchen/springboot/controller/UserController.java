@@ -40,8 +40,8 @@ public class UserController {
 
     @GetMapping("/userInfoByName")
     @ResponseBody
-    public User getUserInfoByName(String name){
-        User user= userService.getByUsername(name);
-        return  user;
+    public List<User> getUserInfoByName(String name){
+        List<User> users= userService.getByUsername(name);
+        return  users;
     }
 }

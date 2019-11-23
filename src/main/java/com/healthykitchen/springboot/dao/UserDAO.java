@@ -24,7 +24,7 @@ public interface UserDAO {
     List<User> getUserlist();
 
     @Select("select * from User_info where user_name = #{userName}")
-    User findByUsername(String userName);
+    List<User> findByUsername(String userName);
 
     @Insert("insert into User_info (user_name, password)values(#{username},#{password})")
     void addUser(User user);
