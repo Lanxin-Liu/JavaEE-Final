@@ -17,6 +17,8 @@ public class Recipe {
 
     private int tag;
 
+    private String desc;
+
     private byte[] image;
 
     private int like_num;
