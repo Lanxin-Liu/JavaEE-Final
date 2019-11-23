@@ -23,8 +23,8 @@ public interface UserDAO {
     @Select("select user_name,password from User_info")
     List<User> getUserlist();
 
-    @Select("select * from User_info where user_name = #{username}")
-    User findByUsername(String username);
+    @Select("select * from User_info where user_name = #{userName}")
+    User findByUsername(String userName);
 
     @Insert("insert into User_info (user_name, password)values(#{username},#{password})")
     void addUser(User user);

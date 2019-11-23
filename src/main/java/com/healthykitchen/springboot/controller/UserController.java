@@ -2,6 +2,7 @@ package com.healthykitchen.springboot.controller;
 
 import com.healthykitchen.springboot.dao.UserDAO;
 import com.healthykitchen.springboot.pojo.User;
+import com.healthykitchen.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,8 @@ public class UserController {
 
     @Autowired
     private UserDAO userdao;
+    @Autowired
+    private UserService userService;
 
 
     @GetMapping("/userlist")
@@ -33,5 +36,12 @@ public class UserController {
             username.add(u.getUsername());
         }
         return username;
+    }
+
+    @GetMapping("/userInfoByName")
+    @ResponseBody
+    public User getUserInfoByName(String name){
+        User user= userService.getByUsername(name);
+        return  user;
     }
 }

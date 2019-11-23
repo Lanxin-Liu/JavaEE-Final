@@ -12,9 +12,9 @@ package com.healthykitchen.springboot.pojo;
 
 public class User {
 
-    private int id;
+    private int userId;
 
-    private String username;
+    private String userName;
 
     private String password;
 
@@ -24,15 +24,15 @@ public class User {
 
     private String gender;
 
-    private int followed_num;
+    private int followedNum;
 
-    private int following_num;
+    private int followingNum;
 
     public User(){}
 
 
     public User(String username, String password) {
-        this.username = username;
+        this.userName = username;
         this.password = password;
         this.gender = "";
         this.intro = "";
@@ -53,19 +53,19 @@ public class User {
 //    }
 
     public int getId() {
-        return id;
+        return userId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.userId = id;
     }
 
     public void setUsername(String name) {
-        this.username = name;
+        this.userName = name;
     }
 
     public String getUsername() {
-        return username;
+        return userName;
     }
 
     public String getPassword() {
@@ -101,18 +101,18 @@ public class User {
     }
 
     public int getFollowed_num() {
-        return followed_num;
+        return followedNum;
     }
 
     public void setFollowed_num(int followed_num) {
-        this.followed_num = followed_num;
+        this.followedNum = followed_num;
     }
 
     public int getFollowing_num() {
-        return following_num;
+        return followingNum;
     }
 
     public void setFollowing_num(int following_num) {
-        this.following_num = following_num;
+        this.followingNum = following_num;
     }
 }
