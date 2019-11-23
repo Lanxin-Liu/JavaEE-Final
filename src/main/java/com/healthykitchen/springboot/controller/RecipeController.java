@@ -1,5 +1,6 @@
 package com.healthykitchen.springboot.controller;
 
+import com.healthykitchen.springboot.dao.RecipeDAO;
 import com.healthykitchen.springboot.dao.UserDAO;
 import com.healthykitchen.springboot.pojo.HostHolder;
 import com.healthykitchen.springboot.pojo.Recipe;
@@ -13,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * @className:
@@ -29,6 +32,18 @@ public class RecipeController {
     HostHolder hostHolder;
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private RecipeDAO recipeDAO;
+
+    //获取所有菜谱 按时间排序
+    @GetMapping("api/recipelist")
+    @ResponseBody
+    public List<Recipe> getAllRecipes(){
+        List<Recipe> recipes=recipeDAO.getAllRecipes();
+        return recipes;
+    }
+
+
 
     //添加菜谱
     @GetMapping("api/release")
@@ -51,6 +66,7 @@ public class RecipeController {
         }
 
     }
+
     //添加步骤（url和返回的错误信息未确定）
     @GetMapping("api/release")
     public void addStepToRecipe(Recipe recipe, @RequestParam("desc") String desc, @RequestParam("image") byte[] image)
@@ -61,4 +77,8 @@ public class RecipeController {
         rs.setRecipeId(recipe.getRecipeId());
         recipeService.addStep(recipe, rs);
     }
+
+     
+
+
 }
