@@ -11,23 +11,23 @@ package com.healthykitchen.springboot.pojo;
 public class Recipe {
     private int recipeId;
 
-    private String name;
+    private String recipeName;
 
-    private String time;
+    private String recipeTime;
 
-    private int tag;
+    private int recipeTag;
 
-    private String desc;
+    private String recipeDesc;
 
-    private byte[] image;
+    private byte[] recipeImage;
 
-    private int like_num;
+    private int likeNum;
 
-    private int collect_num;
+    private int collectNum;
 
     private int size;
 
-    private int userId;
+    private int recipeUserId;
 
     public Recipe() {
 
@@ -41,75 +41,68 @@ public class Recipe {
         this.recipeId = recipeId;
     }
 
-    public byte[] getImage() {
-        return image;
+    public String getRecipeName() {
+        return recipeName;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setRecipeName(String recipeName) {
+        this.recipeName = recipeName;
     }
 
-    public int getLike_num() {
-        return like_num;
+    public String getRecipeTime() {
+        return recipeTime;
     }
 
-    public void setLike_num(int like_num) {
-        this.like_num = like_num;
+    public void setRecipeTime(String recipeTime) {
+        this.recipeTime = recipeTime;
     }
 
-    public int getCollect_num() {
-        return collect_num;
+    public int getRecipeTag() {
+        return recipeTag;
     }
 
-    public void setCollect_num(int collect_num) {
-        this.collect_num = collect_num;
+    public void setRecipeTag(int recipeTag) {
+        this.recipeTag = recipeTag;
     }
 
-    public int getSize() {
-        return size;
+    public String getRecipeDesc() {
+        return recipeDesc;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public void setRecipeDesc(String recipeDesc) {
+        this.recipeDesc = recipeDesc;
     }
 
-    public int getUserId() {
-        return userId;
+    public byte[] getRecipeImage() {
+        return recipeImage;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setRecipeImage(byte[] recipeImage) {
+        this.recipeImage = recipeImage;
     }
 
-    public String getName() {
-        return name;
+    public int getLikeNum() {
+        return likeNum;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLikeNum(int likeNum) {
+        this.likeNum = likeNum;
     }
 
-    public String getTime() {
-        return time;
+    public int getCollectNum() {
+        return collectNum;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setCollectNum(int collectNum) {
+        this.collectNum = collectNum;
     }
 
-    public int getTag() {
-        return tag;
+    public int getRecipeUserId() {
+        return recipeUserId;
     }
 
-    public void setTag(int tag) {
-        this.tag = tag;
+    public void setRecipeUserId(int recipeUserId) {
+        this.recipeUserId = recipeUserId;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
 }

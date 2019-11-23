@@ -24,4 +24,7 @@ public interface RecipeDAO {
 
     @Select("SELECT * FROM healthykitchen.Recipe order by recipe_time desc")
     List<Recipe> getAllRecipes();
+
+    @Select("SELECT * FROM healthykitchen.Recipe where recipe_name = {#name};")
+    List<Recipe> getRecipeByName(String name);
 }

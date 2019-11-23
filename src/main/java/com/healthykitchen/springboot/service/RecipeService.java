@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 
+import java.util.List;
+
 /**
  * @className:
  * @description: 菜谱排行/菜谱收藏/菜谱查找/菜谱发布
@@ -32,10 +34,23 @@ public class RecipeService {
     public void add(Recipe recipe)
     {
         recipeDAO.addRecipe(recipe);
-        recipe.setUserId(hostHolder.getUser().getId());
+        recipe.setRecipeUserId(hostHolder.getUser().getId());
     }
 
     public void addStep(Recipe recipe, RecipeStep rs){
         rsDAO.addRecipeStep(rs);
+    }
+
+    public RecipeDAO getRecipeDAO() {
+        return recipeDAO;
+    }
+
+    public void setRecipeDAO(RecipeDAO recipeDAO) {
+        this.recipeDAO = recipeDAO;
+    }
+
+    public List<Recipe> getRecipeByName(String name){
+        List<Recipe> recipes=this.recipeDAO.getRecipeByName(name);
+        return recipes;
     }
 }

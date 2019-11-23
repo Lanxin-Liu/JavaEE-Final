@@ -43,8 +43,16 @@ public class RecipeController {
         return recipes;
     }
 
+    //根据菜谱名字获取菜谱
+    @GetMapping("api/searchrecipe")
+    @ResponseBody
+    public  List<Recipe> getRecipeByName(String name){
+        List<Recipe> recipes=this.recipeService.getRecipeByName(name);
+        return recipes;
+    }
 
 
+    /*
     //添加菜谱
     @GetMapping("api/release")
     @ResponseBody
@@ -78,7 +86,8 @@ public class RecipeController {
         recipeService.addStep(recipe, rs);
     }
 
-     
+     */
+
 
 
 }
