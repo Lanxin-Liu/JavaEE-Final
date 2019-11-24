@@ -53,4 +53,24 @@ public class RecipeService {
         List<Recipe> recipes=this.recipeDAO.getRecipeByName(name);
         return recipes;
     }
+
+    public List<Recipe> getRecipeByLike(){
+        List<Recipe> recipes=this.recipeDAO.getRecipeByLike();
+        return recipes;
+    }
+
+    public List<Recipe> getRecipeByUserName(String username){
+        List<Recipe> recipes=this.recipeDAO.getRecipeByUserName(username);
+        return recipes;
+    }
+
+    public List<Recipe> getRecipeByUserId(int userId){
+        List<Recipe> recipes=this.recipeDAO.getRecipeByUserId(userId);
+        return recipes;
+    }
+
+    public List<Recipe> getRecipeByTag(String tagName){
+        List<Recipe> recipes=this.recipeDAO.getRecipeByTag(tagName);
+        return recipes;
+    }
 }
