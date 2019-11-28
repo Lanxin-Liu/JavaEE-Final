@@ -54,6 +54,9 @@ public class UserService {
         return user;
     }
 
+    public void updateUserIntro(int userId,String intro){
+        userDAO.updateUserIntro(userId,intro);
+    }
 
 //    public List<User> getuserFollowing(int userId){
 //        int[] followingList = userDAO.getuserFollowing(userId);

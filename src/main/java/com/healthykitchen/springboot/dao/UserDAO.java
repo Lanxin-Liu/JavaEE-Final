@@ -4,6 +4,7 @@ import com.healthykitchen.springboot.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Array;
@@ -35,6 +36,9 @@ public interface UserDAO {
 
     @Select("select user_id from User_info where user_name=#{username}")
     int getuserIdByUsername(String username);
+
+    @Update("UPDATE User_info  SET intro = #{intro}   WHERE user_id=#{userId};")
+    void updateUserIntro(int userId,String intro);
 
     //查看A的关注列表
 //    @Select("SELECT following_user_id FROM Follow where followed_user_id=1;")

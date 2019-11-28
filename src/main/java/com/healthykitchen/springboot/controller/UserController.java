@@ -4,6 +4,8 @@ import com.healthykitchen.springboot.dao.RecipeDAO;
 import com.healthykitchen.springboot.dao.UserDAO;
 import com.healthykitchen.springboot.pojo.Recipe;
 import com.healthykitchen.springboot.pojo.User;
+import com.healthykitchen.springboot.result.Result;
+import com.healthykitchen.springboot.result.ResultFactory;
 import com.healthykitchen.springboot.service.FollowService;
 import com.healthykitchen.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,20 @@ public class UserController {
     public List<User> getUserInfoByName(String name){
         List<User> users= userService.getByUsername(name);
         return  users;
+    }
+
+    @GetMapping("/updateUserIntro")
+    @ResponseBody
+    public Result updateUserIntro(int userId, String intro){
+        boolean exist=userService.existById(userId);
+        if (exist) {
+            User user=new User();
+            user=userService.getuserInfoById(userId);
+            userService.updateUserIntro(userId, intro);
+            return ResultFactory.buildSuccessResult(user);
+        }
+        else
+            return ResultFactory.buildFailResult("更新个人简介失败！");
     }
 
 //    @GetMapping("/myrecipes")
