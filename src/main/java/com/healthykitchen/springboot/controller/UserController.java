@@ -1,13 +1,17 @@
 package com.healthykitchen.springboot.controller;
 
+import com.healthykitchen.springboot.dao.RecipeDAO;
 import com.healthykitchen.springboot.dao.UserDAO;
+import com.healthykitchen.springboot.pojo.Recipe;
 import com.healthykitchen.springboot.pojo.User;
+import com.healthykitchen.springboot.service.FollowService;
 import com.healthykitchen.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 /**
@@ -24,6 +28,8 @@ public class UserController {
     private UserDAO userdao;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RecipeDAO recipeDAO;
 
 
     @GetMapping("/userlist")
@@ -44,4 +50,26 @@ public class UserController {
         List<User> users= userService.getByUsername(name);
         return  users;
     }
+
+//    @GetMapping("/myrecipes")
+//    @ResponseBody
+//    public List<Recipe> getUserRecipes(HttpSession request){
+//        List<Recipe> recipes=recipeDAO.getRecipeByUserId(usrId);
+//    }
+
+//    @GetMapping("/followinglist")
+//    @ResponseBody
+//    public List<User> getFollowingList(int userId){
+//        int[] users=userService.getuserFollowing(userId);
+//        List<User> userList=new ArrayList<>();
+//        for(int i=0;i<users.length;i++){
+//            User u = new User();
+//            u=userService.getuserInfoById(users[i]);
+//            userList.add(u);
+//        }
+//        return userList;
+//    }
+
+
+
 }

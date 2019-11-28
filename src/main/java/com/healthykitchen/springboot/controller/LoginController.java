@@ -20,10 +20,14 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 @Controller
@@ -34,10 +38,11 @@ public class LoginController {
 
     @PostMapping(value = "/api/login")
     @ResponseBody
-    public Result login(@RequestBody User requestUser) {
+    public Result login(@RequestBody User requestUser, HttpServletRequest request) {
         String username = requestUser.getUsername();
         // 将html格式的username转为非html格式
         username = HtmlUtils.htmlEscape(username);
+        int userId=userService.getuserIdByUsername(username);
 
         Subject subject = SecurityUtils.getSubject();
         subject.getSession().setTimeout(10000);
@@ -46,6 +51,9 @@ public class LoginController {
         try {
             subject.login(token);
             // 生成随机 token 并存储在 session 中
+
+
+            //在session中存储userId
             return ResultFactory.buildSuccessResult(token);
         } catch (UnknownAccountException uae) {
             String message = "没有此用户";

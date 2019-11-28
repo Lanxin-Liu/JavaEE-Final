@@ -25,6 +25,11 @@ public class UserService {
         return null!=users;
     }
 
+    public boolean existById(int id){
+        User user=new User();
+        user=userDAO.getuserInfoById(id);
+        return null!=user;
+    }
     public List<User> getByUsername(String username) {
         return userDAO.findByUsername(username);
     }
@@ -32,4 +37,34 @@ public class UserService {
     public void add(User user) {
         userDAO.addUser(user);
     }
+
+
+    /**
+     * 在session中获取到登录的username，然后通过username得到userID,用于获取用户的所有信息。
+     * @param username
+     * @return
+     */
+    public int getuserIdByUsername(String username){
+        int userId = userDAO.getuserIdByUsername(username);
+        return userId;
+    }
+
+    public User getuserInfoById(int userId){
+        User user=userDAO.getuserInfoById(userId);
+        return user;
+    }
+
+
+//    public List<User> getuserFollowing(int userId){
+//        int[] followingList = userDAO.getuserFollowing(userId);
+//        List<User> users = null;
+//        int n = followingList.length;
+//        for (int i=0;i<n;i++){
+//            User user= new User();
+//            user=getuserInfoById(followingList[i]);
+//            users.add(user);
+//        }
+//        return users;
+//    }
+
 }
