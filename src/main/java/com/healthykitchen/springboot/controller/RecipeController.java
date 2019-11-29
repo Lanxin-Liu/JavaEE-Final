@@ -51,6 +51,35 @@ public class RecipeController {
         return recipes;
     }
 
+    //根据菜谱热爱程度获取菜谱
+    @GetMapping("api/recipeRank")
+    @ResponseBody
+    public  List<Recipe> getRecipeByLike(){
+        List<Recipe> recipes=this.recipeService.getRecipeByLike();
+        return  recipes;
+    }
+
+    @GetMapping("api/searchrecipebyuser")
+    @ResponseBody
+    public List<Recipe> getRecipeByUserName(String username){
+        List<Recipe> recipes=this.recipeService.getRecipeByUserName(username);
+        return recipes;
+    }
+
+    @GetMapping("api/userrecipelist")
+    @ResponseBody
+    public List<Recipe> getRecipeByUserId(int userId){
+        List<Recipe> recipes=this.recipeService.getRecipeByUserId(userId);
+        return recipes;
+    }
+
+    @GetMapping("api/searchrecipebytag")
+    @ResponseBody
+    public List<Recipe> getRecipeByTag(String tagName){
+        List<Recipe> recipes=this.recipeService.getRecipeByTag(tagName);
+        return recipes;
+    }
+
 
     /*
     //添加菜谱

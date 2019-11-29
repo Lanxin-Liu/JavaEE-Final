@@ -14,23 +14,23 @@ import java.io.Serializable;
 public class RecipeMaterial implements Serializable{
 
 
-    private int rId;
+    private int recipeId;
 
-    private int mId;
+    private int materialId;
 
     public int getrId() {
-        return rId;
+        return recipeId;
     }
 
     public void setrId(int rId) {
-        this.rId = rId;
+        this.recipeId = rId;
     }
 
     public int getmId() {
-        return mId;
+        return materialId;
     }
 
     public void setmId(int mId) {
-        this.mId = mId;
+        this.materialId = mId;
     }
 }
