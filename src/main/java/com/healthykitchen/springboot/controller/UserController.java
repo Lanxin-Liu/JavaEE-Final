@@ -53,19 +53,82 @@ public class UserController {
         return  users;
     }
 
-    @GetMapping("/updateUserIntro")
+    @GetMapping("/updateUserPassword")
     @ResponseBody
-    public Result updateUserIntro(int userId, String intro){
+    public Result updateUserPassword(String password,int userId){
         boolean exist=userService.existById(userId);
         if (exist) {
             User user=new User();
             user=userService.getuserInfoById(userId);
-            userService.updateUserIntro(userId, intro);
+            user.setPassword(password);
+            userService.updateUserInfo(user);
+            return ResultFactory.buildSuccessResult(user);
+        }
+        else
+            return ResultFactory.buildFailResult("更改个人密码失败！");
+    }
+
+    @GetMapping("/updateUserIntro")
+    @ResponseBody
+    public Result updateUserIntro(String intro,int userId){
+        boolean exist=userService.existById(userId);
+        if (exist) {
+            User user=new User();
+            user=userService.getuserInfoById(userId);
+            user.setIntro(intro);
+            userService.updateUserInfo(user);
             return ResultFactory.buildSuccessResult(user);
         }
         else
             return ResultFactory.buildFailResult("更新个人简介失败！");
     }
+
+    @GetMapping("/updateUserName")
+    @ResponseBody
+    public Result updateUserName(String name,int userId){
+        boolean exist=userService.existById(userId);
+        if (exist) {
+            User user=new User();
+            user=userService.getuserInfoById(userId);
+            user.setUsername(name);
+            userService.updateUserInfo(user);
+            return ResultFactory.buildSuccessResult(user);
+        }
+        else
+            return ResultFactory.buildFailResult("更改个人名字失败！");
+    }
+
+    @GetMapping("/updateUserGender")
+    @ResponseBody
+    public Result updateUserGender(String gender,int userId){
+        boolean exist=userService.existById(userId);
+        if (exist) {
+            User user=new User();
+            user=userService.getuserInfoById(userId);
+            user.setGender(gender);
+            userService.updateUserInfo(user);
+            return ResultFactory.buildSuccessResult(user);
+        }
+        else
+            return ResultFactory.buildFailResult("修改用户性别失败！");
+    }
+
+    @GetMapping("/updateUserImage")
+    @ResponseBody
+    public Result updateUserGender(byte[] image,int userId){
+        boolean exist=userService.existById(userId);
+        if (exist) {
+            User user=new User();
+            user=userService.getuserInfoById(userId);
+            user.setImage(image);
+            userService.updateUserInfo(user);
+            return ResultFactory.buildSuccessResult(user);
+        }
+        else
+            return ResultFactory.buildFailResult("修改用户头像失败！");
+    }
+
+
 
 //    @GetMapping("/myrecipes")
 //    @ResponseBody

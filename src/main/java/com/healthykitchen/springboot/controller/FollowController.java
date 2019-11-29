@@ -65,7 +65,7 @@ public class FollowController {
             follow.setFollowTime(followTime);
             followService.addFollow(follow);
             followService.updateFollowing(followedUserId);
-            followService.getuserFollowed(followingUserId);
+            followService.updateFollowed(followingUserId);
             return ResultFactory.buildSuccessResult(follow);
         }
         else{
