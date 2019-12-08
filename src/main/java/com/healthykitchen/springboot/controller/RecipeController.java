@@ -17,10 +17,7 @@ import com.healthykitchen.springboot.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
@@ -141,13 +138,8 @@ public class RecipeController {
         }
     }
 
-    /**
-     * 添加菜谱
-     * @param recipe
-     * @param httpSession
-     * @return
-     */
-    @PostMapping("api/release")
+
+    @GetMapping("api/release")
     @ResponseBody
     public Result releaseRecipe(@RequestParam("Recipe") Recipe recipe,HttpSession httpSession) {
         try {
@@ -163,13 +155,8 @@ public class RecipeController {
         }
     }
 
-    /**
-     * 添加步骤
-     * @param recipe
-     */
-    @PostMapping("api/release")
-    public void addStepToRecipe(Recipe recipe)
-    {
+    @GetMapping("api/addStep")
+    public void addStepToRecipe(@RequestParam Recipe recipe) {
         RecipeStep rs = new RecipeStep();
         rs.setRecipeId(recipe.getRecipeId());
         recipeService.addStep(rs);
