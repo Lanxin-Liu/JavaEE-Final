@@ -21,8 +21,8 @@ public class UserService {
     UserDAO userDAO;
 
     public boolean isExist(String username) {
-        List<User> users = getByUsername(username);
-        return null!=users;
+        User user = getByUsername(username);
+        return null!=user;
     }
 
     public boolean existById(int id){
@@ -30,7 +30,7 @@ public class UserService {
         user=userDAO.getuserInfoById(id);
         return null!=user;
     }
-    public List<User> getByUsername(String username) {
+    public User getByUsername(String username) {
         return userDAO.findByUsername(username);
     }
 
