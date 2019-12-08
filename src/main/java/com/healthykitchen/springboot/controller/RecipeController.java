@@ -52,6 +52,12 @@ public class RecipeController {
         return recipes;
     }
 
+    @GetMapping("api/getRecipeByName")
+    @ResponseBody
+    public List<Recipe> getRecipeByName(@RequestParam("recipeName") String name){
+        List<Recipe> recipes=recipeService.getRecipeByName(name);
+        return recipes;
+    }
 
     //根据菜谱热爱程度获取菜谱
     @GetMapping("api/recipeRank")

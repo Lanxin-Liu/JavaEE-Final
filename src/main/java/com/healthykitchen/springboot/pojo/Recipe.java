@@ -1,5 +1,7 @@
 package com.healthykitchen.springboot.pojo;
 
+import java.util.List;
+
 /**
  * @className:
  * @description:
@@ -28,6 +30,44 @@ public class Recipe {
     private int size;
 
     private int recipeUserId;
+
+    private int calorie;
+
+    private List<String> materials;
+
+    public int getCalorie() {
+        return calorie;
+    }
+
+    public void setCalorie(int calorie) {
+        this.calorie = calorie;
+    }
+
+    public List<String> getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(List<String> materials) {
+        this.materials = materials;
+    }
+//    private RecipeMaterial recipeMaterial;
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+//    public RecipeMaterial getRecipeMaterial() {
+//        return recipeMaterial;
+//    }
+//
+//    public void setRecipeMaterial(RecipeMaterial recipeMaterial) {
+//        this.recipeMaterial = recipeMaterial;
+//    }
+
 
     public Recipe() {
 

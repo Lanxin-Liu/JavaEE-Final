@@ -205,6 +205,4 @@ public class UserController {
 //            return ResultFactory.buildFailResult("修改用户头像失败！");
 //    }
 
-    
-
 }

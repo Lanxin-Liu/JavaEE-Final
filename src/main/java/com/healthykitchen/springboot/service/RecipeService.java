@@ -31,6 +31,8 @@ public class RecipeService {
     private UserDAO userDAO;
     @Autowired
     private CommentDAO commentDAO;
+    @Autowired
+    private MaterialService materialService;
 
 
     public RecipeDAO getRecipeDAO() {
@@ -55,11 +57,17 @@ public class RecipeService {
 
     public Recipe getRecipeById(int id) {
         Recipe r = this.recipeDAO.getRecipeById(id);
+        r.setCalorie(materialService.getRecipeCalorie(r));
+        r.setMaterials(materialService.getRecipeMaterial(r));
         return r;
     }
 
     public List<Recipe> getRecipeByName(String name){
         List<Recipe> recipes=this.recipeDAO.getRecipeByName(name);
+        for(Recipe r:recipes){
+        r.setCalorie(materialService.getRecipeCalorie(r));
+        r.setMaterials(materialService.getRecipeMaterial(r));
+        }
         return recipes;
     }
 

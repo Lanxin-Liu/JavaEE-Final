@@ -18,19 +18,29 @@ public class RecipeMaterial implements Serializable{
 
     private int materialId;
 
-    public int getrId() {
+    private String materialName;
+
+    public int getRecipeId() {
         return recipeId;
     }
 
-    public void setrId(int rId) {
-        this.recipeId = rId;
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
     }
 
-    public int getmId() {
+    public int getMaterialId() {
         return materialId;
     }
 
-    public void setmId(int mId) {
-        this.materialId = mId;
+    public void setMaterialId(int materialId) {
+        this.materialId = materialId;
+    }
+
+    public String getMaterialName() {
+        return materialName;
+    }
+
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName;
     }
 }
