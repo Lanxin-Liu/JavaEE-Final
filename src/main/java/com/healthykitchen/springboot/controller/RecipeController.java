@@ -17,10 +17,7 @@ import com.healthykitchen.springboot.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
@@ -123,8 +120,7 @@ public class RecipeController {
         }
     }
 
-    @GetMapping("api/addCollection")
-    @ResponseBody
+    @RequestMapping(value = "/addCollection", method = RequestMethod.POST)
     public Result createNewCollection(@RequestParam("collectionName") String cName, HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("User");
         int uId = user.getId();
@@ -147,8 +143,7 @@ public class RecipeController {
      * @param httpSession
      * @return
      */
-    @PostMapping("api/release")
-    @ResponseBody
+    @RequestMapping(value = "/api/recipeStep", method = RequestMethod.POST)
     public Result releaseRecipe(@RequestParam("Recipe") Recipe recipe,HttpSession httpSession) {
         try {
             User user = (User) httpSession.getAttribute("User");
@@ -167,8 +162,8 @@ public class RecipeController {
      * 添加步骤
      * @param recipe
      */
-    @PostMapping("api/release")
-    public void addStepToRecipe(Recipe recipe)
+    @RequestMapping(value = "/api/release", method = RequestMethod.POST)
+    public void addStepToRecipe(@RequestParam("Recipe") Recipe recipe)
     {
         RecipeStep rs = new RecipeStep();
         rs.setRecipeId(recipe.getRecipeId());
@@ -179,6 +174,7 @@ public class RecipeController {
      * 添加评论
      */
     @GetMapping("api/comment")
+    @ResponseBody
     public Result commentToRecipe(@RequestParam("recipeId") int rId, @RequestParam("content") String content, HttpSession httpSession) {
         User user = (User)httpSession.getAttribute("User");
         Comment comment = new Comment();

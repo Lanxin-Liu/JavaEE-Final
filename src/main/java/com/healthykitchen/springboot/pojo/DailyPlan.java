@@ -9,7 +9,6 @@ public class DailyPlan {
 
     private String DPContent;
 
-    private String DPTime;
 
     private String DPTag;
 
@@ -41,13 +40,6 @@ public class DailyPlan {
         this.DPContent = DPContent;
     }
 
-    public String getDPTime() {
-        return DPTime;
-    }
-
-    public void setDPTime(String DPTime) {
-        this.DPTime = DPTime;
-    }
 
     public String getDPTag() {
         return DPTag;
