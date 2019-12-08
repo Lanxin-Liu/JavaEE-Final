@@ -9,9 +9,9 @@ package com.healthykitchen.springboot.pojo;
  */
 public class RecipeStep {
     private int stepId;
-    private int recipeId;
+    private int stepRecipeId;
     private String stepDesc;
-    private byte[] image;
+    private byte[] stepImage;
 
     public int getStepId() {
         return stepId;
@@ -22,11 +22,11 @@ public class RecipeStep {
     }
 
     public int getRecipeId() {
-        return recipeId;
+        return stepRecipeId;
     }
 
     public void setRecipeId(int recipeId) {
-        this.recipeId = recipeId;
+        this.stepRecipeId = recipeId;
     }
 
     public String getStepDesc() {
@@ -38,10 +38,10 @@ public class RecipeStep {
     }
 
     public byte[] getImage() {
-        return image;
+        return stepImage;
     }
 
     public void setImage(byte[] image) {
-        this.image = image;
+        this.stepImage = image;
     }
 }

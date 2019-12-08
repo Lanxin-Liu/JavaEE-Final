@@ -8,10 +8,12 @@ package com.healthykitchen.springboot.controller;
  * @version: v1.0
  */
 
+import com.healthykitchen.springboot.dao.UserDAO;
 import com.healthykitchen.springboot.pojo.User;
 import com.healthykitchen.springboot.result.Result;
 import com.healthykitchen.springboot.result.ResultFactory;
 import com.healthykitchen.springboot.service.UserService;
+import com.healthykitchen.springboot.utils.MD5Util;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -34,64 +36,25 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
+    @Autowired
+    private UserDAO userDAO;
 
     @PostMapping(value = "/api/login")
     @ResponseBody
-    public Result login(@RequestBody User requestUser, HttpServletRequest request) {
-        String username = requestUser.getUsername();
-        // 将html格式的username转为非html格式
-        username = HtmlUtils.htmlEscape(username);
-        int userId=userService.getuserIdByUsername(username);
-
-        Subject subject = SecurityUtils.getSubject();
-        subject.getSession().setTimeout(10000);
-        UsernamePasswordToken token = new UsernamePasswordToken(username, requestUser.getPassword());
-        token.setRememberMe(true);
-        try {
-            subject.login(token);
-            // 生成随机 token 并存储在 session 中
-
-
-            //在session中存储userId
-            return ResultFactory.buildSuccessResult(token);
-        } catch (UnknownAccountException uae) {
-            String message = "没有此用户";
-            return ResultFactory.buildFailResult(message);
-        } catch (IncorrectCredentialsException ice) {
-            String message = "输入密码有误";
-            return ResultFactory.buildFailResult(message);
+    public Result login(@RequestParam("name") String username, @RequestParam("password") String password, HttpSession httpSession) {
+        User user = userDAO.getByNameAndPasswd(username, password);
+        if(user != null && httpSession != null) {
+            httpSession.setAttribute("User",user);
+            return ResultFactory.buildSuccessResult(user);
+        } else {
+            return ResultFactory.buildFailResult("登录失败！");
         }
     }
 
-//    @PostMapping("api/register")
-//    @ResponseBody
-//    public Result register(@RequestBody User user) {
-//        String username = user.getUsername();
-//        String password = user.getPassword();
-//        username = HtmlUtils.htmlEscape(username);
-//        user.setUsername(username);
-//
-//        boolean exist = userService.isExist(username);
-//
-//        if (exist) {
-//            String message = "用户名已被使用";
-//            return ResultFactory.buildFailResult(message);
-//        }
-//
-//        // 默认生成 16 位盐
-//        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
-//        int times = 2;
-//        String encodedPassword = new SimpleHash("md5", password, salt, times).toString();
-//
-//        user.setPassword(encodedPassword);
-//        userService.add(user);
-//
-//        return ResultFactory.buildSuccessResult(user);
-//    }
 
     /**
-     * 注册：后续GetMapping应该改成PostMapping，现在有bug
+     * 注册
      *
      * @param username
      * @param password
@@ -110,29 +73,20 @@ public class LoginController {
             return ResultFactory.buildFailResult(message);
         }
 
-//        // 默认生成 16 位盐
-//        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
-//        int times = 2;
-//        String encodedPassword = new SimpleHash("md5", password, salt, times).toString();
-//
-//        user.setPassword(encodedPassword);
+        String passwordMD5 = MD5Util.MD5Encode(password, "UTF-8");
+
+        user.setPassword(passwordMD5);
         userService.add(user);
 
         return ResultFactory.buildSuccessResult(user);
     }
-    @ResponseBody
+
+
     @GetMapping("api/logout")
-    public Result logout() {
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
-        String message = "成功登出";
-        return ResultFactory.buildSuccessResult(message);
+    public String logout(HttpSession httpSession) {
+        httpSession.removeAttribute("User");
+        return "api/login";
     }
 
-    @ResponseBody
-    @GetMapping(value = "api/authentication")
-    public String authentication(){
-        return "身份认证成功";
-    }
 }
 

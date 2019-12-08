@@ -14,6 +14,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RecipeStepDAO {
-    @Insert("insert into Recipe_Content (step_recipe_id, step_desc, step_image) values (#{recipeId},#{stepDesc},#{image})")
+    @Insert("insert into Recipe_Content (step_recipe_id, step_desc, step_image) values (#{stepRecipeId},#{stepDesc},#{stepImage})")
     void addRecipeStep(RecipeStep step);
 }
