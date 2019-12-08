@@ -30,7 +30,6 @@ public class User {
 
     public User(){}
 
-
     public User(String username, String password) {
         this.userName = username;
         this.password = password;

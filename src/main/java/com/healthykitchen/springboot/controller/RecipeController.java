@@ -9,7 +9,11 @@ import com.healthykitchen.springboot.result.Result;
 import com.healthykitchen.springboot.result.ResultFactory;
 import com.healthykitchen.springboot.service.CollectService;
 import com.healthykitchen.springboot.service.RecipeService;
+
+import com.healthykitchen.springboot.service.TagService;
+
 import com.healthykitchen.springboot.utils.DateUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +42,10 @@ public class RecipeController {
     @Autowired
     private CollectService collectService;
     @Autowired
+    private TagService tagService;
+    @Autowired
     private CollectionDAO collectionDAO;
+
 
     //获取所有菜谱 按时间排序
     @GetMapping("api/recipelist")
@@ -74,6 +81,7 @@ public class RecipeController {
     @GetMapping("api/searchrecipebytag")
     @ResponseBody
     public List<Recipe> getRecipeByTag(String tagName){
+        //int tagId=tagService.getTagId(tagName);
         List<Recipe> recipes=this.recipeService.getRecipeByTag(tagName);
         return recipes;
     }

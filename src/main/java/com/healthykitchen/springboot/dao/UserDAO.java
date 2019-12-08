@@ -37,8 +37,8 @@ public interface UserDAO {
     @Select("select user_id from User_info where user_name=#{username}")
     int getuserIdByUsername(String username);
 
-    @Update("UPDATE User_info  SET intro = #{intro}   WHERE user_id=#{userId};")
-    void updateUserIntro(int userId,String intro);
+    @Update("UPDATE User_info  SET user_id=#{userId},user_name=#{userName},password=#{password},image=#{image},intro=#{intro},gender=#{gender},followed_num=#{followedNum},following_num=#{followingNum} WHERE user_id=#{userId};")
+    void updateUserInfo(User user);
 
     @Select("select * from User_info where user_name = #{userName} and password = #{password}")
     User getByNameAndPasswd(String userName, String password);
