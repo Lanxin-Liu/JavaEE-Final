@@ -9,7 +9,7 @@ public class TagService {
     @Autowired
     private TagDao tagDao;
 
-    public int getTagId(String tagId){
-        return tagDao.getTagId(tagId);
+    public int getTagId(String tagName){
+        return tagDao.getTagId(tagName);
     }
 }

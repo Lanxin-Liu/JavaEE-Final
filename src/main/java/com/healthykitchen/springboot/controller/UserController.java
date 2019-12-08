@@ -46,6 +46,11 @@ public class UserController {
         return username;
     }
 
+    /**
+     * 获取用户信息
+     * @param name
+     * @return
+     */
     @GetMapping("/userInfoByName")
     @ResponseBody
     public List<User> getUserInfoByName(String name){

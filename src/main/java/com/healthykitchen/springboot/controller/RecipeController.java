@@ -79,7 +79,7 @@ public class RecipeController {
     @GetMapping("api/searchrecipebytag")
     @ResponseBody
     public List<Recipe> getRecipeByTag(String tagName){
-        int tagId=tagService.getTagId(tagName);
+        //int tagId=tagService.getTagId(tagName);
         List<Recipe> recipes=this.recipeService.getRecipeByTag(tagName);
         return recipes;
     }

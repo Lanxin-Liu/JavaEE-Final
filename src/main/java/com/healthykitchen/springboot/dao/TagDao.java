@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TagDao {
 
-    @Select("select tag_id from Tag where tag_id=#{tagName}")
+    @Select("select tag_id from Tag where tag_name=#{tagName}")
     int getTagId(String tagName);
 
 }
