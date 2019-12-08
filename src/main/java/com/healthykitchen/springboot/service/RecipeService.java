@@ -1,9 +1,10 @@
 package com.healthykitchen.springboot.service;
 
+import com.healthykitchen.springboot.dao.CommentDAO;
 import com.healthykitchen.springboot.dao.RecipeDAO;
 import com.healthykitchen.springboot.dao.RecipeStepDAO;
 import com.healthykitchen.springboot.dao.UserDAO;
-import com.healthykitchen.springboot.pojo.HostHolder;
+import com.healthykitchen.springboot.pojo.Comment;
 import com.healthykitchen.springboot.pojo.Recipe;
 import com.healthykitchen.springboot.pojo.RecipeStep;
 import com.healthykitchen.springboot.pojo.User;
@@ -27,26 +28,34 @@ public class RecipeService {
     @Autowired
     private RecipeStepDAO rsDAO;
     @Autowired
-    private HostHolder hostHolder;
-    @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private CommentDAO commentDAO;
 
-    public void add(Recipe recipe)
-    {
-        recipeDAO.addRecipe(recipe);
-        recipe.setRecipeUserId(hostHolder.getUser().getId());
-    }
-
-    public void addStep(Recipe recipe, RecipeStep rs){
-        rsDAO.addRecipeStep(rs);
-    }
 
     public RecipeDAO getRecipeDAO() {
         return recipeDAO;
     }
 
+    public void addStep(RecipeStep rs) {
+        rsDAO.addRecipeStep(rs);
+    }
+
     public void setRecipeDAO(RecipeDAO recipeDAO) {
         this.recipeDAO = recipeDAO;
+    }
+
+    public void addRecipe(Recipe recipe) {
+        recipeDAO.addRecipe(recipe);
+    }
+
+    public void addComment(Comment comment) {
+        commentDAO.insertComment(comment);
+    }
+
+    public Recipe getRecipeById(int id) {
+        Recipe r = this.recipeDAO.getRecipeById(id);
+        return r;
     }
 
     public List<Recipe> getRecipeByName(String name){
@@ -72,5 +81,9 @@ public class RecipeService {
     public List<Recipe> getRecipeByTag(String tagName){
         List<Recipe> recipes=this.recipeDAO.getRecipeByTag(tagName);
         return recipes;
+    }
+
+    public void addNewCollection() {
+
     }
 }

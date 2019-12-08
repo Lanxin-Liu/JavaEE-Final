@@ -19,11 +19,14 @@ import java.util.List;
  */
 @Repository
 public interface RecipeDAO {
-    @Insert("insert into Recipe (recipe_name, recipe_time, recipe_tag, recipe_image, size, recipe_user_id) values (#{name},#{time},#{tag},#{image},#{size},#{userId})")
+    @Insert("insert into Recipe (recipe_name, recipe_time, recipe_tag, recipe_image, size, recipe_user_id) values (#{recipeName},#{recipeTime},#{recipeTag},#{recipeImage},#{size},#{recipeUserId})")
     void addRecipe(Recipe recipe);
 
     @Select("SELECT * FROM healthykitchen.Recipe order by recipe_time desc")
     List<Recipe> getAllRecipes();
+
+    @Select("SELECT * FROM healthykitchen.Recipe where recipe_id = #{recipeId}")
+    Recipe getRecipeById(int recipeId);
 
     @Select("SELECT * FROM healthykitchen.Recipe where recipe_name = #{recipeName};")
     List<Recipe> getRecipeByName(String recipeName);

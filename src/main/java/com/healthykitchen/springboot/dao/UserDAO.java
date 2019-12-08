@@ -40,9 +40,6 @@ public interface UserDAO {
     @Update("UPDATE User_info  SET user_id=#{userId},user_name=#{userName},password=#{password},image=#{image},intro=#{intro},gender=#{gender},followed_num=#{followedNum},following_num=#{followingNum} WHERE user_id=#{userId};")
     void updateUserInfo(User user);
 
-    //查看A的关注列表
-//    @Select("SELECT following_user_id FROM Follow where followed_user_id=1;")
-//    int[] getuserFollowing(int userId);
-
-
+    @Select("select * from User_info where user_name = #{userName} and password = #{password}")
+    User getByNameAndPasswd(String userName, String password);
 }
