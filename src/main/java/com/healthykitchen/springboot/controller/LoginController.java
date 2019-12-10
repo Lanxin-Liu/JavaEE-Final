@@ -8,6 +8,7 @@ package com.healthykitchen.springboot.controller;
  * @version: v1.0
  */
 
+import ch.qos.logback.core.boolex.EvaluationException;
 import com.healthykitchen.springboot.dao.UserDAO;
 import com.healthykitchen.springboot.pojo.User;
 import com.healthykitchen.springboot.result.Result;
@@ -40,13 +41,13 @@ public class LoginController {
     @Autowired
     private UserDAO userDAO;
 
-    @PostMapping(value = "/api/login")
+    @PostMapping(value = "api/login")
     @ResponseBody
-    public Result login(@RequestParam("name") String username, @RequestParam("password") String password, HttpSession httpSession) {
-        User user = userDAO.getByNameAndPasswd(username, password);
-        if(user != null && httpSession != null) {
-            httpSession.setAttribute("User",user);
-            return ResultFactory.buildSuccessResult(user);
+    public Result login(@RequestBody User user,HttpSession httpSession) {
+        User user1 = userService.getUserNameandPassword(user.getUsername(),user.getPassword());
+        if(user1 != null && httpSession != null) {
+            httpSession.setAttribute("User",user1);
+            return ResultFactory.buildSuccessResult(user1);
         } else {
             return ResultFactory.buildFailResult("登录失败！");
         }

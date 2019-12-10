@@ -20,6 +20,10 @@ public class UserService {
     @Autowired
     UserDAO userDAO;
 
+    public User getUserNameandPassword(String username,String password){
+        return userDAO.getByNameAndPasswd(username,password);
+    }
+
     public boolean isExist(String username) {
         List<User> users = getByUsername(username);
         return null!=users;
