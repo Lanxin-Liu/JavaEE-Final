@@ -54,7 +54,9 @@ public class RecipeController {
 
 
     //根据菜谱热爱程度获取菜谱
+//    @CrossOrigin(origins = {"http://0.0.0.0:8080", "null"})
     @GetMapping("api/recipeRank")
+    @CrossOrigin(origins = "http://localhost:8080")
     @ResponseBody
     public  List<Recipe> getRecipeByLike(){
         List<Recipe> recipes=this.recipeService.getRecipeByLike();
