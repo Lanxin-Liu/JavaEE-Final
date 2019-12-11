@@ -62,8 +62,8 @@ public class UserController {
      */
     @GetMapping("/userInfoByName")
     @ResponseBody
-    public List<User> getUserInfoByName(String name){
-        List<User> users= userService.getByUsername(name);
+    public User getUserInfoByName(String name){
+        User users= userService.getByUsername(name);
         return  users;
     }
 
