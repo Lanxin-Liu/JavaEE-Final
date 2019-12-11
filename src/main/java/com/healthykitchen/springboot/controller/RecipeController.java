@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
@@ -45,7 +46,7 @@ public class RecipeController {
 
 
     //获取所有菜谱 按时间排序
-    @GetMapping("api/recipelist")
+    @PostMapping("api/recipelist")
     @ResponseBody
     public List<Recipe> getAllRecipes(){
         List<Recipe> recipes=recipeDAO.getAllRecipes();
@@ -55,25 +56,31 @@ public class RecipeController {
 
     //根据菜谱热爱程度获取菜谱
 //    @CrossOrigin(origins = {"http://0.0.0.0:8080", "null"})
-    @GetMapping("api/recipeRank")
-    @CrossOrigin(origins = "http://localhost:8080")
+    @PostMapping("api/recipeRank")
     @ResponseBody
     public  List<Recipe> getRecipeByLike(){
         List<Recipe> recipes=this.recipeService.getRecipeByLike();
         return  recipes;
     }
 
-    @GetMapping("api/searchrecipebyuser")
+    @PostMapping("api/searchrecipebyuser")
     @ResponseBody
     public List<Recipe> getRecipeByUserName(String username){
         List<Recipe> recipes=this.recipeService.getRecipeByUserName(username);
         return recipes;
     }
 
-    @GetMapping("api/userrecipelist")
+    /**
+     * 获取用户发布的菜谱
+     * @param request
+     * @return
+     */
+    @PostMapping("api/userrecipelist")
     @ResponseBody
-    public List<Recipe> getRecipeByUserId(int userId){
-        List<Recipe> recipes=this.recipeService.getRecipeByUserId(userId);
+    public List<Recipe> getRecipeByUserId(HttpServletRequest request) {
+        HttpSession session=request.getSession(true) ;
+        User user=(User)session.getAttribute("user");
+        List<Recipe> recipes=this.recipeService.getRecipeByUserId(user.getId());
         return recipes;
     }
 

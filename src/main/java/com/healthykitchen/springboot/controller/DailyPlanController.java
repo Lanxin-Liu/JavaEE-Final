@@ -1,6 +1,7 @@
 package com.healthykitchen.springboot.controller;
 
 import com.healthykitchen.springboot.pojo.DailyPlan;
+import com.healthykitchen.springboot.pojo.User;
 import com.healthykitchen.springboot.result.Result;
 import com.healthykitchen.springboot.result.ResultFactory;
 import com.healthykitchen.springboot.service.DailyPlanService;
@@ -9,8 +10,12 @@ import com.healthykitchen.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 
@@ -27,45 +32,32 @@ public class DailyPlanController {
 
     /**
      * 获取用户的DP
-     * @param userId
+     * @param request
      * @return
      */
-    @GetMapping("api/mydailyplan")
+    @PostMapping("api/mydailyplan")
     @ResponseBody
-    List<DailyPlan> getDailyPlan(int userId){
+    List<DailyPlan> getDailyPlan(HttpServletRequest request){
+        HttpSession session=request.getSession(true);
+        User user=(User)session.getAttribute("user");
         List<DailyPlan> dailyPlans;
-        dailyPlans=dailyPlanService.getUserDailyPlanById(userId);
+        dailyPlans=dailyPlanService.getUserDailyPlanById(user.getId());
         return dailyPlans;
     }
 
     /**
      * 添加每日计划API
-     * @param DPContent
-     * @param DPTime
-     * @param DPTag
-     * @param DPDate
-     * @param DPCalorie
-     * @param DPImage
-     * @param DPUserId
+     * @param dailyPlan
      * @return
      */
-    @GetMapping("api/addDP")
+    @PostMapping("api/addDP")
     @ResponseBody
-    public Result addDailyPlan(String DPContent, String DPTime, String DPTag, String DPDate, int DPCalorie, byte[] DPImage, int DPUserId){
-
-
+    public Result addDailyPlan(@RequestParam(value = "DailyPlan")DailyPlan dailyPlan,HttpServletRequest request){
         try {
-            DailyPlan dailyPlan = new DailyPlan();
-
-            dailyPlan.setDPContent(DPContent);
-            dailyPlan.setDPDate(DPDate);
-            dailyPlan.setDPCalorie(DPCalorie);
-            dailyPlan.setDPImage(DPImage);
-            dailyPlan.setDPUserId(DPUserId);
-            dailyPlan.setDPTime(DPTime);
-            dailyPlan.setDPTag(DPTag);
+            HttpSession session=request.getSession(true);
+            User user=(User)session.getAttribute("user");
+            dailyPlan.setDPUserId(user.getId());
             dailyPlanService.addDailyPlan(dailyPlan);
-
             return ResultFactory.buildSuccessResult(dailyPlan);
         } catch (Exception e){
             return ResultFactory.buildFailResult("插入信息失败！");
@@ -77,19 +69,19 @@ public class DailyPlanController {
      * @param dailyPlan
      * @return
      */
-//    @GetMapping("api/deleteDP")
-//    @ResponseBody
-//    public Result deleteDailyPlan(DailyPlan dailyPlan){
-//        try {
-//            int DPId = dailyPlan.getDPId();
-//            dailyPlanService.deleteDailyPlan(DPId);
-//            return ResultFactory.buildSuccessResult(dailyPlan);
-//        } catch (Exception e)
-//        {
-//            return  ResultFactory.buildFailResult("删除每日计划失败");
-//        }
-//
-//    }
+    @PostMapping("api/deleteDP")
+    @ResponseBody
+    public Result deleteDailyPlan(DailyPlan dailyPlan){
+        try {
+            int DPId = dailyPlan.getDPId();
+            dailyPlanService.deleteDailyPlan(DPId);
+            return ResultFactory.buildSuccessResult(dailyPlan);
+        } catch (Exception e)
+        {
+            return  ResultFactory.buildFailResult("删除每日计划失败");
+        }
+
+    }
 
 
 }

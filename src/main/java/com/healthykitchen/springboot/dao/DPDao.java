@@ -17,7 +17,7 @@ public interface DPDao {
     @Insert("insert into DailyPlan(DP_content,DP_time,DP_tag,DP_date,DP_calorie,DP_user_id,DP_image) values (#{DPContent},#{DPTime},#{DPTag},#{DPDate},#{DPCalorie},#{DPUserId},#{DPImage})")
     void addDailyPlan(DailyPlan dailyPlan);
 
-    @Delete("delete from DailyPlan where DP_user_id=#{DPUserId} and DP_id=#{DPId}")
+    @Delete("delete from DailyPlan where DP_id=#{DPId}")
     void deleteDailyPlan(int DPId);
 
 }
