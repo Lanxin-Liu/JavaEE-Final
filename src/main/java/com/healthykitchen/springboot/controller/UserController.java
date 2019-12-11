@@ -40,6 +40,12 @@ public class UserController {
     private RecipeDAO recipeDAO;
 
 
+    @PostMapping("api/getUserInfoById")
+    @ResponseBody
+    public User getUserInfoById(int userId){
+        return userService.getuserInfoById(userId);
+    }
+
     @GetMapping("/userlist")
     @ResponseBody
     public List<String> getUserList() {
