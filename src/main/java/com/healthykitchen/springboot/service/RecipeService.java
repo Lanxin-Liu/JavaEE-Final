@@ -41,6 +41,10 @@ public class RecipeService {
         rsDAO.addRecipeStep(rs);
     }
 
+    public List<Comment> getRecipeComment(Recipe recipe){
+        return commentDAO.getRecipeComment(recipe);
+    }
+
     public void setRecipeDAO(RecipeDAO recipeDAO) {
         this.recipeDAO = recipeDAO;
     }

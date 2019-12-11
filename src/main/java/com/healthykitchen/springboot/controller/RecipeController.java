@@ -84,6 +84,12 @@ public class RecipeController {
         return recipes;
     }
 
+    @PostMapping("api/getRecipeComment")
+    @ResponseBody
+    public List<Comment> getRecipeComment(Recipe recipe){
+        return recipeService.getRecipeComment(recipe);
+    }
+
     @GetMapping("api/searchrecipebytag")
     @ResponseBody
     public List<Recipe> getRecipeByTag(String tagName){

@@ -43,10 +43,12 @@ public class LoginController {
 
     @PostMapping(value = "api/login")
     @ResponseBody
+//    @RequestMapping(value="/login", method = RequestMethod.POST)
     public Result login(@RequestBody User user,HttpSession httpSession) {
         User user1 = userService.getUserNameandPassword(user.getUsername(),user.getPassword());
-        if(user1 != null && httpSession != null) {
-            httpSession.setAttribute("User",user1);
+        if(user1 != null ) {
+            httpSession.setAttribute("user",user1);
+            System.out.println("success!");
             return ResultFactory.buildSuccessResult(user1);
         } else {
             return ResultFactory.buildFailResult("登录失败！");
@@ -66,7 +68,6 @@ public class LoginController {
     public Result register(@RequestParam(value = "username",required = true) String username,@RequestParam(value = "password",required = true) String password) {
         User user = new User(username, password);
         username = HtmlUtils.htmlEscape(username);
-
         boolean exist = userService.isExist(username);
 
         if (exist) {
