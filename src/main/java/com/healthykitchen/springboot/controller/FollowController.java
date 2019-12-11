@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -24,77 +25,80 @@ public class FollowController {
 
     /**
      * 获取关注列表
-     * @param userId
+     * @param httpSession
      * @return
      */
-    @GetMapping("/followinglist")
+    @GetMapping("api/followinglist")
     @ResponseBody
-    public List<User> getFollowingList(int userId){
-        List<User> users=followService.getuserFollowing(userId);
+    public List<User> getFollowingList(HttpSession httpSession){
+        User user=(User)httpSession.getAttribute("user");
+        List<User> users=followService.getuserFollowing(user.getId());
         return users;
     }
 
     /**
      * 获取用户粉丝列表
-     * @param userId
+     * @param httpSession
      * @return
      */
-    @GetMapping("/followedlist")
+    @GetMapping("api/followedlist")
     @ResponseBody
-    public List<User> getFollowedList(int userId){
-        List<User> users=followService.getuserFollowed(userId);
+    public List<User> getFollowedList(HttpSession httpSession){
+        User user=(User)httpSession.getAttribute("User");
+        List<User> users=followService.getuserFollowed(user.getId());
         return users;
     }
 
     /**
      * 用户进行关注
-     * @param followedUserId【本用户】
-     * @param followingUserId【本用户关注的用户】
+     * @param httpSession
+     * @param followingUser【本用户关注的用户】
      * @return
      */
-    @GetMapping("/follow")
+    @GetMapping("api/follow")
     @ResponseBody
-    public Result follow(@RequestParam(value = "followedUserId",required = true) int followedUserId, @RequestParam(value = "followingUserId",required = true) int followingUserId) {
+    public Result follow(User followingUser,HttpSession httpSession) {
         //ResultFactory resultFactory=new ResultFactory();
-        boolean exist=userService.existById(followingUserId);
-        if(exist) {
+        User user=(User)httpSession.getAttribute("user");
+        //boolean exist=userService.existById(followingUserId);
+        try {
             Follow follow = new Follow();
             String followTime = "2019-11-12 12:00:00";//获取时间的函数忘记了，先用这个
-            follow.setFollowedUserId(followedUserId);
-            follow.setFollowingUserId(followingUserId);
+            follow.setFollowedUserId(user.getId());
+            follow.setFollowingUserId(followingUser.getId());
             follow.setFollowTime(followTime);
             followService.addFollow(follow);
-            followService.updateFollowing(followedUserId);
-            followService.updateFollowed(followingUserId);
+            followService.updateFollowing(user.getId());
+            followService.updateFollowed(followingUser.getId());
             return ResultFactory.buildSuccessResult(follow);
-        }
-        else{
+        } catch (Exception e)
+        {
             return ResultFactory.buildFailResult("要关注的用户不存在");
         }
     }
 
     /**
      * 用户进行取关
-     * @param followedUserId
-     * @param followingUserId
+     * @param httpSession
+     * @param followingUser 【我们取关的用户】
      * @return
      */
     @GetMapping("/unfollow")
     @ResponseBody
-    public Result unfollow(@RequestParam(value = "followedUserId",required = true) int followedUserId, @RequestParam(value = "followingUserId",required = true) int followingUserId) {
+    public Result unfollow(User followingUser,HttpSession httpSession) {
         //ResultFactory resultFactory=new ResultFactory();
-        boolean exist=userService.existById(followingUserId);
-        if(exist) {
+        User user=(User)httpSession.getAttribute("user");
+        try {
             String time="2019-12-11 12:00:12";
             Follow follow=new Follow();
-            follow.setFollowedUserId(followedUserId);
-            follow.setFollowingUserId(followingUserId);
-            followService.unfollow(followedUserId,followingUserId);
-            followService.updateunFollowed(followingUserId);
-            followService.updateunFollowing(followedUserId);
+            follow.setFollowedUserId(user.getId());
+            follow.setFollowingUserId(followingUser.getId());
+            followService.unfollow(user.getId(),followingUser.getId());
+            followService.updateunFollowed(followingUser.getId());
+            followService.updateunFollowing(user.getId());
             return ResultFactory.buildSuccessResult(follow);
         }
-        else{
+        catch (Exception e){
             return ResultFactory.buildFailResult("要取关的用户不存在");
         }
     }
