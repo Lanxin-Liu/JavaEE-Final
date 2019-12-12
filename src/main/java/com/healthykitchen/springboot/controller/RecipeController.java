@@ -92,7 +92,7 @@ public class RecipeController {
     @ResponseBody
     public List<Recipe> getRecipeByUserId(HttpServletRequest request) {
         HttpSession session=request.getSession(true) ;
-        User user=(User)session.getAttribute("user");
+        User user=(User)session.getAttribute("User");
         List<Recipe> recipes=this.recipeService.getRecipeByUserId(user.getId());
         return recipes;
     }
@@ -160,7 +160,7 @@ public class RecipeController {
     @ResponseBody
     public Result likeRecipe(@RequestParam(value = "recipeId") int rId, HttpSession httpSession) {
         try {
-            User user = (User) httpSession.getAttribute("user");
+            User user = (User) httpSession.getAttribute("User");
             int uId;
             uId = user.getId();
             Recipe recipe = recipeService.getRecipeById(rId);
@@ -285,7 +285,7 @@ public class RecipeController {
      * @param recipeId
      * @return
      */
-    @PostMapping("api/getRecipeCalorie")
+    @GetMapping("api/getRecipeCalorie")
     @ResponseBody
     public int getRecipeCalorie(int recipeId){
         Recipe recipe=recipeService.getRecipeById(recipeId);
@@ -328,7 +328,6 @@ public class RecipeController {
         recipeService.addComment(comment);
         return ResultFactory.buildSuccessResult(comment);
     }
-
 
 
 

@@ -31,7 +31,7 @@ public class FollowController {
     @GetMapping("api/followinglist")
     @ResponseBody
     public List<User> getFollowingList(HttpSession httpSession){
-        User user=(User)httpSession.getAttribute("user");
+        User user=(User)httpSession.getAttribute("User");
         List<User> users=followService.getuserFollowing(user.getId());
         return users;
     }
@@ -59,7 +59,7 @@ public class FollowController {
     @ResponseBody
     public Result follow(User followingUser,HttpSession httpSession) {
         //ResultFactory resultFactory=new ResultFactory();
-        User user=(User)httpSession.getAttribute("user");
+        User user=(User)httpSession.getAttribute("User");
         //boolean exist=userService.existById(followingUserId);
         try {
             Follow follow = new Follow();
@@ -87,7 +87,7 @@ public class FollowController {
     @ResponseBody
     public Result unfollow(User followingUser,HttpSession httpSession) {
         //ResultFactory resultFactory=new ResultFactory();
-        User user=(User)httpSession.getAttribute("user");
+        User user=(User)httpSession.getAttribute("User");
         try {
             String time="2019-12-11 12:00:12";
             Follow follow=new Follow();
