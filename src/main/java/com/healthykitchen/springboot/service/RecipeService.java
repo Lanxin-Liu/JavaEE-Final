@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +28,8 @@ public class RecipeService {
     private CommentDAO commentDAO;
     @Autowired
     private RecipeMaterialDAO recipeMaterialDAO;
+    @Autowired
+    private MaterialDao materialDao;
 
 
     public RecipeDAO getRecipeDAO() {
@@ -58,6 +61,26 @@ public class RecipeService {
         for (RecipeMaterial rm:recipeMaterials){
             recipeMaterialDAO.addRecipeMaterial(rm);
         }
+    }
+
+    public int getRecipeCalorie(Recipe recipe){
+        int rId;
+        rId=recipe.getRecipeId();
+        List<RecipeMaterial> rm=new ArrayList<>();
+        Material m;
+        rm=recipeMaterialDAO.getRecipeMaterial(rId);
+        int totc=0;//总卡路里
+        int count;
+        int ec;//单位卡路里
+        for (RecipeMaterial i:rm){
+            m=materialDao.getMaterialCalorie(i.getMaterialName());
+            //System.out.println(m.getCalorie()+"aaaaa"+m.getMaterialName());
+            ec=m.getCalorie();
+            count=i.getMaterialCount();
+            //System.out.println(i.getMaterialCount());
+            totc=ec*count+totc;
+        }
+        return totc;
     }
 
     public void addComment(Comment comment) {

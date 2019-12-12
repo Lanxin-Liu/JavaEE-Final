@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface RecipeMaterialDAO {
-    @Select("SELECT Recipe_has_Material.recipe_id,Material.material_name,Recipe_has_Material.material_count FROM Material,Recipe_has_Material where Recipe_has_Material.material_id=Material.material_id and recipe_id=#{recipeId}")
+    @Select("SELECT Recipe_has_Material.recipe_id,Material.material_name,Recipe_has_Material.material_count FROM Material,Recipe_has_Material where recipe_id=#{recipeId}")
     List<RecipeMaterial> getRecipeMaterial(int recipeId);
 
     @Insert("insert Recipe_has_Material(recipe_id,material_name,material_count) values (#{recipeId},#{materialName},#{materialCount})")

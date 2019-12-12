@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface MaterialDao {
     @Select("select * from Material where material_name=#{materialName}")
-    List<Material> getMaterialCalorie(String materialName);
+    Material getMaterialCalorie(String materialName);
 }

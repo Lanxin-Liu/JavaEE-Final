@@ -250,7 +250,7 @@ public class RecipeController {
 
     @GetMapping("api/test")
     @ResponseBody
-    public List<Material> getMaterial(String materialName){
+    public Material getMaterial(String materialName){
         return materialDao.getMaterialCalorie(materialName);
     }
 
@@ -278,6 +278,18 @@ public class RecipeController {
         {
             return ResultFactory.buildFailResult("添加食材失败！");
         }
+    }
+
+    /**
+     * 【菜谱页面】获取菜谱总卡路里
+     * @param recipeId
+     * @return
+     */
+    @GetMapping("api/getRecipeCalorie")
+    @ResponseBody
+    public int getRecipeCalorie(int recipeId){
+        Recipe recipe=recipeService.getRecipeById(recipeId);
+        return recipeService.getRecipeCalorie(recipe);
     }
 
     @GetMapping("api/addStep")
