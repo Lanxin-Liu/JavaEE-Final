@@ -281,16 +281,28 @@ public class RecipeController {
     }
 
     /**
-     * 【菜谱页面】获取菜谱总卡路里
+     * 【菜谱页】获取菜谱总卡路里
      * @param recipeId
      * @return
      */
-    @GetMapping("api/getRecipeCalorie")
+    @PostMapping("api/getRecipeCalorie")
     @ResponseBody
     public int getRecipeCalorie(int recipeId){
         Recipe recipe=recipeService.getRecipeById(recipeId);
         return recipeService.getRecipeCalorie(recipe);
     }
+
+    /**
+     * 【菜谱页】根据材料名字获取卡路里
+     * @param materialName
+     * @return
+     */
+    @PostMapping("api/getMaterialCalorie")
+    @ResponseBody
+    public int getMaterialCalorie(@RequestParam(value = "materialName") String materialName){
+        return materialDao.getMaterialCalorie(materialName).getCalorie();
+    }
+
 
     @GetMapping("api/addStep")
     public void addStepToRecipe(@RequestParam Recipe recipe) {
