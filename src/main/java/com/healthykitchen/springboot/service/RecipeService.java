@@ -1,13 +1,7 @@
 package com.healthykitchen.springboot.service;
 
-import com.healthykitchen.springboot.dao.CommentDAO;
-import com.healthykitchen.springboot.dao.RecipeDAO;
-import com.healthykitchen.springboot.dao.RecipeStepDAO;
-import com.healthykitchen.springboot.dao.UserDAO;
-import com.healthykitchen.springboot.pojo.Comment;
-import com.healthykitchen.springboot.pojo.Recipe;
-import com.healthykitchen.springboot.pojo.RecipeStep;
-import com.healthykitchen.springboot.pojo.User;
+import com.healthykitchen.springboot.dao.*;
+import com.healthykitchen.springboot.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
@@ -31,6 +25,8 @@ public class RecipeService {
     private UserDAO userDAO;
     @Autowired
     private CommentDAO commentDAO;
+    @Autowired
+    private RecipeMaterialDAO recipeMaterialDAO;
 
 
     public RecipeDAO getRecipeDAO() {
@@ -41,8 +37,13 @@ public class RecipeService {
         rsDAO.addRecipeStep(rs);
     }
 
-    public List<Comment> getRecipeComment(Recipe recipe){
-        return commentDAO.getRecipeComment(recipe);
+    public List<Comment> getRecipeComment(int recipeId){
+        return commentDAO.getRecipeComment(recipeId);
+    }
+
+
+    public List<RecipeMaterial> getRecipeMaterial(int recipeId){
+        return recipeMaterialDAO.getRecipeMaterial(recipeId);
     }
 
     public void setRecipeDAO(RecipeDAO recipeDAO) {
@@ -53,9 +54,16 @@ public class RecipeService {
         recipeDAO.addRecipe(recipe);
     }
 
+    public void addRecipeMaterial(List<RecipeMaterial> recipeMaterials){
+        for (RecipeMaterial rm:recipeMaterials){
+            recipeMaterialDAO.addRecipeMaterial(rm);
+        }
+    }
+
     public void addComment(Comment comment) {
         commentDAO.insertComment(comment);
     }
+
 
     public Recipe getRecipeById(int id) {
         Recipe r = this.recipeDAO.getRecipeById(id);

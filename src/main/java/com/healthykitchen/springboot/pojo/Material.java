@@ -9,18 +9,17 @@ package com.healthykitchen.springboot.pojo;
  * @version: v1.0
  */
 public class Material {
-    private int mId;
 
-    private int calorie;
+   private String materialName;
 
-    private String mName;
+   private int calorie;
 
-    public int getmId() {
-        return mId;
+    public String getMaterialName() {
+        return materialName;
     }
 
-    public void setmId(int mId) {
-        this.mId = mId;
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName;
     }
 
     public int getCalorie() {
@@ -29,13 +28,5 @@ public class Material {
 
     public void setCalorie(int calorie) {
         this.calorie = calorie;
-    }
-
-    public String getmName() {
-        return mName;
-    }
-
-    public void setmName(String mName) {
-        this.mName = mName;
     }
 }

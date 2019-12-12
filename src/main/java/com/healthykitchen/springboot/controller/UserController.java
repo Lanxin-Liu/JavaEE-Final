@@ -40,12 +40,27 @@ public class UserController {
     private RecipeDAO recipeDAO;
 
 
+    /**
+     * 【个人主页】根据用户id获取用户信息
+     * @param userId
+     * @return
+     */
     @PostMapping("api/getUserInfoById")
     @ResponseBody
-    public User getUserInfoById(int userId){
-        return userService.getuserInfoById(userId);
+    public Result getUserInfoById(@RequestParam(value = "userId") int userId,HttpSession httpSession){
+        User user=(User)httpSession.getAttribute("User");
+        User userRequest=userService.getuserInfoById(userId);
+        if(user.getId()!=userId){
+            return ResultFactory.buildSuccessResult(userRequest);
+        }
+        else
+            return ResultFactory.buildFailResult("本用户");
     }
 
+    /**
+     * 【】主页 用户名单
+     * @return
+     */
     @GetMapping("/userlist")
     @ResponseBody
     public List<String> getUserList() {
@@ -59,7 +74,7 @@ public class UserController {
     }
 
     /**
-     * 根据用户名字搜索用户
+     * 【搜索】根据用户名字搜索用户
      * @param name
      * @return
      */
@@ -71,7 +86,7 @@ public class UserController {
 
 
     /**
-     * 修改用户密码
+     * 【个人资料】修改用户密码
      * @param password
      * @param httpSession
      * @return
@@ -102,7 +117,7 @@ public class UserController {
     }
 
     /**
-     * 修改用户个人简介
+     * 【个人资料】修改用户个人简介
      * @param intro
      * @param httpSession
      * @return
@@ -137,7 +152,7 @@ public class UserController {
 //    }
 
     /**
-     * 修改用户名
+     * 【个人资料】修改用户名
      * @param name
      * @param httpSession
      * @return
@@ -161,6 +176,12 @@ public class UserController {
         }
     }
 
+    /**
+     * 【个人资料】修改用户性别
+     * @param gender
+     * @param httpSession
+     * @return
+     */
     //@RequestMapping(value="/updateUserGender",method = RequestMethod.POST)
     @PostMapping("api/updateUserGender")
     @ResponseBody

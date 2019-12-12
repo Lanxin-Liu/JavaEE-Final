@@ -1,9 +1,6 @@
 package com.healthykitchen.springboot.controller;
 
-import com.healthykitchen.springboot.dao.CollectionDAO;
-import com.healthykitchen.springboot.dao.LikeDAO;
-import com.healthykitchen.springboot.dao.RecipeDAO;
-import com.healthykitchen.springboot.dao.UserDAO;
+import com.healthykitchen.springboot.dao.*;
 import com.healthykitchen.springboot.pojo.*;
 import com.healthykitchen.springboot.result.Result;
 import com.healthykitchen.springboot.result.ResultFactory;
@@ -21,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,8 +41,14 @@ public class RecipeController {
     private TagService tagService;
     @Autowired
     private CollectionDAO collectionDAO;
+    @Autowired
+    private MaterialDao materialDao;
 
 
+    /**
+     * 【主页】按时间获取所有菜谱
+     * @return
+     */
     //获取所有菜谱 按时间排序
     @PostMapping("api/recipelist")
     @ResponseBody
@@ -54,6 +58,10 @@ public class RecipeController {
     }
 
 
+    /**
+     * 【主页】菜谱排行榜
+     * @return
+     */
     //根据菜谱热爱程度获取菜谱
 //    @CrossOrigin(origins = {"http://0.0.0.0:8080", "null"})
     @PostMapping("api/recipeRank")
@@ -63,6 +71,11 @@ public class RecipeController {
         return  recipes;
     }
 
+    /**
+     * 【搜索】根据用户名字获取菜谱
+     * @param username
+     * @return
+     */
     @PostMapping("api/searchrecipebyuser")
     @ResponseBody
     public List<Recipe> getRecipeByUserName(String username){
@@ -71,7 +84,7 @@ public class RecipeController {
     }
 
     /**
-     * 获取用户发布的菜谱
+     * 【个人】获取本用户发布的菜谱
      * @param request
      * @return
      */
@@ -84,20 +97,65 @@ public class RecipeController {
         return recipes;
     }
 
-    @PostMapping("api/getRecipeComment")
+    /**
+     * 【菜谱页】获取菜谱原料
+     * @param recipeId
+     * @return
+     */
+    @GetMapping("api/recipeMaterial")
     @ResponseBody
-    public List<Comment> getRecipeComment(Recipe recipe){
-        return recipeService.getRecipeComment(recipe);
+    public List<RecipeMaterial> getRecipeMaterial(@RequestParam(value = "recipeId")int recipeId){
+        return recipeService.getRecipeMaterial(recipeId);
     }
 
-    @GetMapping("api/searchrecipebytag")
+    /**
+     * 【菜谱页】获取菜谱评论
+     * @param recipeId
+     * @return
+     */
+    @PostMapping("api/getRecipeComment")
     @ResponseBody
-    public List<Recipe> getRecipeByTag(String tagName){
+    public List<Comment> getRecipeComment(@RequestParam(value = "recipeId") int recipeId){
+        return recipeService.getRecipeComment(recipeId);
+    }
+
+    /**
+     * 【菜谱页】根据菜谱ID获取菜谱
+     * @param recipeId
+     * @return
+     */
+    @PostMapping("api/getRecipebyId")
+    @ResponseBody
+    public Recipe getRecioeById(@RequestParam(value = "recipeId") int recipeId){
+        return recipeService.getRecipeById(recipeId);
+    }
+
+    /**
+     *【搜索】根据菜谱名字获取菜谱
+     * @param tagName
+     * @return
+     */
+    @PostMapping("api/searchrecipebytag")
+    @ResponseBody
+    public List<Recipe> getRecipeByTag(@RequestParam(value = "tagName") String tagName){
         //int tagId=tagService.getTagId(tagName);
         List<Recipe> recipes=this.recipeService.getRecipeByTag(tagName);
         return recipes;
     }
 
+
+    @PostMapping
+    @ResponseBody
+    public int getMaterialCalorie(@RequestParam(value = "materialId") int materialId){
+        return 0;
+    }
+
+    /**
+     * 【菜谱页】点赞菜谱
+     * @param rId
+     * @param httpSession
+     * @return
+     */
     @GetMapping("api/like")
     @ResponseBody
     public Result likeRecipe(@RequestParam(value = "recipeId") int rId, HttpSession httpSession) {
@@ -116,6 +174,13 @@ public class RecipeController {
 
     }
 
+    /**
+     * 【菜谱页】收藏菜谱
+     * @param rId
+     * @param cName
+     * @param httpSession
+     * @return
+     */
     @GetMapping("api/collect")
     @ResponseBody
     public Result collectRecipe(@RequestParam(value = "recipeId") int rId,@RequestParam(value = "collectionName") String cName, HttpSession httpSession) {
@@ -135,6 +200,12 @@ public class RecipeController {
         }
     }
 
+    /**
+     * 【个人】添加收藏夹
+     * @param cName
+     * @param httpSession
+     * @return
+     */
     @GetMapping("api/addCollection")
     @ResponseBody
     public Result createNewCollection(@RequestParam("collectionName") String cName, HttpSession httpSession) {
@@ -154,6 +225,12 @@ public class RecipeController {
     }
 
 
+    /**
+     * 【主页】发布菜谱
+     * @param recipe
+     * @param httpSession
+     * @return
+     */
     @GetMapping("api/release")
     @ResponseBody
     public Result releaseRecipe(@RequestParam("Recipe") Recipe recipe,HttpSession httpSession) {
@@ -170,6 +247,39 @@ public class RecipeController {
         }
     }
 
+
+    @GetMapping("api/test")
+    @ResponseBody
+    public List<Material> getMaterial(String materialName){
+        return materialDao.getMaterialCalorie(materialName);
+    }
+
+
+    /**
+     * 【菜谱页】向菜谱中添加食材
+     * @param recipeId
+     * @param materialName
+     * @param materialCount
+     * @return
+     */
+    @GetMapping("api/addRecipeMaterial")
+    @ResponseBody
+    public Result addReciepeMaterial(int recipeId,String materialName,int materialCount){
+        try{
+            List<RecipeMaterial> recipeMaterials1=new ArrayList<>();
+            RecipeMaterial temp=new RecipeMaterial();
+            temp.setRecipeId(recipeId);
+            temp.setMaterialName(materialName);
+            temp.setMaterialCount(materialCount);
+            recipeMaterials1.add(temp);
+            recipeService.addRecipeMaterial(recipeMaterials1);
+            return ResultFactory.buildSuccessResult(recipeMaterials1);
+        } catch (Exception e)
+        {
+            return ResultFactory.buildFailResult("添加食材失败！");
+        }
+    }
+
     @GetMapping("api/addStep")
     public void addStepToRecipe(@RequestParam Recipe recipe) {
         RecipeStep rs = new RecipeStep();
@@ -178,7 +288,11 @@ public class RecipeController {
     }
 
     /**
-     * 添加评论
+     * 添加菜谱评论
+     * @param rId
+     * @param content
+     * @param httpSession
+     * @return
      */
     @GetMapping("api/comment")
     public Result commentToRecipe(@RequestParam("recipeId") int rId, @RequestParam("content") String content, HttpSession httpSession) {

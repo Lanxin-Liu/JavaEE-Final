@@ -21,5 +21,5 @@ public interface CommentDAO {
     void insertComment(Comment comment);
 
     @Select("select * from Comment where recipe_id=#{recipeId}")
-    List<Comment> getRecipeComment(Recipe recipe);
+    List<Comment> getRecipeComment(int recipeId);
 }
