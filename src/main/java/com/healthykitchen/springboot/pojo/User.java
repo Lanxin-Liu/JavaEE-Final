@@ -18,7 +18,7 @@ public class User {
 
     private String password;
 
-    private byte[] image;
+    private String image;
 
     private String intro;
 
@@ -78,11 +78,11 @@ public class User {
         this.password = password;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

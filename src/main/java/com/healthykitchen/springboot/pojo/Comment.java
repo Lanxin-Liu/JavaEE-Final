@@ -13,6 +13,16 @@ public class Comment {
     private int commentRecipeId;
     private String commentContent;
 
+    public String getCommentTime() {
+        return commentTime;
+    }
+
+    public void setCommentTime(String commentTime) {
+        this.commentTime = commentTime;
+    }
+
+    private String commentTime;
+
     public int getCommentId() {
         return commentId;
     }

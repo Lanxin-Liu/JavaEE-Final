@@ -49,6 +49,8 @@ public class RecipeController {
     private MaterialDao materialDao;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RecipeStepDAO recipeStepDAO;
 
 
     /**
@@ -62,10 +64,16 @@ public class RecipeController {
         List<Recipe> recipes=recipeDAO.getAllRecipes();
         for(Recipe i: recipes ){
             int userId=i.getRecipeUserId();
-//            System.out.println(userService.getuserInfoById(userId).getUsername());
             i.setRecipeUsername(userService.getuserInfoById(userId).getUsername());
         }
         return recipes;
+    }
+
+    @GetMapping("api/steplist")
+    @ResponseBody
+    public List<RecipeStep> getStepInRecipe(@RequestParam Recipe recipe){
+        List<RecipeStep> rs = recipeStepDAO.getRecipeStepList(recipe);
+        return rs;
     }
 
 
@@ -134,8 +142,18 @@ public class RecipeController {
      */
     @PostMapping("api/getRecipeComment")
     @ResponseBody
-    public List<Comment> getRecipeComment(@RequestParam(value = "recipeId") int recipeId){
-        return recipeService.getRecipeComment(recipeId);
+    public List<CommentDetail> getRecipeComment(@RequestParam(value = "recipeId") int recipeId){
+        List<Comment> commentList = recipeService.getRecipeComment(recipeId);
+        List<CommentDetail> detailList = new ArrayList<>();
+        for(Comment c:commentList) {
+            CommentDetail detail = new CommentDetail();
+            detail.setUserName(userService.getUserNameById(c.getCommentUserId()));
+            detail.setTime(c.getCommentTime());
+            detail.setPic(userService.getuserInfoById(c.getCommentUserId()).getImage());
+            detail.setContent(c.getCommentContent());
+            detailList.add(detail);
+        }
+        return detailList;
     }
 
 
@@ -195,25 +213,23 @@ public class RecipeController {
 
     }
 
+
     /**
      * 【菜谱页】收藏菜谱
      * @param rId
-     * @param cName
-     * @param httpSession
      * @return
      */
-    @GetMapping("api/collect")
+    @PostMapping("api/collect")
     @ResponseBody
-    public Result collectRecipe(@RequestParam(value = "recipeId") int rId,@RequestParam(value = "collectionName") String cName, HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("User");
-        int uId = user.getUserId();
-        if(collectService.ifExist(uId, cName)) {
-            int recipeNums = collectionDAO.getRecipeNums(uId);
+    public Result collectRecipe(@RequestParam(value = "recipeId") int rId, @RequestParam int userId) {
+        String cName="DEFAULT";
+        if(collectService.ifExist(userId, cName)) {
+            int recipeNums = collectionDAO.getRecipeNums(userId);
             Collection c = new Collection();
             c.setCollectionId(recipeNums+1);
             c.setCollectionName(cName);
             c.setCollectionRecipeId(rId);
-            c.setCollectionUserId(uId);
+            c.setCollectionUserId(userId);
             collectionDAO.addCollection(c);
             return ResultFactory.buildSuccessResult(c);
         } else {
@@ -343,18 +359,24 @@ public class RecipeController {
      * 添加菜谱评论
      * @param rId
      * @param content
-     * @param httpSession
      * @return
      */
-    @GetMapping("api/comment")
-    public Result commentToRecipe(@RequestParam("recipeId") int rId, @RequestParam("content") String content, HttpSession httpSession) {
-        User user = (User)httpSession.getAttribute("User");
+    @PostMapping("api/comment")
+    public Result commentToRecipe(@RequestParam("recipeId") int rId, @RequestParam("content") String content, @RequestParam int userId) {
+        DateUtil time = new DateUtil();
+        User user = userService.getuserInfoById(userId);
+        CommentDetail detail = new CommentDetail();
         Comment comment = new Comment();
         comment.setCommentRecipeId(rId);
         comment.setCommentContent(content);
-        comment.setCommentUserId(user.getUserId());
+        comment.setCommentUserId(userId);
+        comment.setCommentTime(time.getTime());
+        detail.setContent(content);
+        detail.setPic(user.getImage());
+        detail.setTime(time.getTime());/**/
+        detail.setUserName(user.getUsername());
         recipeService.addComment(comment);
-        return ResultFactory.buildSuccessResult(comment);
+        return ResultFactory.buildSuccessResult(detail);
     }
 
     public String upload(MultipartFile pic){
