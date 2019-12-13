@@ -2,6 +2,7 @@ package com.healthykitchen.springboot.controller;
 
 import com.healthykitchen.springboot.dao.*;
 import com.healthykitchen.springboot.pojo.*;
+import com.healthykitchen.springboot.pojo.Collection;
 import com.healthykitchen.springboot.result.Result;
 import com.healthykitchen.springboot.result.ResultFactory;
 import com.healthykitchen.springboot.service.CollectService;
@@ -11,16 +12,18 @@ import com.healthykitchen.springboot.service.TagService;
 
 import com.healthykitchen.springboot.utils.DateUtil;
 
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @className:
@@ -93,7 +96,7 @@ public class RecipeController {
     public List<Recipe> getRecipeByUserId(HttpServletRequest request) {
         HttpSession session=request.getSession(true) ;
         User user=(User)session.getAttribute("user");
-        List<Recipe> recipes=this.recipeService.getRecipeByUserId(user.getId());
+        List<Recipe> recipes=this.recipeService.getRecipeByUserId(user.getUserId());
         return recipes;
     }
 
@@ -162,7 +165,7 @@ public class RecipeController {
         try {
             User user = (User) httpSession.getAttribute("user");
             int uId;
-            uId = user.getId();
+            uId = user.getUserId();
             Recipe recipe = recipeService.getRecipeById(rId);
             collectService.addLikeToRecipe(recipe, uId);
             recipe.setLikeNum(recipe.getLikeNum() + 1);
@@ -185,7 +188,7 @@ public class RecipeController {
     @ResponseBody
     public Result collectRecipe(@RequestParam(value = "recipeId") int rId,@RequestParam(value = "collectionName") String cName, HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("User");
-        int uId = user.getId();
+        int uId = user.getUserId();
         if(collectService.ifExist(uId, cName)) {
             int recipeNums = collectionDAO.getRecipeNums(uId);
             Collection c = new Collection();
@@ -210,7 +213,7 @@ public class RecipeController {
     @ResponseBody
     public Result createNewCollection(@RequestParam("collectionName") String cName, HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("User");
-        int uId = user.getId();
+        int uId = user.getUserId();
         if(!collectService.ifExist(uId, cName)) {
             int recipeNums = collectionDAO.getRecipeNums(uId);
             Collection c = new Collection();
@@ -231,13 +234,14 @@ public class RecipeController {
      * @param httpSession
      * @return
      */
-    @GetMapping("api/release")
+    @PostMapping("api/release")
     @ResponseBody
-    public Result releaseRecipe(@RequestParam("Recipe") Recipe recipe,HttpSession httpSession) {
+    public Result releaseRecipe(@RequestParam("Recipe") Recipe recipe,@RequestParam MultipartFile pic, HttpSession httpSession) {
         try {
             User user = (User) httpSession.getAttribute("User");
             DateUtil date = new DateUtil();
-            int uId = user.getId();
+            int uId = user.getUserId();
+            upload(pic);
             recipe.setRecipeTime(date.getTime());
             recipe.setRecipeUserId(uId);
             recipeService.addRecipe(recipe);
@@ -324,9 +328,35 @@ public class RecipeController {
         Comment comment = new Comment();
         comment.setCommentRecipeId(rId);
         comment.setCommentContent(content);
-        comment.setCommentUserId(user.getId());
+        comment.setCommentUserId(user.getUserId());
         recipeService.addComment(comment);
         return ResultFactory.buildSuccessResult(comment);
+    }
+
+
+    /**
+     * 上传图片
+     * @param pic
+     * @return
+     * @throws ParseException
+     */
+    public void upload(MultipartFile pic) throws ParseException {
+        if (pic.isEmpty()) {
+            System.err.println("上传文件不可为空");
+        }
+        String fileName = pic.getOriginalFilename();//得到文件名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));//得到后缀名
+        System.err.println("suffixName:" + suffixName);
+        String filepath = "/Users/anonym_co/Desktop/";//指定图片上传到哪个文件夹的路径
+        fileName = UUID.randomUUID() + suffixName;//重新命名图片，变成随机的名字
+        System.err.println("fileName:" + fileName);
+        File dest = new File(filepath + fileName);//在上传的文件夹处创建文件
+        try {
+            pic.transferTo(dest);//把上传的图片写入磁盘中
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

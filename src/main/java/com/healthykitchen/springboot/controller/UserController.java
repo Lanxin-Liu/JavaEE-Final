@@ -50,7 +50,7 @@ public class UserController {
     public Result getUserInfoById(@RequestParam(value = "userId") int userId,HttpSession httpSession){
         User user=(User)httpSession.getAttribute("User");
         User userRequest=userService.getuserInfoById(userId);
-        if(user.getId()!=userId){
+        if(user.getUserId()!=userId){
             return ResultFactory.buildSuccessResult(userRequest);
         }
         else
@@ -96,7 +96,7 @@ public class UserController {
     @ResponseBody
     public Result updateUserPassword(@RequestParam("password") String password,HttpSession httpSession){
         User user = (User) httpSession.getAttribute("User");
-        int uId=user.getId();
+        int uId=user.getUserId();
         try{
             user.setPassword(password);
             userService.updateUserInfo(user);

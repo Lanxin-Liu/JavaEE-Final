@@ -19,7 +19,7 @@ public class Recipe {
 
     private String recipeDesc;
 
-    private byte[] recipeImage;
+    private String recipeImage;
 
     private int likeNum;
 
@@ -73,11 +73,11 @@ public class Recipe {
         this.recipeDesc = recipeDesc;
     }
 
-    public byte[] getRecipeImage() {
+    public String getRecipeImage() {
         return recipeImage;
     }
 
-    public void setRecipeImage(byte[] recipeImage) {
+    public void setRecipeImage(String recipeImage) {
         this.recipeImage = recipeImage;
     }
 

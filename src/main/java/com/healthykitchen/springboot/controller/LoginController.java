@@ -77,7 +77,7 @@ public class LoginController {
 
         String passwordMD5 = MD5Util.MD5Encode(password, "UTF-8");
 
-        user.setId(userService.countUser());
+        user.setUserId(userService.countUser());
         user.setPassword(passwordMD5);
         userService.add(user);
 

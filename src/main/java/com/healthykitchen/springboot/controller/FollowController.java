@@ -32,7 +32,7 @@ public class FollowController {
     @ResponseBody
     public List<User> getFollowingList(HttpSession httpSession){
         User user=(User)httpSession.getAttribute("user");
-        List<User> users=followService.getuserFollowing(user.getId());
+        List<User> users=followService.getuserFollowing(user.getUserId());
         return users;
     }
 
@@ -45,7 +45,7 @@ public class FollowController {
     @ResponseBody
     public List<User> getFollowedList(HttpSession httpSession){
         User user=(User)httpSession.getAttribute("User");
-        List<User> users=followService.getuserFollowed(user.getId());
+        List<User> users=followService.getuserFollowed(user.getUserId());
         return users;
     }
 
@@ -64,12 +64,12 @@ public class FollowController {
         try {
             Follow follow = new Follow();
             String followTime = "2019-11-12 12:00:00";//获取时间的函数忘记了，先用这个
-            follow.setFollowedUserId(user.getId());
-            follow.setFollowingUserId(followingUser.getId());
+            follow.setFollowedUserId(user.getUserId());
+            follow.setFollowingUserId(followingUser.getUserId());
             follow.setFollowTime(followTime);
             followService.addFollow(follow);
-            followService.updateFollowing(user.getId());
-            followService.updateFollowed(followingUser.getId());
+            followService.updateFollowing(user.getUserId());
+            followService.updateFollowed(followingUser.getUserId());
             return ResultFactory.buildSuccessResult(follow);
         } catch (Exception e)
         {
@@ -91,11 +91,11 @@ public class FollowController {
         try {
             String time="2019-12-11 12:00:12";
             Follow follow=new Follow();
-            follow.setFollowedUserId(user.getId());
-            follow.setFollowingUserId(followingUser.getId());
-            followService.unfollow(user.getId(),followingUser.getId());
-            followService.updateunFollowed(followingUser.getId());
-            followService.updateunFollowing(user.getId());
+            follow.setFollowedUserId(user.getUserId());
+            follow.setFollowingUserId(followingUser.getUserId());
+            followService.unfollow(user.getUserId(),followingUser.getUserId());
+            followService.updateunFollowed(followingUser.getUserId());
+            followService.updateunFollowing(user.getUserId());
             return ResultFactory.buildSuccessResult(follow);
         }
         catch (Exception e){
