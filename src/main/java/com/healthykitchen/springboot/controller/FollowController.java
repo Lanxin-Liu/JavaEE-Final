@@ -31,8 +31,8 @@ public class FollowController {
     @GetMapping("api/followinglist")
     @ResponseBody
     public List<User> getFollowingList(HttpSession httpSession){
-        User user=(User)httpSession.getAttribute("user");
-        List<User> users=followService.getuserFollowing(user.getUserId());
+        User user=(User)httpSession.getAttribute("User");
+        List<User> users=followService.getuserFollowing(user.getId());
         return users;
     }
 
@@ -45,7 +45,7 @@ public class FollowController {
     @ResponseBody
     public List<User> getFollowedList(HttpSession httpSession){
         User user=(User)httpSession.getAttribute("User");
-        List<User> users=followService.getuserFollowed(user.getUserId());
+        List<User> users=followService.getuserFollowed(user.getId());
         return users;
     }
 
@@ -59,17 +59,17 @@ public class FollowController {
     @ResponseBody
     public Result follow(User followingUser,HttpSession httpSession) {
         //ResultFactory resultFactory=new ResultFactory();
-        User user=(User)httpSession.getAttribute("user");
+        User user=(User)httpSession.getAttribute("User");
         //boolean exist=userService.existById(followingUserId);
         try {
             Follow follow = new Follow();
             String followTime = "2019-11-12 12:00:00";//获取时间的函数忘记了，先用这个
-            follow.setFollowedUserId(user.getUserId());
-            follow.setFollowingUserId(followingUser.getUserId());
+            follow.setFollowedUserId(user.getId());
+            follow.setFollowingUserId(followingUser.getId());
             follow.setFollowTime(followTime);
             followService.addFollow(follow);
-            followService.updateFollowing(user.getUserId());
-            followService.updateFollowed(followingUser.getUserId());
+            followService.updateFollowing(user.getId());
+            followService.updateFollowed(followingUser.getId());
             return ResultFactory.buildSuccessResult(follow);
         } catch (Exception e)
         {
@@ -87,15 +87,15 @@ public class FollowController {
     @ResponseBody
     public Result unfollow(User followingUser,HttpSession httpSession) {
         //ResultFactory resultFactory=new ResultFactory();
-        User user=(User)httpSession.getAttribute("user");
+        User user=(User)httpSession.getAttribute("User");
         try {
             String time="2019-12-11 12:00:12";
             Follow follow=new Follow();
-            follow.setFollowedUserId(user.getUserId());
-            follow.setFollowingUserId(followingUser.getUserId());
-            followService.unfollow(user.getUserId(),followingUser.getUserId());
-            followService.updateunFollowed(followingUser.getUserId());
-            followService.updateunFollowing(user.getUserId());
+            follow.setFollowedUserId(user.getId());
+            follow.setFollowingUserId(followingUser.getId());
+            followService.unfollow(user.getId(),followingUser.getId());
+            followService.updateunFollowed(followingUser.getId());
+            followService.updateunFollowing(user.getId());
             return ResultFactory.buildSuccessResult(follow);
         }
         catch (Exception e){

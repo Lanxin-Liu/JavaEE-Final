@@ -58,6 +58,23 @@ public class UserController {
     }
 
     /**
+     * [主页]用户个人信息
+     * @param httpSession
+     * @return
+     */
+    @GetMapping("api/getpPersonalInfo")
+    @ResponseBody
+    public Result getPersonalInfo(HttpSession httpSession){
+        try {
+            User user = (User) httpSession.getAttribute("User");
+            return ResultFactory.buildSuccessResult(user);
+        }
+        catch (Exception e) {
+            return ResultFactory.buildFailResult("本用户");
+        }
+    }
+
+    /**
      * 【】主页 用户名单
      * @return
      */
