@@ -101,7 +101,7 @@ public class RecipeController {
     public List<Recipe> getRecipeByUserId(HttpServletRequest request) {
         HttpSession session=request.getSession(true) ;
         User user=(User)session.getAttribute("User");
-        List<Recipe> recipes=this.recipeService.getRecipeByUserId(user.getId());
+        List<Recipe> recipes=this.recipeService.getRecipeByUserId(user.getUserId());
         return recipes;
     }
 
@@ -170,7 +170,7 @@ public class RecipeController {
         try {
             User user = (User) httpSession.getAttribute("User");
             int uId;
-            uId = user.getId();
+            uId = user.getUserId();
             Recipe recipe = recipeService.getRecipeById(rId);
             collectService.addLikeToRecipe(recipe, uId);
             recipe.setLikeNum(recipe.getLikeNum() + 1);
@@ -193,7 +193,7 @@ public class RecipeController {
     @ResponseBody
     public Result collectRecipe(@RequestParam(value = "recipeId") int rId,@RequestParam(value = "collectionName") String cName, HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("User");
-        int uId = user.getId();
+        int uId = user.getUserId();
         if(collectService.ifExist(uId, cName)) {
             int recipeNums = collectionDAO.getRecipeNums(uId);
             Collection c = new Collection();
@@ -218,7 +218,7 @@ public class RecipeController {
     @ResponseBody
     public Result createNewCollection(@RequestParam("collectionName") String cName, HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("User");
-        int uId = user.getId();
+        int uId = user.getUserId();
         if(!collectService.ifExist(uId, cName)) {
             int recipeNums = collectionDAO.getRecipeNums(uId);
             Collection c = new Collection();
@@ -245,7 +245,7 @@ public class RecipeController {
         try {
             User user = (User) httpSession.getAttribute("User");
             DateUtil date = new DateUtil();
-            int uId = user.getId();
+            int uId = user.getUserId();
             recipe.setRecipeTime(date.getTime());
             recipe.setRecipeUserId(uId);
             recipeService.addRecipe(recipe);
@@ -332,7 +332,7 @@ public class RecipeController {
         Comment comment = new Comment();
         comment.setCommentRecipeId(rId);
         comment.setCommentContent(content);
-        comment.setCommentUserId(user.getId());
+        comment.setCommentUserId(user.getUserId());
         recipeService.addComment(comment);
         return ResultFactory.buildSuccessResult(comment);
     }
