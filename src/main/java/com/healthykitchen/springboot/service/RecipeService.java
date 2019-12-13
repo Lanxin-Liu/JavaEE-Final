@@ -125,4 +125,8 @@ public class RecipeService {
     public int countUser() {
         return recipeDAO.getRecipeNum();
     }
+
+    public int countRecipeStep(Recipe recipe) {
+        return rsDAO.getRecipeStepNum(recipe);
+    }
 }

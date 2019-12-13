@@ -241,7 +241,7 @@ public class RecipeController {
             User user = (User) httpSession.getAttribute("User");
             DateUtil date = new DateUtil();
             int uId = user.getUserId();
-            upload(pic);
+            recipe.setRecipeImage(upload(pic));
             recipe.setRecipeTime(date.getTime());
             recipe.setRecipeUserId(uId);
             recipeService.addRecipe(recipe);
@@ -309,10 +309,12 @@ public class RecipeController {
 
 
     @GetMapping("api/addStep")
-    public void addStepToRecipe(@RequestParam Recipe recipe) {
-        RecipeStep rs = new RecipeStep();
-        rs.setRecipeId(recipe.getRecipeId());
-        recipeService.addStep(rs);
+    public void addStepToRecipe(@RequestParam MultipartFile pic, @RequestParam Recipe recipe,@RequestParam RecipeStep rs) throws ParseException {
+        RecipeStep recipeStep = rs;
+        recipeStep.setImage(upload(pic));
+        recipeStep.setRecipeId(recipe.getRecipeId());
+        recipeStep.setStepId(recipeService.countRecipeStep(recipe)+1);
+        recipeService.addStep(recipeStep);
     }
 
     /**
@@ -340,7 +342,7 @@ public class RecipeController {
      * @return
      * @throws ParseException
      */
-    public void upload(MultipartFile pic) throws ParseException {
+    public String upload(MultipartFile pic) throws ParseException {
         if (pic.isEmpty()) {
             System.err.println("上传文件不可为空");
         }
@@ -356,7 +358,7 @@ public class RecipeController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return filepath+fileName;
     }
 
 
