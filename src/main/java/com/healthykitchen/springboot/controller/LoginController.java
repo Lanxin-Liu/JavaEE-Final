@@ -44,11 +44,17 @@ public class LoginController {
     @PostMapping(value = "api/login")
     @ResponseBody
 //    @RequestMapping(value="/login", method = RequestMethod.POST)
-    public Result login(@RequestBody User user,HttpSession httpSession) {
+    public Result login(@RequestBody User user,HttpServletRequest request) {
         User user1 = userService.getUserNameandPassword(user.getUsername(),user.getPassword());
         if(user1 != null ) {
-            httpSession.setAttribute("user",user1);
+             HttpSession session=request.getSession();
+             session.setAttribute("User",user1);
+//            httpSession.setAttribute("user",user1);
             System.out.println("success!");
+            User temp=new User();
+            session=request.getSession();
+            temp=(User)session.getAttribute("User");
+            System.out.print(temp.getId()+temp.getUsername());
             return ResultFactory.buildSuccessResult(user1);
         } else {
             return ResultFactory.buildFailResult("登录失败！");

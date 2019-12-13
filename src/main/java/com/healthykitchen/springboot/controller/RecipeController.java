@@ -110,7 +110,7 @@ public class RecipeController {
      * @param recipeId
      * @return
      */
-    @GetMapping("api/recipeMaterial")
+    @PostMapping("api/getRecipeMaterial")
     @ResponseBody
     public List<RecipeMaterial> getRecipeMaterial(@RequestParam(value = "recipeId")int recipeId){
         return recipeService.getRecipeMaterial(recipeId);
@@ -135,7 +135,9 @@ public class RecipeController {
     @PostMapping("api/getRecipebyId")
     @ResponseBody
     public Recipe getRecioeById(@RequestParam(value = "recipeId") int recipeId){
-        return recipeService.getRecipeById(recipeId);
+        Recipe recipe=recipeService.getRecipeById(recipeId);
+        recipe.setRecipeUsername(userService.getuserInfoById(recipe.getRecipeUserId()).getUsername());
+        return recipe ;
     }
 
     /**

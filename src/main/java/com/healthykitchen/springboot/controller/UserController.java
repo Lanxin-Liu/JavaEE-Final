@@ -47,11 +47,12 @@ public class UserController {
      */
     @PostMapping("api/getUserInfoById")
     @ResponseBody
-    public Result getUserInfoById(@RequestParam(value = "userId") int userId,HttpSession httpSession){
-        User user=(User)httpSession.getAttribute("User");
-        User userRequest=userService.getuserInfoById(userId);
-        if(user.getId()!=userId){
-            return ResultFactory.buildSuccessResult(userRequest);
+    public Result getUserInfoById(@RequestParam(value = "userId") String userId){
+//        User user=(User)httpSession.getAttribute("User");
+        int uId=Integer.parseInt(userId);
+        User user=userService.getuserInfoById(uId);
+        if(user.getId()==uId){
+            return ResultFactory.buildSuccessResult(user);
         }
         else
             return ResultFactory.buildFailResult("本用户");
@@ -59,14 +60,17 @@ public class UserController {
 
     /**
      * [主页]用户个人信息
-     * @param httpSession
+     * @param request
      * @return
      */
-    @GetMapping("api/getpPersonalInfo")
+    @GetMapping("api/getPersonalInfo")
     @ResponseBody
-    public Result getPersonalInfo(HttpSession httpSession){
+    public Result getPersonalInfo(HttpServletRequest request){
         try {
-            User user = (User) httpSession.getAttribute("User");
+            HttpSession session=request.getSession(true);
+            User user=(User)session.getAttribute("User");
+//            User user = (User) httpSession.getAttribute("User");
+            System.out.print(user.getId()+user.getUsername());
             return ResultFactory.buildSuccessResult(user);
         }
         catch (Exception e) {
