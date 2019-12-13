@@ -95,12 +95,20 @@ public class RecipeController {
      * @param username
      * @return
      */
-    @PostMapping("api/searchrecipebyuser")
+    @PostMapping("api/getRecipeByUsername")
     @ResponseBody
-    public List<Recipe> getRecipeByUserName(String username){
-        List<Recipe> recipes=this.recipeService.getRecipeByUserName(username);
+    public List<Recipe> getRecipeByUserName(@RequestParam(value = "username") String username){
+        List<Recipe> recipes=recipeService.getRecipeByUserName(username);
         return recipes;
     }
+
+    @PostMapping("api/getRecipeByUserId")
+    @ResponseBody
+    public List<Recipe> getRecipeByUserId(@RequestParam(value = "userId") int userId){
+        List<Recipe> recipes=recipeService.getRecipeByUserId(userId);
+        return  recipes;
+    }
+
 
     /**
      * 【个人】获取本用户发布的菜谱
@@ -147,6 +155,8 @@ public class RecipeController {
         }
         return detailList;
     }
+
+
 
     /**
      * 【菜谱页】根据菜谱ID获取菜谱
@@ -345,7 +355,6 @@ public class RecipeController {
             i++;
         }
     }
-
     /**
      * 添加菜谱评论
      * @param rId
