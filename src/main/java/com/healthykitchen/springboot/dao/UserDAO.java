@@ -28,6 +28,9 @@ public interface UserDAO {
     @Select("select user_id,user_name,password,image,intro,gender,followed_num,following_num from User_info where user_id=#{userId}")
     User getuserInfoById(int userId);
 
+    @Select("select user_name from User_info where user_id=#{userId}")
+    String getuserNameById(int userId);
+
     @Select("select * from User_info where user_name = #{userName}")
     User findByUsername(String userName);
 

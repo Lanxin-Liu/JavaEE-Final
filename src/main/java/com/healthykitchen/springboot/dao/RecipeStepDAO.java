@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @className:
  * @description:
@@ -21,4 +23,7 @@ public interface RecipeStepDAO {
 
     @Select("select count(*) from Recipe_Content where step_recipe_id = #{recipeId}")
     int getRecipeStepNum(Recipe recipe);
+
+    @Select("select * from Recipe_Content where step_recipe_id = #{recipeId}")
+    List<RecipeStep> getRecipeStepList(Recipe recipe);
 }
