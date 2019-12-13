@@ -98,6 +98,8 @@ public class RecipeController {
     @ResponseBody
     public List<Recipe> getRecipeByUserId(@RequestParam(value = "userId") int userId){
         List<Recipe> recipes=recipeService.getRecipeByUserId(userId);
+        for(Recipe r:recipes)
+            System.out.print(r.getRecipeId());
         return  recipes;
     }
 
@@ -134,7 +136,9 @@ public class RecipeController {
     @PostMapping("api/getRecipeComment")
     @ResponseBody
     public List<Comment> getRecipeComment(@RequestParam(value = "recipeId") int recipeId){
-        return recipeService.getRecipeComment(recipeId);
+        List<Comment> comments;
+        comments=recipeService.getRecipeComment(recipeId);
+        return comments;
     }
 
     /**
@@ -197,27 +201,20 @@ public class RecipeController {
     /**
      * 【菜谱页】收藏菜谱
      * @param rId
-     * @param cName
-     * @param httpSession
      * @return
      */
-    @GetMapping("api/collect")
+    @PostMapping("api/collect")
     @ResponseBody
-    public Result collectRecipe(@RequestParam(value = "recipeId") int rId,@RequestParam(value = "collectionName") String cName, HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("User");
-        int uId = user.getUserId();
-        if(collectService.ifExist(uId, cName)) {
-            int recipeNums = collectionDAO.getRecipeNums(uId);
-            Collection c = new Collection();
-            c.setCollectionId(recipeNums+1);
-            c.setCollectionName(cName);
-            c.setCollectionRecipeId(rId);
-            c.setCollectionUserId(uId);
-            collectionDAO.addCollection(c);
-            return ResultFactory.buildSuccessResult(c);
-        } else {
-            return ResultFactory.buildFailResult("该收藏夹不存在！");
-        }
+    public Result collectRecipe(@RequestParam(value = "recipeId") int rId, @RequestParam int userId) {
+        String cName="DEFAULT";
+        int recipeNums = collectionDAO.getRecipeNums(userId);
+        Collection c = new Collection();
+        c.setCollectionName(cName);
+        c.setCollectionRecipeId(rId);
+        c.setCollectionUserId(userId);
+        collectionDAO.addCollection(c);
+        return ResultFactory.buildSuccessResult(c);
+
     }
 
     /**
@@ -236,7 +233,6 @@ public class RecipeController {
             Collection c = new Collection();
             c.setCollectionUserId(uId);
             c.setCollectionName(cName);
-            c.setCollectionId(recipeNums + 1);
             collectService.createCollection(c);
             return ResultFactory.buildSuccessResult(c);
         } else {
@@ -342,18 +338,25 @@ public class RecipeController {
      * 添加菜谱评论
      * @param rId
      * @param content
-     * @param httpSession
      * @return
      */
-    @GetMapping("api/comment")
-    public Result commentToRecipe(@RequestParam("recipeId") int rId, @RequestParam("content") String content, HttpSession httpSession) {
-        User user = (User)httpSession.getAttribute("User");
+    @PostMapping("api/comment")
+    @ResponseBody
+    public Result commentToRecipe(@RequestParam("recipeId") int rId, @RequestParam("content") String content, @RequestParam int userId) {
+        DateUtil time = new DateUtil();
+        User user = userService.getuserInfoById(userId);
+        CommentDetail detail = new CommentDetail();
         Comment comment = new Comment();
         comment.setCommentRecipeId(rId);
         comment.setCommentContent(content);
-        comment.setCommentUserId(user.getUserId());
+        comment.setCommentUserId(userId);
+        comment.setCommentTime(time.getTime());
+        detail.setContent(content);
+        detail.setPic(user.getImage());
+        detail.setTime(time.getTime());
+        detail.setUserName(user.getUsername());
         recipeService.addComment(comment);
-        return ResultFactory.buildSuccessResult(comment);
+        return ResultFactory.buildSuccessResult(detail);
     }
 
     public String upload(MultipartFile pic){

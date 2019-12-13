@@ -8,18 +8,10 @@ package com.healthykitchen.springboot.pojo;
  * @version: v1.0
  */
 public class Collection {
-    private int collectionId;
     private String collectionName;
     private int collectionUserId;
     private int collectionRecipeId;
 
-    public int getCollectionId() {
-        return collectionId;
-    }
-
-    public void setCollectionId(int collectionId) {
-        this.collectionId = collectionId;
-    }
 
     public String getCollectionName() {
         return collectionName;

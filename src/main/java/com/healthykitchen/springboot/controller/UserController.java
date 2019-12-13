@@ -2,11 +2,14 @@ package com.healthykitchen.springboot.controller;
 
 import com.healthykitchen.springboot.dao.RecipeDAO;
 import com.healthykitchen.springboot.dao.UserDAO;
+import com.healthykitchen.springboot.pojo.Collection;
 import com.healthykitchen.springboot.pojo.Recipe;
 import com.healthykitchen.springboot.pojo.User;
 import com.healthykitchen.springboot.result.Result;
 import com.healthykitchen.springboot.result.ResultFactory;
+import com.healthykitchen.springboot.service.CollectService;
 import com.healthykitchen.springboot.service.FollowService;
+import com.healthykitchen.springboot.service.RecipeService;
 import com.healthykitchen.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,19 +42,38 @@ public class UserController {
     @Autowired
     private RecipeDAO recipeDAO;
 
+   /*
+           * @param collectionUserId
+     * @return
+             */
+    @Autowired
+    private CollectService collectService;
+    @Autowired
+    private RecipeService recipeService;
 
+
+    @PostMapping("api/getUserCollection")
+    @ResponseBody
+    public List<Recipe> getUserCollection(@RequestParam(value = "userId")int userId){
+        List<Collection> collections=collectService.getMyCollection(userId);
+        List<Recipe> recipes=new ArrayList<>();
+        for(Collection c:collections) {
+            recipes.add(recipeService.getRecipeById(c.getCollectionRecipeId()));
+        }
+        return recipes;
+    }
     /**
      * 【个人主页】根据用户id获取用户信息
      * @param userId
      * @return
      */
-    @GetMapping("api/getUserInfoById")
+    @PostMapping("api/getUserInfoById")
     @ResponseBody
-    public Result getUserInfoById(@RequestParam(value = "userId") int userId,HttpSession httpSession){
-        User user=(User)httpSession.getAttribute("User");
-        User userRequest=userService.getuserInfoById(userId);
-        if(user.getUserId()!=userId){
-            return ResultFactory.buildSuccessResult(userRequest);
+    public Result getUserInfoById(@RequestParam(value = "userId") int userId){
+//        User user=(User)httpSession.getAttribute("User");
+        User user=userService.getuserInfoById(userId);
+        if(user.getUserId()==userId){
+            return ResultFactory.buildSuccessResult(user);
         }
         else
             return ResultFactory.buildFailResult("本用户");

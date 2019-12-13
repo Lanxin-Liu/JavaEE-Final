@@ -12,6 +12,15 @@ public class Comment {
     private int commentUserId;
     private int commentRecipeId;
     private String commentContent;
+    private String commentTime;
+
+    public String getCommentTime() {
+        return commentTime;
+    }
+
+    public void setCommentTime(String commentTime) {
+        this.commentTime = commentTime;
+    }
 
     public int getCommentId() {
         return commentId;

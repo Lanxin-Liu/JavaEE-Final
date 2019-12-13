@@ -20,6 +20,6 @@ public interface CommentDAO {
     @Insert("insert into Comment (comment_user_id,comment_recipe_id,comment_content) values (#{commentUserId},#{commentRecipeId},#{commentContent})")
     void insertComment(Comment comment);
 
-    @Select("select * from Comment where recipe_id=#{recipeId}")
-    List<Comment> getRecipeComment(int recipeId);
+    @Select("select * from Comment where comment_recipe_id=#{commentRecipeId}")
+    List<Comment> getRecipeComment(int commentRecipeId);
 }

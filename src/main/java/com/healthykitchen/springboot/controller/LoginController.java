@@ -54,7 +54,7 @@ public class LoginController {
             User temp=new User();
             session=request.getSession();
             temp=(User)session.getAttribute("User");
-            System.out.print(temp.getId()+temp.getUsername());
+            System.out.print(temp.getUserId()+temp.getUsername());
             return ResultFactory.buildSuccessResult(user1);
         } else {
             return ResultFactory.buildFailResult("登录失败！");

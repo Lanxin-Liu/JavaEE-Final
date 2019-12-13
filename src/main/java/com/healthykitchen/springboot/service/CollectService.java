@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @className:
@@ -64,5 +65,10 @@ public class CollectService {
         if(c == null) {
             return false;
         } else return true;
+    }
+
+    public List<Collection> getMyCollection(int UserId){
+        List<Collection> collections=collectionDAO.getMyCollection(UserId);
+        return collections;
     }
 }
