@@ -101,6 +101,7 @@ public class RecipeController {
         return  recipes;
     }
 
+
     /**
      * 【个人】获取本用户发布的菜谱
      * @param request
@@ -136,6 +137,8 @@ public class RecipeController {
     public List<Comment> getRecipeComment(@RequestParam(value = "recipeId") int recipeId){
         return recipeService.getRecipeComment(recipeId);
     }
+
+
 
     /**
      * 【菜谱页】根据菜谱ID获取菜谱

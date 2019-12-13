@@ -1,6 +1,7 @@
 package com.healthykitchen.springboot.dao;
 
 import com.healthykitchen.springboot.pojo.Collection;
+import com.healthykitchen.springboot.pojo.Recipe;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -24,4 +25,7 @@ public interface CollectionDAO {
 
     @Select("SSELECT COUNT(collection_recipe_id) FROM Collection WHERE collection_user_id = #{uId}")
     int getRecipeNums(int uId);
+
+    @Select(("SELECT * FROM Collection where collection_user_id = #{collectionUserId}"))
+    List<Recipe> getMyCollection(int collectionUserId);
 }

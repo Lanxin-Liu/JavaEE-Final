@@ -2,10 +2,12 @@ package com.healthykitchen.springboot.controller;
 
 import com.healthykitchen.springboot.dao.RecipeDAO;
 import com.healthykitchen.springboot.dao.UserDAO;
+import com.healthykitchen.springboot.pojo.Collection;
 import com.healthykitchen.springboot.pojo.Recipe;
 import com.healthykitchen.springboot.pojo.User;
 import com.healthykitchen.springboot.result.Result;
 import com.healthykitchen.springboot.result.ResultFactory;
+import com.healthykitchen.springboot.service.CollectService;
 import com.healthykitchen.springboot.service.FollowService;
 import com.healthykitchen.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private RecipeDAO recipeDAO;
+    @Autowired
+    private CollectService collectService;
 
 
     /**
@@ -133,6 +137,17 @@ public class UserController {
 //            return ResultFactory.buildFailResult("更改个人密码失败！");
     }
 
+    /**
+     *
+     * @param collectionUserId
+     * @return
+     */
+    @PostMapping("api/getUserCollection")
+    @ResponseBody
+    public List<Recipe> getUserCollection(@RequestParam(value = "collectionUserId")int collectionUserId){
+        List<Recipe> recipes=collectService.getMyCollection(collectionUserId);
+        return recipes;
+    }
     /**
      * 【个人资料】修改用户个人简介
      * @param intro
