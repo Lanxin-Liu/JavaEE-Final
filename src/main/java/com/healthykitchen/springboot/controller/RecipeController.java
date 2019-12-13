@@ -317,14 +317,18 @@ public class RecipeController {
 
 
     @GetMapping("api/addStep")
-    public void addStepToRecipe(@RequestParam MultipartFile pic, @RequestParam RecipeStep recipeStep, @RequestParam Recipe recipe) {
-        RecipeStep rs = recipeStep;
-        rs.setImage(upload(pic));
-        rs.setStepId(recipeService.countRecipeStep(recipe)+1);
-        rs.setRecipeId(recipe.getRecipeId());
-        recipeService.addStep(rs);
+    @ResponseBody
+    public void addStepToRecipe(List<MultipartFile> picList, List<RecipeStep> recipeStepList, @RequestParam Recipe recipe) {
+        int i = 0;
+        for(RecipeStep r:recipeStepList) {
+            RecipeStep rs = r;
+            rs.setImage(upload(picList.get(i)));
+            rs.setStepId(recipeService.countRecipeStep(recipe) + 1);
+            rs.setRecipeId(recipe.getRecipeId());
+            recipeService.addStep(rs);
+            i++;
+        }
     }
-
     /**
      * 添加菜谱评论
      * @param rId
