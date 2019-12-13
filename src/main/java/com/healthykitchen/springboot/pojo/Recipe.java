@@ -15,7 +15,7 @@ public class Recipe {
 
     private String recipeTime;
 
-    private int recipeTag;
+    private String recipeTag;
 
     private String recipeDesc;
 
@@ -69,11 +69,11 @@ public class Recipe {
         this.recipeTime = recipeTime;
     }
 
-    public int getRecipeTag() {
+    public String getRecipeTag() {
         return recipeTag;
     }
 
-    public void setRecipeTag(int recipeTag) {
+    public void setRecipeTag(String recipeTag) {
         this.recipeTag = recipeTag;
     }
 
