@@ -53,12 +53,14 @@ public class RecipeController {
      * @return
      */
     //获取所有菜谱 按时间排序
-    @PostMapping("api/recipelist")
+    @GetMapping("api/recipelist")
     @ResponseBody
     public List<Recipe> getAllRecipes(){
         List<Recipe> recipes=recipeDAO.getAllRecipes();
         for(Recipe i: recipes ){
-            i.setRecipeUsername(userService.getuserInfoById(i.getRecipeUserId()).getUsername());
+            int userId=i.getRecipeUserId();
+//            System.out.println(userService.getuserInfoById(userId).getUsername());
+            i.setRecipeUsername(userService.getuserInfoById(userId).getUsername());
         }
         return recipes;
     }
