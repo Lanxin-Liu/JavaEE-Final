@@ -28,9 +28,12 @@ public class User {
 
     private int followingNum;
 
-    public User(){}
+    public User(){
+        this.userId = 0;
+    }
 
     public User(String username, String password) {
+        this.userId = 0;
         this.userName = username;
         this.password = password;
         this.gender = "";
@@ -51,11 +54,11 @@ public class User {
 //        this.following_num = following_num;
 //    }
 
-    public int getId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setId(int id) {
+    public void setUserId(int id) {
         this.userId = id;
     }
 

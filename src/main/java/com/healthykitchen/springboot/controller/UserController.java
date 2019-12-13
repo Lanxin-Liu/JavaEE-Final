@@ -45,14 +45,13 @@ public class UserController {
      * @param userId
      * @return
      */
-    @PostMapping("api/getUserInfoById")
+    @GetMapping("api/getUserInfoById")
     @ResponseBody
-    public Result getUserInfoById(@RequestParam(value = "userId") String userId){
-//        User user=(User)httpSession.getAttribute("User");
-        int uId=Integer.parseInt(userId);
-        User user=userService.getuserInfoById(uId);
-        if(user.getId()==uId){
-            return ResultFactory.buildSuccessResult(user);
+    public Result getUserInfoById(@RequestParam(value = "userId") int userId,HttpSession httpSession){
+        User user=(User)httpSession.getAttribute("User");
+        User userRequest=userService.getuserInfoById(userId);
+        if(user.getUserId()!=userId){
+            return ResultFactory.buildSuccessResult(userRequest);
         }
         else
             return ResultFactory.buildFailResult("本用户");
@@ -70,7 +69,7 @@ public class UserController {
             HttpSession session=request.getSession(true);
             User user=(User)session.getAttribute("User");
 //            User user = (User) httpSession.getAttribute("User");
-            System.out.print(user.getId()+user.getUsername());
+//            System.out.print(user.getId()+user.getUsername());
             return ResultFactory.buildSuccessResult(user);
         }
         catch (Exception e) {
@@ -117,7 +116,7 @@ public class UserController {
     @ResponseBody
     public Result updateUserPassword(@RequestParam("password") String password,HttpSession httpSession){
         User user = (User) httpSession.getAttribute("User");
-        int uId=user.getId();
+        int uId=user.getUserId();
         try{
             user.setPassword(password);
             userService.updateUserInfo(user);

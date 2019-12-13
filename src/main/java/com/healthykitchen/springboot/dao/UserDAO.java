@@ -31,7 +31,7 @@ public interface UserDAO {
     @Select("select * from User_info where user_name = #{userName}")
     User findByUsername(String userName);
 
-    @Insert("insert into User_info (user_name, password)values(#{username},#{password})")
+    @Insert("insert into User_info (user_id, user_name, password)values(#{userId}, #{userName},#{password})")
     void addUser(User user);
 
     @Select("select user_id from User_info where user_name=#{username}")
@@ -42,4 +42,7 @@ public interface UserDAO {
 
     @Select("select * from User_info where user_name = #{userName} and password = #{password}")
     User getByNameAndPasswd(String userName, String password);
+
+    @Select("select COUNT(*) from User_info")
+    int getUserNum();
 }

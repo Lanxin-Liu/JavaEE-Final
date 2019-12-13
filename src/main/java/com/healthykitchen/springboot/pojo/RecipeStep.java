@@ -11,7 +11,7 @@ public class RecipeStep {
     private int stepId;
     private int stepRecipeId;
     private String stepDesc;
-    private byte[] stepImage;
+    private String stepImage;
 
     public int getStepId() {
         return stepId;
@@ -37,11 +37,11 @@ public class RecipeStep {
         this.stepDesc = stepDesc;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return stepImage;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.stepImage = image;
     }
 }

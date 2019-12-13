@@ -41,7 +41,7 @@ public class DailyPlanController {
         HttpSession session=request.getSession(true);
         User user=(User)session.getAttribute("user");
         List<DailyPlan> dailyPlans;
-        dailyPlans=dailyPlanService.getUserDailyPlanById(user.getId());
+        dailyPlans=dailyPlanService.getUserDailyPlanById(user.getUserId());
         return dailyPlans;
     }
 
@@ -56,7 +56,7 @@ public class DailyPlanController {
         try {
             HttpSession session=request.getSession(true);
             User user=(User)session.getAttribute("user");
-            dailyPlan.setDPUserId(user.getId());
+            dailyPlan.setDPUserId(user.getUserId());
             dailyPlanService.addDailyPlan(dailyPlan);
             return ResultFactory.buildSuccessResult(dailyPlan);
         } catch (Exception e){

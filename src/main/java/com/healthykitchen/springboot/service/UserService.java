@@ -26,7 +26,7 @@ public class UserService {
 
     public boolean isExist(String username) {
         User users = getByUsername(username);
-        return null!=users;
+        return null==users;
     }
 
     public boolean existById(int id){
@@ -60,6 +60,10 @@ public class UserService {
 
     public void updateUserInfo(User user){
         userDAO.updateUserInfo(user);
+    }
+
+    public int countUser() {
+        return userDAO.getUserNum();
     }
 
 //    public List<User> getuserFollowing(int userId){
