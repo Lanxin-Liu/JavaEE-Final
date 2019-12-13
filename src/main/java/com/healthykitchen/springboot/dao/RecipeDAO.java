@@ -43,5 +43,8 @@ public interface RecipeDAO {
     @Select("SELECT distinct(recipe_id),recipe_name,recipe_time,recipe_tag,recipe_image,like_num,collect_num,size,recipe_user_id,recipe_desc FROM Recipe ,Tag where Tag.tag_name=#{tagName} and Recipe.recipe_tag=Tag.tag_id;")
     List<Recipe> getRecipeByTag(String tagName);
 
+    @Select("select COUNT(*) from Recipe")
+    int getRecipeNum();
+
 
 }

@@ -121,4 +121,8 @@ public class RecipeService {
     public void addNewCollection() {
 
     }
+
+    public int countUser() {
+        return recipeDAO.getRecipeNum();
+    }
 }

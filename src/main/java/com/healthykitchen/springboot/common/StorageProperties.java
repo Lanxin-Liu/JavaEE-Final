@@ -1,5 +1,7 @@
 package com.healthykitchen.springboot.common;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 /**
  * @className:
  * @description:
@@ -8,7 +10,12 @@ package com.healthykitchen.springboot.common;
  * @version: v1.0
  */
 
+
+@ConfigurationProperties("storage")
+
+
 public class StorageProperties {
+
 
     /**
      * Folder location for storing files

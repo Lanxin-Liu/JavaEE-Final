@@ -28,9 +28,12 @@ public class User {
 
     private int followingNum;
 
-    public User(){}
+    public User(){
+        this.userId = 0;
+    }
 
     public User(String username, String password) {
+        this.userId = 0;
         this.userName = username;
         this.password = password;
         this.gender = "";
