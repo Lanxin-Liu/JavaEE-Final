@@ -87,11 +87,18 @@ public class RecipeController {
      * @param username
      * @return
      */
-    @PostMapping("api/searchrecipebyuser")
+    @PostMapping("api/getRecipeByUsername")
     @ResponseBody
-    public List<Recipe> getRecipeByUserName(String username){
-        List<Recipe> recipes=this.recipeService.getRecipeByUserName(username);
+    public List<Recipe> getRecipeByUserName(@RequestParam(value = "username") String username){
+        List<Recipe> recipes=recipeService.getRecipeByUserName(username);
         return recipes;
+    }
+
+    @PostMapping("api/getRecipeByUserId")
+    @ResponseBody
+    public List<Recipe> getRecipeByUserId(@RequestParam(value = "userId") int userId){
+        List<Recipe> recipes=recipeService.getRecipeByUserId(userId);
+        return  recipes;
     }
 
     /**
