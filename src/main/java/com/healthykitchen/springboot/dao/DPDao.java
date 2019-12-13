@@ -14,7 +14,7 @@ public interface DPDao {
     @Select("select * from DailyPlan where DP_user_id=#{userId} order by DP_time desc")
     List<DailyPlan> getUserDailyPlanById(int userId);
 
-    @Insert("insert into DailyPlan(DP_content,DP_time,DP_tag,DP_date,DP_calorie,DP_user_id,DP_image) values (#{DPContent},#{DPTime},#{DPTag},#{DPDate},#{DPCalorie},#{DPUserId},#{DPImage})")
+    @Insert("insert into DailyPlan(DP_content,DP_tag,DP_date,DP_calorie,DP_user_id,DP_recipe_id) values (#{DPContent},#{DPTag},#{DPDate},#{DPCalorie},#{DPUserId},#{DPRecipeId})")
     void addDailyPlan(DailyPlan dailyPlan);
 
     @Delete("delete from DailyPlan where DP_id=#{DPId}")

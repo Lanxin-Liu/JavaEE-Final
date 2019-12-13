@@ -31,6 +31,24 @@ public class Recipe {
 
     private String recipeUsername;
 
+    private int recipeCalorie;
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public int getRecipeCalorie() {
+        return recipeCalorie;
+    }
+
+    public void setRecipeCalorie(int recipeCalorie) {
+        this.recipeCalorie = recipeCalorie;
+    }
+
     public String getRecipeUsername() {
         return recipeUsername;
     }
