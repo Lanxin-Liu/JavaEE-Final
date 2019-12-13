@@ -41,6 +41,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private RecipeDAO recipeDAO;
+    @Autowired
+    private CollectService collectService;
 
    /*
            * @param collectionUserId
@@ -159,6 +161,17 @@ public class UserController {
     }
 
     /**
+     *
+     * @param collectionUserId
+     * @return
+     */
+    @PostMapping("api/getUserCollection")
+    @ResponseBody
+    public List<Recipe> getUserCollection(@RequestParam(value = "collectionUserId")int collectionUserId){
+        List<Recipe> recipes=collectService.getMyCollection(collectionUserId);
+        return recipes;
+    }
+    /**
      * 【个人资料】修改用户个人简介
      * @param intro
      * @param httpSession
@@ -237,6 +250,43 @@ public class UserController {
         {
             return ResultFactory.buildFailResult("修改性别失败！");
         }
+    }
+
+    @PostMapping("api/updateUserAvatar")
+    @ResponseBody
+    public Result updateUserAvatar(@RequestParam MultipartFile pic,HttpSession httpSession){
+        User user=(User)httpSession.getAttribute("User");
+        try{
+            user.setImage(upload(pic));
+            userService.updateUserInfo(user);
+            return ResultFactory.buildSuccessResult(user);
+        } catch (Exception e)
+        {
+            return ResultFactory.buildFailResult("修改性别失败！");
+        }
+
+
+    }
+
+    public String upload(MultipartFile pic){
+        if (pic.isEmpty()) {
+            System.err.println("上传文件不可为空");
+        }
+        String fileName = pic.getOriginalFilename();//得到文件名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));//得到后缀名
+        System.err.println("suffixName:" + suffixName);
+        String filepath = "/Users/anonym_co/Desktop/";//指定图片上传到哪个文件夹的路径
+        fileName = UUID.randomUUID() + suffixName;//重新命名图片，变成随机的名字
+        System.err.println("fileName:" + fileName);
+        File dest = new File(filepath + fileName);//在上传的文件夹处创建文件
+        try {
+            pic.transferTo(dest);//把上传的图片写入磁盘中
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return filepath+fileName;
+
     }
 
 //    /**

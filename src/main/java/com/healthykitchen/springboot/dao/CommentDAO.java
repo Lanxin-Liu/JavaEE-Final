@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Repository
 public interface CommentDAO {
-    @Insert("insert into Comment (comment_user_id,comment_recipe_id,comment_content) values (#{commentUserId},#{commentRecipeId},#{commentContent})")
+    @Insert("insert into Comment (comment_user_id,comment_recipe_id,comment_content,comment_time) values (#{commentUserId},#{commentRecipeId},#{commentContent},#{commentTime})")
     void insertComment(Comment comment);
 
     @Select("select * from Comment where comment_recipe_id=#{commentRecipeId}")

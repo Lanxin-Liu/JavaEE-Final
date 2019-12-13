@@ -49,6 +49,8 @@ public class RecipeController {
     private MaterialDao materialDao;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RecipeStepDAO recipeStepDAO;
 
 
     /**
@@ -62,10 +64,16 @@ public class RecipeController {
         List<Recipe> recipes=recipeDAO.getAllRecipes();
         for(Recipe i: recipes ){
             int userId=i.getRecipeUserId();
-//            System.out.println(userService.getuserInfoById(userId).getUsername());
             i.setRecipeUsername(userService.getuserInfoById(userId).getUsername());
         }
         return recipes;
+    }
+
+    @GetMapping("api/steplist")
+    @ResponseBody
+    public List<RecipeStep> getStepInRecipe(@RequestParam Recipe recipe){
+        List<RecipeStep> rs = recipeStepDAO.getRecipeStepList(recipe);
+        return rs;
     }
 
 
@@ -103,6 +111,7 @@ public class RecipeController {
         return  recipes;
     }
 
+
     /**
      * 【个人】获取本用户发布的菜谱
      * @param request
@@ -135,11 +144,22 @@ public class RecipeController {
      */
     @PostMapping("api/getRecipeComment")
     @ResponseBody
-    public List<Comment> getRecipeComment(@RequestParam(value = "recipeId") int recipeId){
-        List<Comment> comments;
-        comments=recipeService.getRecipeComment(recipeId);
-        return comments;
+
+    public List<CommentDetail> getRecipeComment(@RequestParam(value = "recipeId") int recipeId){
+        List<Comment> commentList = recipeService.getRecipeComment(recipeId);
+        List<CommentDetail> detailList = new ArrayList<>();
+        for(Comment c:commentList) {
+            CommentDetail detail = new CommentDetail();
+            detail.setUserName(userService.getUserNameById(c.getCommentUserId()));
+            detail.setTime(c.getCommentTime());
+            detail.setPic(userService.getuserInfoById(c.getCommentUserId()).getImage());
+            detail.setContent(c.getCommentContent());
+            detailList.add(detail);
+        }
+        return detailList;
     }
+
+
 
     /**
      * 【菜谱页】根据菜谱ID获取菜谱
@@ -198,6 +218,7 @@ public class RecipeController {
 
     }
 
+
     /**
      * 【菜谱页】收藏菜谱
      * @param rId
@@ -207,6 +228,7 @@ public class RecipeController {
     @ResponseBody
     public Result collectRecipe(@RequestParam(value = "recipeId") int rId, @RequestParam int userId) {
         String cName="DEFAULT";
+
         int recipeNums = collectionDAO.getRecipeNums(userId);
         Collection c = new Collection();
         c.setCollectionName(cName);
@@ -342,6 +364,7 @@ public class RecipeController {
      */
     @PostMapping("api/comment")
     @ResponseBody
+
     public Result commentToRecipe(@RequestParam("recipeId") int rId, @RequestParam("content") String content, @RequestParam int userId) {
         DateUtil time = new DateUtil();
         User user = userService.getuserInfoById(userId);
@@ -353,7 +376,9 @@ public class RecipeController {
         comment.setCommentTime(time.getTime());
         detail.setContent(content);
         detail.setPic(user.getImage());
+
         detail.setTime(time.getTime());
+
         detail.setUserName(user.getUsername());
         recipeService.addComment(comment);
         return ResultFactory.buildSuccessResult(detail);

@@ -28,4 +28,5 @@ public interface CollectionDAO {
 
     @Select("SELECT * FROM Collection where collection_user_id = #{collectionUserId}")
     List<Collection> getMyCollection(int collectionUserId);
+
 }

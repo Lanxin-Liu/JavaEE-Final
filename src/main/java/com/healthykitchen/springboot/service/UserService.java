@@ -66,6 +66,10 @@ public class UserService {
         return userDAO.getUserNum();
     }
 
+    public String getUserNameById(int id) {
+        return userDAO.getuserNameById(id);
+    }
+
 //    public List<User> getuserFollowing(int userId){
 //        int[] followingList = userDAO.getuserFollowing(userId);
 //        List<User> users = null;
