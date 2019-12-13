@@ -9,6 +9,7 @@ import com.healthykitchen.springboot.service.RecipeService;
 
 import com.healthykitchen.springboot.service.TagService;
 
+import com.healthykitchen.springboot.service.UserService;
 import com.healthykitchen.springboot.utils.DateUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,8 @@ public class RecipeController {
     private CollectionDAO collectionDAO;
     @Autowired
     private MaterialDao materialDao;
+    @Autowired
+    private UserService userService;
 
 
     /**
@@ -54,6 +57,9 @@ public class RecipeController {
     @ResponseBody
     public List<Recipe> getAllRecipes(){
         List<Recipe> recipes=recipeDAO.getAllRecipes();
+        for(Recipe i: recipes ){
+            i.setRecipeUsername(userService.getuserInfoById(i.getRecipeUserId()).getUsername());
+        }
         return recipes;
     }
 
@@ -248,11 +254,11 @@ public class RecipeController {
     }
 
 
-    @GetMapping("api/test")
-    @ResponseBody
-    public Material getMaterial(String materialName){
-        return materialDao.getMaterialCalorie(materialName);
-    }
+//    @GetMapping("api/test")
+//    @ResponseBody
+//    public Material getMaterial(String materialName){
+//        return materialDao.getMaterialCalorie(materialName);
+//    }
 
 
     /**
@@ -328,8 +334,6 @@ public class RecipeController {
         recipeService.addComment(comment);
         return ResultFactory.buildSuccessResult(comment);
     }
-
-
 
 
 

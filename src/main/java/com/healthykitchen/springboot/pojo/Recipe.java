@@ -29,6 +29,18 @@ public class Recipe {
 
     private int recipeUserId;
 
+    private String recipeUsername;
+
+    public String getRecipeUsername() {
+        return recipeUsername;
+    }
+
+    public void setRecipeUsername(String recipeUsername) {
+        this.recipeUsername = recipeUsername;
+    }
+
+
+
     public Recipe() {
 
     }
