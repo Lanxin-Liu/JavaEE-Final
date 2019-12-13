@@ -45,7 +45,7 @@ public class UserController {
      * @param userId
      * @return
      */
-    @PostMapping("api/getUserInfoById")
+    @GetMapping("api/getUserInfoById")
     @ResponseBody
     public Result getUserInfoById(@RequestParam(value = "userId") int userId,HttpSession httpSession){
         User user=(User)httpSession.getAttribute("User");

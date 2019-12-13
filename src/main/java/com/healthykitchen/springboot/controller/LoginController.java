@@ -88,7 +88,7 @@ public class LoginController {
     @GetMapping("api/logout")
     @ResponseBody
     public String logout(HttpSession httpSession) {
-        httpSession.removeAttribute("User");
+        httpSession.removeAttribute("user");
         return "api/login";
     }
 
