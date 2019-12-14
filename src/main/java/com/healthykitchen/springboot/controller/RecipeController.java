@@ -264,19 +264,18 @@ public class RecipeController {
 
     /**
      * 【主页】发布菜谱
-     * @param recipe
-     * @param httpSession
-     * @return
      */
     @GetMapping("api/release")
     @ResponseBody
-    public Result releaseRecipe(@RequestParam MultipartFile pic, @RequestParam("Recipe") Recipe recipe,HttpSession httpSession) {
+    public Result releaseRecipe(@RequestParam MultipartFile pic, @RequestParam String recipeDesc, @RequestParam String recipeName, @RequestParam int size, @RequestParam String recipeTag, int userId) {
         try {
-            User user = (User) httpSession.getAttribute("User");
             Recipe r = new Recipe();
-            r = recipe;
             DateUtil date = new DateUtil();
-            int uId = user.getUserId();
+            int uId = userId;
+            r.setRecipeName(recipeName);
+            r.setRecipeDesc(recipeDesc);
+            r.setRecipeTag(recipeTag);
+            r.setSize(size);
             r.setRecipeImage(upload(pic));
             r.setRecipeTime(date.getTime());
             r.setRecipeUserId(uId);
