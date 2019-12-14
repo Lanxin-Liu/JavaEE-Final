@@ -72,4 +72,8 @@ public class CollectService {
             return false;
         } else return true;
     }
+
+    public void deleteLike(int recipeId, int userId) {
+        likeDAO.deleteLike(recipeId, userId);
+    }
 }

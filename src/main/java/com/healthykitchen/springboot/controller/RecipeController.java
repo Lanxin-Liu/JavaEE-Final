@@ -187,7 +187,7 @@ public class RecipeController {
     public List<Recipe> getRecipeByName(@RequestParam("recipeName") String name){
         List<Recipe> recipes=recipeService.getRecipeByName(name);
         return recipes;
-}
+    }
 
 
     @PostMapping
@@ -218,6 +218,14 @@ public class RecipeController {
             return ResultFactory.buildFailResult("点赞失败！");
         }
 
+    }
+
+    @PostMapping("api/dislike")
+    @ResponseBody
+    public void dislikeRecipe(@RequestParam int recipeId, @RequestParam int userId) {
+        Recipe recipe = recipeService.getRecipeById(recipeId);
+        collectService.deleteLike(recipeId, userId);
+        recipe.setLikeNum(recipe.getLikeNum()-1);
     }
 
 
@@ -322,8 +330,6 @@ public class RecipeController {
 
     /**
      * 【菜谱页】向菜谱中添加食材
-     * @param materialName
-     * @param materialCount
      * @return
      */
     @PostMapping("api/addRecipeMaterial")
