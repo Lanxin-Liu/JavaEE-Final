@@ -23,7 +23,7 @@ public interface DPDao {
     @Select("select count(DP_id) from DailyPlan")
     int getDPCount();
 
-    @Select("select * from DailyPlan where DP_user_id=#{userId} and locate(#{date}, DP_date) order by DP_date desc")
+    @Select("select * from DailyPlan where DP_user_id=#{userId} and locate(#{date}, DP_date)>0 order by DP_date desc")
     List<DailyPlan> getUserDailyPlanByDate(String date, int userId);
 
 
