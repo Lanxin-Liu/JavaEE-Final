@@ -182,6 +182,13 @@ public class RecipeController {
         return recipes;
     }
 
+    @PostMapping("api/getRecipeByName")
+    @ResponseBody
+    public List<Recipe> getRecipeByName(@RequestParam("recipeName") String name){
+        List<Recipe> recipes=recipeService.getRecipeByName(name);
+        return recipes;
+}
+
 
     @PostMapping
     @ResponseBody
@@ -195,7 +202,7 @@ public class RecipeController {
      * @param httpSession
      * @return
      */
-    @GetMapping("api/like")
+    @PostMapping("api/like")
     @ResponseBody
     public Result likeRecipe(@RequestParam(value = "recipeId") int rId, HttpSession httpSession) {
         try {
@@ -265,7 +272,7 @@ public class RecipeController {
     /**
      * 【主页】发布菜谱
      */
-    @GetMapping("api/release")
+    @PostMapping("api/release")
     @ResponseBody
     public Result releaseRecipe(@RequestParam MultipartFile pic, @RequestParam String recipeDesc, @RequestParam String recipeName, @RequestParam int size, @RequestParam String recipeTag, int userId) {
         try {
@@ -343,15 +350,15 @@ public class RecipeController {
     }
 
 
-    @GetMapping("api/addStep")
+    @PostMapping("api/addStep")
     @ResponseBody
-    public void addStepToRecipe(List<MultipartFile> picList, List<RecipeStep> recipeStepList, @RequestParam Recipe recipe) {
+    public void addStepToRecipe(List<MultipartFile> picList, List<RecipeStep> recipeStepList, @RequestParam int recipeId) {
         int i = 0;
         for(RecipeStep r:recipeStepList) {
             RecipeStep rs = r;
             rs.setImage(upload(picList.get(i)));
-            rs.setStepId(recipeService.countRecipeStep(recipe) + 1);
-            rs.setRecipeId(recipe.getRecipeId());
+            rs.setStepId(recipeService.countRecipeStep(recipeId) + 1);
+            rs.setRecipeId(recipeId);
             recipeService.addStep(rs);
             i++;
         }

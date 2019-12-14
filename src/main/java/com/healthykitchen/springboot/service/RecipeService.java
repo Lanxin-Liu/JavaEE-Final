@@ -127,7 +127,7 @@ public class RecipeService {
         return recipeDAO.getRecipeNum();
     }
 
-    public int countRecipeStep(Recipe recipe) {
-        return rsDAO.getRecipeStepNum(recipe);
+    public int countRecipeStep(int recipeId) {
+        return rsDAO.getRecipeStepNum(recipeId);
     }
 }

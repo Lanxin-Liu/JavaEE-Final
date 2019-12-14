@@ -29,7 +29,7 @@ public interface RecipeDAO {
     @Select("SELECT * FROM Recipe where recipe_id = #{recipeId}")
     Recipe getRecipeById(int recipeId);
 
-    @Select("SELECT * FROM Recipe where recipe_name = #{recipeName};")
+    @Select("SELECT * FROM Recipe where locate(#{recipeName},recipe_name)>0;")
     List<Recipe> getRecipeByName(String recipeName);
 
     @Select("SELECT * FROM Recipe order by like_num desc ")
