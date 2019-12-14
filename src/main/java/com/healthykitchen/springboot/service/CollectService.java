@@ -58,10 +58,10 @@ public class CollectService {
         likeDAO.insertLike(like);
     }
 
-    public List<Recipe> getMyCollection(int UserId){
-        List<Recipe> recipes=collectionDAO.getMyCollection(UserId);
-        return recipes;
-    }
+//    public List<Recipe> getMyCollection(int UserId){
+//        List<Recipe> recipes=collectionDAO.getMyCollection(UserId);
+//        return recipes;
+//    }
 
     /**
      * 判断该收藏夹是否已存在

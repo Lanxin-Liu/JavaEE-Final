@@ -117,4 +117,6 @@ public class Recipe {
         this.recipeUserId = recipeUserId;
     }
 
+    public void setRecipeCalorie(int recipeCalorie) {
+    }
 }

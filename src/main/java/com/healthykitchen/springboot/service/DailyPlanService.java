@@ -1,7 +1,6 @@
 package com.healthykitchen.springboot.service;
 
 import com.healthykitchen.springboot.dao.DPDao;
-import com.healthykitchen.springboot.pojo.DailyPlan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

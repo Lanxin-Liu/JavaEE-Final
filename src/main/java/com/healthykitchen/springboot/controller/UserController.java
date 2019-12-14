@@ -48,8 +48,7 @@ public class UserController {
            * @param collectionUserId
      * @return
              */
-    @Autowired
-    private CollectService collectService;
+
     @Autowired
     private RecipeService recipeService;
 
@@ -165,12 +164,12 @@ public class UserController {
      * @param collectionUserId
      * @return
      */
-    @PostMapping("api/getUserCollection")
-    @ResponseBody
-    public List<Recipe> getUserCollection(@RequestParam(value = "collectionUserId")int collectionUserId){
-        List<Recipe> recipes=collectService.getMyCollection(collectionUserId);
-        return recipes;
-    }
+//    @PostMapping("api/getUserCollection")
+//    @ResponseBody
+//    public List<Recipe> getUserCollection(@RequestParam(value = "collectionUserId")int collectionUserId){
+//        List<Recipe> recipes=collectService.getMyCollection(collectionUserId);
+//        return recipes;
+//    }
     /**
      * 【个人资料】修改用户个人简介
      * @param intro
