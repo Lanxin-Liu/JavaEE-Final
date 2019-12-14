@@ -9,9 +9,6 @@ public class DailyPlan {
 
     private String DPContent;
 
-    private String DPTime;
-
-    private String DPTag;
 
     private String DPDate;
 
@@ -20,6 +17,16 @@ public class DailyPlan {
     private byte[] DPImage;
 
     private int DPUserId;
+
+    public int getDPrecipeId() {
+        return DPrecipeId;
+    }
+
+    public void setDPrecipeId(int DPrecipeId) {
+        this.DPrecipeId = DPrecipeId;
+    }
+
+    private int DPrecipeId;
 
     public DailyPlan(){
 
