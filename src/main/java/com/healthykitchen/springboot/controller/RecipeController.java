@@ -302,17 +302,21 @@ public class RecipeController {
      */
     @GetMapping("api/addRecipeMaterial")
     @ResponseBody
-    public Result addReciepeMaterial(String materialName,int materialCount){
+    public Result addReciepeMaterial(@RequestBody List<RecipeMaterial> recipeMaterials){
         try{
-            List<RecipeMaterial> recipeMaterials1=new ArrayList<>();
-            RecipeMaterial temp=new RecipeMaterial();
-            int recipeId=recipeDAO.getRecipeNum();
-            temp.setRecipeId(recipeId+1);
-            temp.setMaterialName(materialName);
-            temp.setMaterialCount(materialCount);
-            recipeMaterials1.add(temp);
-            recipeService.addRecipeMaterial(recipeMaterials1);
-            return ResultFactory.buildSuccessResult(recipeMaterials1);
+//            List<RecipeMaterial> recipeMaterials1=new ArrayList<>();
+//            RecipeMaterial temp=new RecipeMaterial();
+//            int recipeId=recipeDAO.getRecipeNum();
+//            temp.setRecipeId(recipeId+1);
+//            temp.setMaterialName(materialName);
+//            temp.setMaterialCount(materialCount);
+//            recipeMaterials1.add(temp);
+            int rId=recipeDAO.getRecipeNum() ;
+            for(RecipeMaterial rm:recipeMaterials){
+                rm.setRecipeId(rId+1);
+            }
+            recipeService.addRecipeMaterial(recipeMaterials);
+            return ResultFactory.buildSuccessResult(recipeMaterials);
         } catch (Exception e)
         {
             return ResultFactory.buildFailResult("添加食材失败！");
