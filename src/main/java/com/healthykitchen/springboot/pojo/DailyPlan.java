@@ -7,19 +7,21 @@ public class DailyPlan {
 
     private int DPId;
 
-    private String DPContent;
-
-    private String DPTime;
-
-    private String DPTag;
-
     private String DPDate;
 
     private int DPCalorie;
 
-    private byte[] DPImage;
-
     private int DPUserId;
+
+    public int getDPRecipeId() {
+        return DPRecipeId;
+    }
+
+    public void setDPRecipeId(int DPRecipeId) {
+        this.DPRecipeId = DPRecipeId;
+    }
+
+    private int DPRecipeId;
 
     public DailyPlan(){
 
@@ -33,29 +35,6 @@ public class DailyPlan {
         this.DPId = DPId;
     }
 
-    public String getDPContent() {
-        return DPContent;
-    }
-
-    public void setDPContent(String DPContent) {
-        this.DPContent = DPContent;
-    }
-
-    public String getDPTime() {
-        return DPTime;
-    }
-
-    public void setDPTime(String DPTime) {
-        this.DPTime = DPTime;
-    }
-
-    public String getDPTag() {
-        return DPTag;
-    }
-
-    public void setDPTag(String DPTag) {
-        this.DPTag = DPTag;
-    }
 
     public String getDPDate() {
         return DPDate;
@@ -73,13 +52,6 @@ public class DailyPlan {
         this.DPCalorie = DPCalorie;
     }
 
-    public byte[] getDPImage() {
-        return DPImage;
-    }
-
-    public void setDPImage(byte[] DPImage) {
-        this.DPImage = DPImage;
-    }
 
     public int getDPUserId() {
         return DPUserId;

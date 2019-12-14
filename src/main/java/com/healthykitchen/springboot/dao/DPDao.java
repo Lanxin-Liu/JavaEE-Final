@@ -20,4 +20,7 @@ public interface DPDao {
     @Delete("delete from DailyPlan where DP_id=#{DPId}")
     void deleteDailyPlan(int DPId);
 
+
+
+
 }
