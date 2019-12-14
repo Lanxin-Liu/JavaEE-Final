@@ -268,7 +268,7 @@ public class RecipeController {
     @PostMapping("api/release")
     @ResponseBody
     public Result releaseRecipe(@RequestParam MultipartFile pic, @RequestParam String recipeDesc, @RequestParam String recipeName, @RequestParam int size, @RequestParam String recipeTag,
-                                @RequestParam List<MultipartFile> picList,@RequestParam List<RecipeStep> recipeStepList, int userId) {
+                                @RequestParam List<MultipartFile> picList,@RequestParam List<RecipeStep> recipeStepList, int userId,@RequestParam List<RecipeMaterial> recipeMaterials) {
         try {
             Recipe r = new Recipe();
             DateUtil date = new DateUtil();
@@ -281,6 +281,10 @@ public class RecipeController {
             r.setRecipeTime(date.getTime());
             r.setRecipeUserId(uId);
             recipeService.addRecipe(r);
+            for(RecipeMaterial rm:recipeMaterials){
+                rm.setRecipeId(r.getRecipeId());
+            }
+            recipeService.addRecipeMaterial(recipeMaterials);
             addStepToRecipe(picList,recipeStepList,r.getRecipeId());
             return ResultFactory.buildSuccessResult(r);
         } catch (Exception e) {
