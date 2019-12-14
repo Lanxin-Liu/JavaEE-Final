@@ -364,6 +364,7 @@ public class RecipeController {
      * @return
      */
     @PostMapping("api/comment")
+    @ResponseBody
     public Result commentToRecipe(@RequestParam("recipeId") int rId, @RequestParam("content") String content, @RequestParam int userId) {
         DateUtil time = new DateUtil();
         User user = userService.getuserInfoById(userId);
