@@ -273,13 +273,15 @@ public class RecipeController {
     public Result releaseRecipe(@RequestParam MultipartFile pic, @RequestParam("Recipe") Recipe recipe,HttpSession httpSession) {
         try {
             User user = (User) httpSession.getAttribute("User");
+            Recipe r = new Recipe();
+            r = recipe;
             DateUtil date = new DateUtil();
             int uId = user.getUserId();
-            recipe.setRecipeImage(upload(pic));
-            recipe.setRecipeTime(date.getTime());
-            recipe.setRecipeUserId(uId);
-            recipeService.addRecipe(recipe);
-            return ResultFactory.buildSuccessResult(recipe);
+            r.setRecipeImage(upload(pic));
+            r.setRecipeTime(date.getTime());
+            r.setRecipeUserId(uId);
+            recipeService.addRecipe(r);
+            return ResultFactory.buildSuccessResult(r);
         } catch (Exception e) {
             return ResultFactory.buildFailResult("添加菜谱失败！");
         }
@@ -295,7 +297,6 @@ public class RecipeController {
 
     /**
      * 【菜谱页】向菜谱中添加食材
-     * @param recipeId
      * @param materialName
      * @param materialCount
      * @return
