@@ -80,6 +80,7 @@ public class RecipeService {
             //System.out.println(i.getMaterialCount());
             totc=ec*count+totc;
         }
+        System.out.println("该菜谱卡路里为"+totc);
         return totc;
     }
 

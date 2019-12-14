@@ -302,11 +302,12 @@ public class RecipeController {
      */
     @GetMapping("api/addRecipeMaterial")
     @ResponseBody
-    public Result addReciepeMaterial(int recipeId,String materialName,int materialCount){
+    public Result addReciepeMaterial(String materialName,int materialCount){
         try{
             List<RecipeMaterial> recipeMaterials1=new ArrayList<>();
             RecipeMaterial temp=new RecipeMaterial();
-            temp.setRecipeId(recipeId);
+            int recipeId=recipeDAO.getRecipeNum();
+            temp.setRecipeId(recipeId+1);
             temp.setMaterialName(materialName);
             temp.setMaterialCount(materialCount);
             recipeMaterials1.add(temp);

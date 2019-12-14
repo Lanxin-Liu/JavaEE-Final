@@ -3,6 +3,7 @@ package com.healthykitchen.springboot.dao;
 import com.healthykitchen.springboot.pojo.Recipe;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.ibatis.annotations.Select;
@@ -45,6 +46,9 @@ public interface RecipeDAO {
 
     @Select("select COUNT(*) from Recipe")
     int getRecipeNum();
+
+    @Update("UPDATE Recipe SET calorie=#{calorie} where recipe_id=#{recipeId}")
+    void updateRecipeCalorie(Recipe recipe);
 
 
 }

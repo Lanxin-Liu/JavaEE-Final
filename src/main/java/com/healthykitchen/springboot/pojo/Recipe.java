@@ -15,7 +15,7 @@ public class Recipe {
 
     private String recipeTime;
 
-    private int recipeTag;
+    private String recipeTag;
 
     private String recipeDesc;
 
@@ -31,7 +31,7 @@ public class Recipe {
 
     private String recipeUsername;
 
-    private int recipeCalorie;
+    private int calorie;
 
     public int getSize() {
         return size;
@@ -41,13 +41,14 @@ public class Recipe {
         this.size = size;
     }
 
-    public int getRecipeCalorie() {
-        return recipeCalorie;
+    public int getCalorie() {
+        return calorie;
     }
 
-    public void setRecipeCalorie(int recipeCalorie) {
-        this.recipeCalorie = recipeCalorie;
+    public void setCalorie(int calorie) {
+        this.calorie = calorie;
     }
+
 
     public String getRecipeUsername() {
         return recipeUsername;
@@ -87,11 +88,11 @@ public class Recipe {
         this.recipeTime = recipeTime;
     }
 
-    public int getRecipeTag() {
+    public String getRecipeTag() {
         return recipeTag;
     }
 
-    public void setRecipeTag(int recipeTag) {
+    public void setRecipeTag(String recipeTag) {
         this.recipeTag = recipeTag;
     }
 

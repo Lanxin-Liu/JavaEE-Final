@@ -13,6 +13,8 @@ public class DailyPlan {
 
     private int DPUserId;
 
+    private int DPRecipeId;
+
     public int getDPRecipeId() {
         return DPRecipeId;
     }
@@ -20,8 +22,6 @@ public class DailyPlan {
     public void setDPRecipeId(int DPRecipeId) {
         this.DPRecipeId = DPRecipeId;
     }
-
-    private int DPRecipeId;
 
     public DailyPlan(){
 
