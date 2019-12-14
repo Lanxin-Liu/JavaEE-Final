@@ -138,13 +138,13 @@ public class UserController {
 
     /**
      *
-     * @param collectionUserId
+     * @param userId
      * @return
      */
     @PostMapping("api/getUserCollection")
     @ResponseBody
-    public List<Recipe> getUserCollection(@RequestParam(value = "collectionUserId")int collectionUserId){
-        List<Recipe> recipes=collectService.getMyCollection(collectionUserId);
+    public List<Recipe> getUserCollection(@RequestParam(value = "userId")int userId){
+        List<Recipe> recipes=collectService.getMyCollection(userId);
         return recipes;
     }
     /**

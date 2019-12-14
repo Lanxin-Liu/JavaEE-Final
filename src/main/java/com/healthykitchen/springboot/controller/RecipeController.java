@@ -129,7 +129,7 @@ public class RecipeController {
      * @param recipeId
      * @return
      */
-    @GetMapping("api/recipeMaterial")
+    @PostMapping("api/getRecipeMaterial")
     @ResponseBody
     public List<RecipeMaterial> getRecipeMaterial(@RequestParam(value = "recipeId")int recipeId){
         return recipeService.getRecipeMaterial(recipeId);
