@@ -49,13 +49,12 @@ public class UserController {
      * @param userId
      * @return
      */
-    @GetMapping("api/getUserInfoById")
+    @PostMapping("api/getUserInfoById")
     @ResponseBody
-    public Result getUserInfoById(@RequestParam(value = "userId") int userId,HttpSession httpSession){
-        User user=(User)httpSession.getAttribute("User");
-        User userRequest=userService.getuserInfoById(userId);
-        if(user.getUserId()!=userId){
-            return ResultFactory.buildSuccessResult(userRequest);
+    public Result getUserInfoById(@RequestParam(value = "userId") int userId){
+        User user=userService.getuserInfoById(userId);
+        if(user.getUserId()==userId){
+            return ResultFactory.buildSuccessResult(user);
         }
         else
             return ResultFactory.buildFailResult("本用户");
