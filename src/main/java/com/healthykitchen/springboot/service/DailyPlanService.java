@@ -31,5 +31,10 @@ public class DailyPlanService {
         dpDao.deleteDailyPlan(DPId);
     }
 
+    public List<DailyPlan> getUserDailyPlanByDate(String date, int userId) {
+        List<DailyPlan> dps = dpDao.getUserDailyPlanByDate(date, userId);
+        return dps;
+    }
+
 
 }

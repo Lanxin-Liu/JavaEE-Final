@@ -76,6 +76,27 @@ public class DailyPlanController {
     }
 
     /**
+     * 今天的今日计划
+     */
+    @PostMapping("api/todayplan")
+    @ResponseBody
+    public List<DPRecipe> showTodayPlan(@RequestParam String date, @RequestParam int userId) {
+        List<DailyPlan> dp = dailyPlanService.getUserDailyPlanByDate(date, userId);
+        List<DPRecipe> dpRecipes=new ArrayList<>();
+        /**
+         * 把dp和菜谱整合到一起。
+         */
+        for (DailyPlan d: dp){
+            DPRecipe dpr=new DPRecipe();
+            dpr.setDailyPlan(d);
+            Recipe recipe = recipeService.getRecipeById(d.getDPRecipeId());
+            dpr.setRecipe(recipe);
+            dpRecipes.add(dpr);
+        }
+        return dpRecipes;
+    }
+
+    /**
      * 添加每日计划API
      *
      * @return
