@@ -58,7 +58,7 @@ public class RecipeController {
      * @return
      */
     //获取所有菜谱 按时间排序
-    @GetMapping("api/recipelist")
+    @PostMapping("api/recipelist")
     @ResponseBody
     public List<Recipe> getAllRecipes(){
         List<Recipe> recipes=recipeDAO.getAllRecipes();
@@ -69,7 +69,7 @@ public class RecipeController {
         return recipes;
     }
 
-    @GetMapping("api/steplist")
+    @PostMapping("api/steplist")
     @ResponseBody
     public List<RecipeStep> getStepInRecipe(@RequestParam Recipe recipe){
         List<RecipeStep> rs = recipeStepDAO.getRecipeStepList(recipe);
@@ -195,7 +195,7 @@ public class RecipeController {
      * @param httpSession
      * @return
      */
-    @GetMapping("api/like")
+    @PostMapping("api/like")
     @ResponseBody
     public Result likeRecipe(@RequestParam(value = "recipeId") int rId, HttpSession httpSession) {
         try {
@@ -243,7 +243,7 @@ public class RecipeController {
      * @param httpSession
      * @return
      */
-    @GetMapping("api/addCollection")
+    @PostMapping("api/addCollection")
     @ResponseBody
     public Result createNewCollection(@RequestParam("collectionName") String cName, HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("User");
@@ -265,9 +265,10 @@ public class RecipeController {
     /**
      * 【主页】发布菜谱
      */
-    @GetMapping("api/release")
+    @PostMapping("api/release")
     @ResponseBody
-    public Result releaseRecipe(@RequestParam MultipartFile pic, @RequestParam String recipeDesc, @RequestParam String recipeName, @RequestParam int size, @RequestParam String recipeTag, int userId) {
+    public Result releaseRecipe(@RequestParam MultipartFile pic, @RequestParam String recipeDesc, @RequestParam String recipeName, @RequestParam int size, @RequestParam String recipeTag,
+                                @RequestParam List<MultipartFile> picList,@RequestParam List<RecipeStep> recipeStepList, int userId) {
         try {
             Recipe r = new Recipe();
             DateUtil date = new DateUtil();
@@ -280,9 +281,23 @@ public class RecipeController {
             r.setRecipeTime(date.getTime());
             r.setRecipeUserId(uId);
             recipeService.addRecipe(r);
+            addStepToRecipe(picList,recipeStepList,r.getRecipeId());
             return ResultFactory.buildSuccessResult(r);
         } catch (Exception e) {
             return ResultFactory.buildFailResult("添加菜谱失败！");
+        }
+    }
+
+
+    public void addStepToRecipe(List<MultipartFile> picList, List<RecipeStep> recipeStepList, int recipeId) {
+        int i = 0;
+        for(RecipeStep r:recipeStepList) {
+            RecipeStep rs = r;
+            rs.setImage(upload(picList.get(i)));
+            rs.setStepId(recipeService.countRecipeStep(recipeId) + 1);
+            rs.setRecipeId(recipeId);
+            recipeService.addStep(rs);
+            i++;
         }
     }
 
@@ -300,7 +315,7 @@ public class RecipeController {
      * @param materialCount
      * @return
      */
-    @GetMapping("api/addRecipeMaterial")
+    @PostMapping("api/addRecipeMaterial")
     @ResponseBody
     public Result addReciepeMaterial(String materialName,int materialCount){
         try{
@@ -324,7 +339,7 @@ public class RecipeController {
      * @param recipeId
      * @return
      */
-    @GetMapping("api/getRecipeCalorie")
+    @PostMapping("api/getRecipeCalorie")
     @ResponseBody
     public int getRecipeCalorie(int recipeId){
         Recipe recipe=recipeService.getRecipeById(recipeId);
@@ -343,19 +358,7 @@ public class RecipeController {
     }
 
 
-    @GetMapping("api/addStep")
-    @ResponseBody
-    public void addStepToRecipe(List<MultipartFile> picList, List<RecipeStep> recipeStepList, @RequestParam Recipe recipe) {
-        int i = 0;
-        for(RecipeStep r:recipeStepList) {
-            RecipeStep rs = r;
-            rs.setImage(upload(picList.get(i)));
-            rs.setStepId(recipeService.countRecipeStep(recipe) + 1);
-            rs.setRecipeId(recipe.getRecipeId());
-            recipeService.addStep(rs);
-            i++;
-        }
-    }
+
     /**
      * 添加菜谱评论
      * @param rId

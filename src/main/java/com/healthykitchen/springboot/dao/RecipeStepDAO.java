@@ -22,7 +22,7 @@ public interface RecipeStepDAO {
     void addRecipeStep(RecipeStep step);
 
     @Select("select count(*) from Recipe_Content where step_recipe_id = #{recipeId}")
-    int getRecipeStepNum(Recipe recipe);
+    int getRecipeStepNum(int recipeId);
 
     @Select("select * from Recipe_Content where step_recipe_id = #{recipeId}")
     List<RecipeStep> getRecipeStepList(Recipe recipe);
