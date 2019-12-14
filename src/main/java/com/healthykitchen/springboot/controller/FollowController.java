@@ -6,6 +6,7 @@ import com.healthykitchen.springboot.result.Result;
 import com.healthykitchen.springboot.result.ResultFactory;
 import com.healthykitchen.springboot.service.FollowService;
 import com.healthykitchen.springboot.service.UserService;
+import com.healthykitchen.springboot.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,13 +26,13 @@ public class FollowController {
 
     /**
      * 获取关注列表
-     * @param httpSession
+     *
      * @return
      */
     @GetMapping("api/followinglist")
     @ResponseBody
-    public List<User> getFollowingList(HttpSession httpSession){
-        User user=(User)httpSession.getAttribute("User");
+    public List<User> getFollowingList(@RequestParam(value = "userId")int userId){
+        User user=userService.getuserInfoById(userId);
         List<User> users=followService.getuserFollowing(user.getUserId());
         return users;
     }
@@ -43,8 +44,8 @@ public class FollowController {
      */
     @GetMapping("api/followedlist")
     @ResponseBody
-    public List<User> getFollowedList(HttpSession httpSession){
-        User user=(User)httpSession.getAttribute("User");
+    public List<User> getFollowedList(@RequestParam(value = "userId")int userId){
+        User user=userService.getuserInfoById(userId);
         List<User> users=followService.getuserFollowed(user.getUserId());
         return users;
     }
@@ -57,13 +58,15 @@ public class FollowController {
      */
     @GetMapping("api/follow")
     @ResponseBody
-    public Result follow(User followingUser,HttpSession httpSession) {
+    public Result follow(@RequestParam(value = "followingUserId")int followingUserId,@RequestParam(value = "userId")int userId) {
         //ResultFactory resultFactory=new ResultFactory();
-        User user=(User)httpSession.getAttribute("User");
+        User user=userService.getuserInfoById(userId);
+        User followingUser=userService.getuserInfoById(followingUserId);
         //boolean exist=userService.existById(followingUserId);
         try {
+            DateUtil dateUtil=new DateUtil();
             Follow follow = new Follow();
-            String followTime = "2019-11-12 12:00:00";//获取时间的函数忘记了，先用这个
+            String followTime = dateUtil.getTime();
             follow.setFollowedUserId(user.getUserId());
             follow.setFollowingUserId(followingUser.getUserId());
             follow.setFollowTime(followTime);
@@ -85,9 +88,11 @@ public class FollowController {
      */
     @GetMapping("/unfollow")
     @ResponseBody
-    public Result unfollow(User followingUser,HttpSession httpSession) {
+    public Result unfollow(@RequestParam(value = "followingUserId")int followingUserId,@RequestParam(value = "userId")int userId) {
         //ResultFactory resultFactory=new ResultFactory();
-        User user=(User)httpSession.getAttribute("User");
+//        User user=(User)httpSession.getAttribute("User");
+        User user=userService.getuserInfoById(userId);
+        User followingUser=userService.getuserInfoById(followingUserId);
         try {
             String time="2019-12-11 12:00:12";
             Follow follow=new Follow();
