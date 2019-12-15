@@ -259,10 +259,8 @@ public class RecipeController {
 //            return ResultFactory.buildSuccessResult(c);
 //        } else {
         try{
-            int cId=collectionDAO.getRecipeNums(userId);
             Collection collection= new Collection();
-            collection.setCollectionId(cId);
-            collection.setCollectionName("wu");
+            collection.setCollectionName("DeFault");
             collection.setCollectionUserId(userId);
             collection.setCollectionRecipeId(rId);
             collectionDAO.addCollection(collection);

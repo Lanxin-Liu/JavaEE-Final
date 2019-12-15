@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Repository
 public interface CollectionDAO {
-    @Insert("insert into Collection (collection_id,collection_name,collection_user_id,collection_recipe_id) values (#{collectionId},#{collectionName},#{collectionUserId},#{collectionRecipeId})")
+    @Insert("insert into Collection (collection_name,collection_user_id,collection_recipe_id) values (#{collectionName},#{collectionUserId},#{collectionRecipeId})")
     void addCollection(Collection collection);
 
     @Select("SELECT * FROM Collection where collection_name = #{collectionName} and collection_user_id = #{uId}")
