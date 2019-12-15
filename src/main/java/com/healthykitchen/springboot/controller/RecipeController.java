@@ -51,6 +51,8 @@ public class RecipeController {
     private UserService userService;
     @Autowired
     private RecipeStepDAO recipeStepDAO;
+    @Autowired
+    private  LikeDAO likeDAO;
 
 
     /**
@@ -58,7 +60,7 @@ public class RecipeController {
      * @return
      */
     //获取所有菜谱 按时间排序
-    @PostMapping("api/recipelist")
+    @GetMapping("api/recipelist")
     @ResponseBody
     public List<Recipe> getAllRecipes(){
         List<Recipe> recipes=recipeDAO.getAllRecipes();
@@ -204,15 +206,23 @@ public class RecipeController {
      */
     @PostMapping("api/like")
     @ResponseBody
-    public Result likeRecipe(@RequestParam(value = "recipeId") int rId, HttpSession httpSession) {
+    public Result likeRecipe(@RequestParam(value = "recipeId") int rId,@RequestParam(value = "userId")int userId) {
         try {
-            User user = (User) httpSession.getAttribute("User");
+            User user = userService.getuserInfoById(userId);
             int uId;
             uId = user.getUserId();
             Recipe recipe = recipeService.getRecipeById(rId);
-            collectService.addLikeToRecipe(recipe, uId);
+            Like like=new Like();
+
+            like.setLikeUserId(userId);
+            like.setLikeRecipeId(rId);
+            DateUtil date=new DateUtil();
+            like.setLikeTime(date.getTime());
+            likeDAO.insertLike(like);
+            System.out.println("success");
             recipe.setLikeNum(recipe.getLikeNum() + 1);
-            return ResultFactory.buildSuccessResult(recipe);
+            recipeDAO.updateRecipeLike(recipe);
+            return ResultFactory.buildSuccessResult(recipeService.getRecipeById(recipe.getRecipeId()));
 
         } catch(Exception e) {
             return ResultFactory.buildFailResult("点赞失败！");
@@ -236,18 +246,28 @@ public class RecipeController {
      */
     @PostMapping("api/collect")
     @ResponseBody
-    public Result collectRecipe(@RequestParam(value = "recipeId") int rId, @RequestParam int userId) {
+    public Result collectRecipe(@RequestParam(value = "recipeId") int rId, @RequestParam(value = "userId") int userId) {
         String cName="DEFAULT";
-        if(collectService.ifExist(userId, cName)) {
-            int recipeNums = collectionDAO.getRecipeNums(userId);
-            Collection c = new Collection();
-            c.setCollectionId(recipeNums+1);
-            c.setCollectionName(cName);
-            c.setCollectionRecipeId(rId);
-            c.setCollectionUserId(userId);
-            collectionDAO.addCollection(c);
-            return ResultFactory.buildSuccessResult(c);
-        } else {
+//        if(collectService.ifExist(userId, cName)) {
+//            int recipeNums = collectionDAO.getRecipeNums(userId);
+//            Collection c = new Collection();
+//            c.setCollectionId(recipeNums+1);
+//            c.setCollectionName(cName);
+//            c.setCollectionRecipeId(rId);
+//            c.setCollectionUserId(userId);
+//            collectionDAO.addCollection(c);
+//            return ResultFactory.buildSuccessResult(c);
+//        } else {
+        try{
+            int cId=collectionDAO.getRecipeNums(userId);
+            Collection collection= new Collection();
+            collection.setCollectionId(cId);
+            collection.setCollectionName("wu");
+            collection.setCollectionUserId(userId);
+            collection.setCollectionRecipeId(rId);
+            collectionDAO.addCollection(collection);
+            return ResultFactory.buildSuccessResult(collection);
+        }catch (Exception e){
             return ResultFactory.buildFailResult("该收藏夹不存在！");
         }
     }
