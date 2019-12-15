@@ -81,10 +81,11 @@ public class FollowController {
         }
     }
 
+
     /**
      * 用户进行取关
-     * @param httpSession
-     * @param followingUser 【我们取关的用户】
+     * @param followingUserId
+     * @param userId
      * @return
      */
     @PostMapping("/unfollow")
