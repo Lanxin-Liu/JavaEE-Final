@@ -5,6 +5,7 @@ import com.healthykitchen.springboot.dao.LikeDAO;
 import com.healthykitchen.springboot.pojo.Collection;
 import com.healthykitchen.springboot.pojo.Like;
 import com.healthykitchen.springboot.pojo.Recipe;
+import com.healthykitchen.springboot.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,11 +51,7 @@ public class CollectService {
     /**
      * 添加like
      */
-    public void addLikeToRecipe(Recipe recipe, int uId) {
-        Like like = new Like();
-        like.setRecipeId(recipe.getRecipeId());
-        like.setTime(new Date());
-        like.setUserId(uId);
+    public void addLikeToRecipe(Like like) {
         likeDAO.insertLike(like);
     }
 
