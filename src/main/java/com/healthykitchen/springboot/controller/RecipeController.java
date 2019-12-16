@@ -297,8 +297,9 @@ public class RecipeController {
      */
     @PostMapping("api/release")
     @ResponseBody
-    public Result releaseRecipe(@RequestParam String recipeDesc, @RequestParam String recipeName, @RequestParam int size, @RequestParam String recipeTag,
-                                @RequestParam List<MultipartFile> picList,@RequestParam int userId,@RequestParam(value = "materialName[]")List<String> materialName,@RequestParam("materialCount[]") int[] materialCount) {
+    public Result releaseRecipe(@RequestParam String recipeDesc, @RequestParam String recipeName, @RequestParam int size, @RequestParam String recipeTag, @RequestParam MultipartFile pic,
+                                @RequestParam List<MultipartFile> picList,@RequestParam int userId,@RequestParam(value = "materialName[]")List<String> materialName,@RequestParam("materialCount[]") int[] materialCount,
+                                @RequestParam List<String> stepDesc) {
         try {
             Recipe r = new Recipe();
             DateUtil date = new DateUtil();
@@ -323,24 +324,31 @@ public class RecipeController {
                 rm.setMaterialCount(materialCount[i]);
                 recipeService.addRecipeMaterial(rm);
             }
+            for(int i=0;i<stepDesc.size();i++) {
+                RecipeContent rc = new RecipeContent();
+                rc.setStepDesc(stepDesc.get(i));
+                rc.setImage(upload(picList.get(i)));
+                rc.setRecipeId(r.getRecipeId());
+                rc.setStepId(i);
+                recipeStepDAO.addRecipeStep(rc);
+            }
             return ResultFactory.buildSuccessResult(r);
         } catch (Exception e) {
             return ResultFactory.buildFailResult("添加菜谱失败！");
         }
     }
 
-
-    public void addStepToRecipe(List<MultipartFile> picList, List<RecipeContent> recipeContentList, int recipeId) {
-        int i = 0;
-        for(RecipeContent r: recipeContentList) {
-            RecipeContent rs = r;
-            rs.setImage(upload(picList.get(i)));
-            rs.setStepId(recipeService.countRecipeStep(recipeId) + 1);
-            rs.setRecipeId(recipeId);
-            recipeService.addStep(rs);
-            i++;
-        }
-    }
+//    public void addStepToRecipe(List<MultipartFile> picList, List<RecipeContent> recipeContentList, int recipeId) {
+//        int i = 0;
+//        for(RecipeContent r: recipeContentList) {
+//            RecipeContent rs = r;
+//            rs.setImage(upload(picList.get(i)));
+//            rs.setStepId(recipeService.countRecipeStep(recipeId) + 1);
+//            rs.setRecipeId(recipeId);
+//            recipeService.addStep(rs);
+//            i++;
+//        }
+//    }
 
 
 //    @GetMapping("api/test")
