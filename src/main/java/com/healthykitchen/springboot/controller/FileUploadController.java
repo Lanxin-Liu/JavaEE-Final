@@ -43,7 +43,7 @@ public class FileUploadController {
         String fileName = pic.getOriginalFilename();//得到文件名
         String suffixName = fileName.substring(fileName.lastIndexOf("."));//得到后缀名
         System.err.println("suffixName:" + suffixName);
-        String filepath = "/Users/anonym_co/Desktop/";//指定图片上传到哪个文件夹的路径
+        String filepath = "/Users/sienna99/Desktop/";//指定图片上传到哪个文件夹的路径
         fileName = UUID.randomUUID() + suffixName;//重新命名图片，变成随机的名字
         System.err.println("fileName:" + fileName);
         File dest = new File(filepath + fileName);//在上传的文件夹处创建文件

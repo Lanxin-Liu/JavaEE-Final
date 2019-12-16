@@ -297,8 +297,8 @@ public class RecipeController {
      */
     @PostMapping("api/release")
     @ResponseBody
-    public Result releaseRecipe(@RequestParam String recipeDesc, @RequestParam String recipeName, @RequestParam int size, @RequestParam String recipeTag, @RequestParam MultipartFile pic,
-                                @RequestParam List<MultipartFile> picList,@RequestParam int userId,@RequestParam(value = "materialName[]")List<String> materialName,@RequestParam("materialCount[]") int[] materialCount,
+    public Result releaseRecipe(@RequestParam String recipeDesc, @RequestParam String recipeName, @RequestParam int size, @RequestParam String recipeTag, MultipartFile pic,
+                                @RequestParam MultipartFile[] picList,@RequestParam int userId,@RequestParam(value = "materialName")List<String> materialName,@RequestParam("materialCount") int[] materialCount,
                                 @RequestParam List<String> stepDesc) {
         try {
             Recipe r = new Recipe();
@@ -308,30 +308,51 @@ public class RecipeController {
             r.setRecipeDesc(recipeDesc);
             r.setRecipeTag(recipeTag);
             r.setSize(size);
-//            r.setRecipeImage(upload(pic));
+            r.setRecipeImage(upload(pic));
             r.setRecipeTime(date.getTime());
             r.setRecipeUserId(uId);
+            System.out.println("succ");
             recipeService.addRecipe(r);
+            System.out.println("succ");
 //            for(RecipeMaterial rm:recipeMaterials){
 //                rm.setRecipeId(r.getRecipeId());
 //            }
 //            recipeService.addRecipeMaterial(recipeMaterials);
 //            addStepToRecipe(picList,recipeStepList,r.getRecipeId());
+            System.out.println(r.getRecipeId()+r.getRecipeName()+r.getRecipeTag()+r.getRecipeTime());
+            System.out.println(stepDesc.size());
             for(int i=0;i<materialName.size();i++) {
                 RecipeMaterial rm = new RecipeMaterial();
                 rm.setRecipeId(r.getRecipeId());
                 rm.setMaterialName(materialName.get(i));
                 rm.setMaterialCount(materialCount[i]);
                 recipeService.addRecipeMaterial(rm);
+                System.out.println("succ");
             }
+            System.out.println("菜谱id为："+r.getRecipeId());
             for(int i=0;i<stepDesc.size();i++) {
+                System.out.println("succ");
                 RecipeContent rc = new RecipeContent();
                 rc.setStepDesc(stepDesc.get(i));
-                rc.setImage(upload(picList.get(i)));
+                System.out.println("菜谱id为："+r.getRecipeId());
+                rc.setImage(upload(picList[i]));
+                System.out.println("菜谱id为："+r.getRecipeId());
                 rc.setRecipeId(r.getRecipeId());
                 rc.setStepId(i);
+                System.out.println("菜谱id为："+r.getRecipeId());
                 recipeStepDAO.addRecipeStep(rc);
+                System.out.println("succ");
             }
+            System.out.println("菜谱id为："+r.getRecipeId());
+//            for(int i=0;i<stepDesc.size();i++) {
+//                RecipeContent rc = new RecipeContent();
+//                rc.setStepDesc(stepDesc.get(i));
+//                rc.setImage(upload(picList.get(i)));
+//                rc.setRecipeId(r.getRecipeId());
+//                rc.setStepId(i);
+//                recipeStepDAO.addRecipeStep(rc);
+//                System.out.println("succ");
+//            }
             return ResultFactory.buildSuccessResult(r);
         } catch (Exception e) {
             return ResultFactory.buildFailResult("添加菜谱失败！");
@@ -461,7 +482,7 @@ public class RecipeController {
     @PostMapping("api/covers")
     @ResponseBody
     public String upload(MultipartFile file) {
-        String folder = "/Users/anonym_co/Desktop/1";
+        String folder = "/Users/sienna99/Desktop/1";
         File imageFolder = new File(folder);
         File f = new File(imageFolder, getRandomString(6) + file.getOriginalFilename()
                 .substring(file.getOriginalFilename().length() - 4));

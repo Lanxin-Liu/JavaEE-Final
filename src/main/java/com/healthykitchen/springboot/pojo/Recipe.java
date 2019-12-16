@@ -9,6 +9,7 @@ package com.healthykitchen.springboot.pojo;
  */
 
 public class Recipe {
+
     private int recipeId;
 
     private String recipeName;

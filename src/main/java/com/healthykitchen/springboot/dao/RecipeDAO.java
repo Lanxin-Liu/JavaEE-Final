@@ -1,12 +1,9 @@
 package com.healthykitchen.springboot.dao;
 
 import com.healthykitchen.springboot.pojo.Recipe;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,6 +18,7 @@ import java.util.List;
 @Repository
 public interface RecipeDAO {
     @Insert("insert into Recipe (recipe_name, recipe_time, recipe_tag, recipe_image, size, recipe_user_id) values (#{recipeName},#{recipeTime},#{recipeTag},#{recipeImage},#{size},#{recipeUserId})")
+    @Options(useGeneratedKeys=true, keyProperty="recipeId")
     void addRecipe(Recipe recipe);
 
     @Select("SELECT * FROM Recipe order by recipe_time desc")
