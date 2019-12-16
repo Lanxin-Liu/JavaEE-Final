@@ -13,10 +13,8 @@ import com.healthykitchen.springboot.service.TagService;
 import com.healthykitchen.springboot.service.UserService;
 import com.healthykitchen.springboot.utils.DateUtil;
 
-import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,7 +56,7 @@ public class RecipeController {
      * @return
      */
     //获取所有菜谱 按时间排序
-    @PostMapping("api/recipelist")
+    @GetMapping("api/recipelist")
     @ResponseBody
     public List<Recipe> getAllRecipes(){
         List<Recipe> recipes=recipeDAO.getAllRecipes();
@@ -69,10 +67,10 @@ public class RecipeController {
         return recipes;
     }
 
-    @PostMapping("api/steplist")
+    @GetMapping("api/steplist")
     @ResponseBody
-    public List<RecipeStep> getStepInRecipe(@RequestParam Recipe recipe){
-        List<RecipeStep> rs = recipeStepDAO.getRecipeStepList(recipe);
+    public List<RecipeContent> getStepInRecipe(@RequestParam Recipe recipe){
+        List<RecipeContent> rs = recipeStepDAO.getRecipeStepList(recipe);
         return rs;
     }
 
@@ -199,16 +197,14 @@ public class RecipeController {
     /**
      * 【菜谱页】点赞菜谱
      * @param rId
-     * @param httpSession
      * @return
      */
     @PostMapping("api/like")
     @ResponseBody
-    public Result likeRecipe(@RequestParam(value = "recipeId") int rId, HttpSession httpSession) {
+    public Result likeRecipe(@RequestParam(value = "recipeId") int rId, int userId) {
         try {
-            User user = (User) httpSession.getAttribute("User");
             int uId;
-            uId = user.getUserId();
+            uId = userId;
             Recipe recipe = recipeService.getRecipeById(rId);
             collectService.addLikeToRecipe(recipe, uId);
             recipe.setLikeNum(recipe.getLikeNum() + 1);
@@ -282,8 +278,10 @@ public class RecipeController {
      */
     @PostMapping("api/release")
     @ResponseBody
-    public Result releaseRecipe(@RequestParam MultipartFile pic, @RequestParam String recipeDesc, @RequestParam String recipeName, @RequestParam int size, @RequestParam String recipeTag,
-                                @RequestParam List<MultipartFile> picList,@RequestParam List<RecipeStep> recipeStepList, int userId,@RequestParam List<RecipeMaterial> recipeMaterials) {
+    public Result releaseRecipe(@RequestParam MultipartFile pic, @RequestParam String recipeDesc, @RequestParam String recipeName,
+                                @RequestParam int size, @RequestParam String recipeTag,
+                                @RequestParam List<MultipartFile> picList,@RequestParam List<RecipeContent> recipeContentList
+            , int userId,@RequestParam List<RecipeMaterial> recipeMaterials) {
         try {
             Recipe r = new Recipe();
             DateUtil date = new DateUtil();
@@ -296,11 +294,11 @@ public class RecipeController {
             r.setRecipeTime(date.getTime());
             r.setRecipeUserId(uId);
             recipeService.addRecipe(r);
-            for(RecipeMaterial rm:recipeMaterials){
+            for(RecipeMaterial rm:recipeMaterials) {
                 rm.setRecipeId(r.getRecipeId());
             }
             recipeService.addRecipeMaterial(recipeMaterials);
-            addStepToRecipe(picList,recipeStepList,r.getRecipeId());
+            addStepToRecipe(picList, recipeContentList,r.getRecipeId());
             return ResultFactory.buildSuccessResult(r);
         } catch (Exception e) {
             return ResultFactory.buildFailResult("添加菜谱失败！");
@@ -308,10 +306,10 @@ public class RecipeController {
     }
 
 
-    public void addStepToRecipe(List<MultipartFile> picList, List<RecipeStep> recipeStepList, int recipeId) {
+    public void addStepToRecipe(List<MultipartFile> picList, List<RecipeContent> recipeContentList, int recipeId) {
         int i = 0;
-        for(RecipeStep r:recipeStepList) {
-            RecipeStep rs = r;
+        for(RecipeContent r: recipeContentList) {
+            RecipeContent rs = r;
             rs.setImage(upload(picList.get(i)));
             rs.setStepId(recipeService.countRecipeStep(recipeId) + 1);
             rs.setRecipeId(recipeId);
@@ -405,25 +403,58 @@ public class RecipeController {
         return ResultFactory.buildSuccessResult(detail);
     }
 
-    public String upload(MultipartFile pic){
-        if (pic.isEmpty()) {
-            System.err.println("上传文件不可为空");
-        }
-        String fileName = pic.getOriginalFilename();//得到文件名
-        String suffixName = fileName.substring(fileName.lastIndexOf("."));//得到后缀名
-        System.err.println("suffixName:" + suffixName);
-        String filepath = "/Users/anonym_co/Desktop/";//指定图片上传到哪个文件夹的路径
-        fileName = UUID.randomUUID() + suffixName;//重新命名图片，变成随机的名字
-        System.err.println("fileName:" + fileName);
-        File dest = new File(filepath + fileName);//在上传的文件夹处创建文件
+//    public String upload(MultipartFile pic){
+//        if (pic.isEmpty()) {
+//            System.err.println("上传文件不可为空");
+//        }
+//        String fileName = pic.getOriginalFilename();//得到文件名
+//        String suffixName = fileName.substring(fileName.lastIndexOf("."));//得到后缀名
+//        System.err.println("suffixName:" + suffixName);
+//        String filepath = "/Users/anonym_co/Desktop/";//指定图片上传到哪个文件夹的路径
+//        fileName = UUID.randomUUID() + suffixName;//重新命名图片，变成随机的名字
+//        System.err.println("fileName:" + fileName);
+//        File dest = new File(filepath + fileName);//在上传的文件夹处创建文件
+//        try {
+//            pic.transferTo(dest);//把上传的图片写入磁盘中
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return filepath+fileName;
+//
+//    }
+
+    @PostMapping("api/covers")
+    @ResponseBody
+    public String upload(MultipartFile file) {
+        String folder = "/Users/anonym_co/Desktop/1";
+        File imageFolder = new File(folder);
+        File f = new File(imageFolder, getRandomString(6) + file.getOriginalFilename()
+                .substring(file.getOriginalFilename().length() - 4));
+        String filename = file.getName();
+        if (!f.getParentFile().exists())
+            f.getParentFile().mkdirs();
         try {
-            pic.transferTo(dest);//把上传的图片写入磁盘中
+            file.transferTo(f);
+//            System.out.println(file.getOriginalFilename());
+//            System.out.println("http://localhost:8443/api/file/" + f.getName());
+            String imgURL = "http://localhost:8443/api/file/" + f.getName();
+            return imgURL;
         } catch (IOException e) {
             e.printStackTrace();
+            return "";
         }
+    }
 
-        return filepath+fileName;
-
+    public String getRandomString(int length) {
+        String base = "abcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int number = random.nextInt(base.length());
+            sb.append(base.charAt(number));
+        }
+        return sb.toString();
     }
 
 }

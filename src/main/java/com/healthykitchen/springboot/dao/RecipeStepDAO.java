@@ -1,8 +1,7 @@
 package com.healthykitchen.springboot.dao;
 
 import com.healthykitchen.springboot.pojo.Recipe;
-import com.healthykitchen.springboot.pojo.RecipeStep;
-import com.healthykitchen.springboot.service.RecipeService;
+import com.healthykitchen.springboot.pojo.RecipeContent;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -19,11 +18,11 @@ import java.util.List;
 @Repository
 public interface RecipeStepDAO {
     @Insert("insert into Recipe_Content (step_id, step_recipe_id, step_desc, step_image) values (#{stepId},#{stepRecipeId},#{stepDesc},#{stepImage})")
-    void addRecipeStep(RecipeStep step);
+    void addRecipeStep(RecipeContent step);
 
     @Select("select count(*) from Recipe_Content where step_recipe_id = #{recipeId}")
     int getRecipeStepNum(int recipeId);
 
     @Select("select * from Recipe_Content where step_recipe_id = #{recipeId}")
-    List<RecipeStep> getRecipeStepList(Recipe recipe);
+    List<RecipeContent> getRecipeStepList(Recipe recipe);
 }

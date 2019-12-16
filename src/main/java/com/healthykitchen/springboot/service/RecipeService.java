@@ -4,7 +4,6 @@ import com.healthykitchen.springboot.dao.*;
 import com.healthykitchen.springboot.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.HtmlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,7 @@ public class RecipeService {
         return recipeDAO;
     }
 
-    public void addStep(RecipeStep rs) {
+    public void addStep(RecipeContent rs) {
         rsDAO.addRecipeStep(rs);
     }
 

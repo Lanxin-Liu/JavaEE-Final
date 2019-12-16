@@ -1,27 +1,17 @@
 package com.healthykitchen.springboot.pojo;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.io.Serializable;
-
 /**
  * @className:
  * @description:
  * @author: Liu Lanxin
- * @date: 20:18 2019/11/19
+ * @date: 02:51 2019/11/22
  * @version: v1.0
  */
-@JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-public class RecipeContent implements Serializable {
-
+public class RecipeContent {
     private int stepId;
-
-    private int recipeId;
-
+    private int stepRecipeId;
     private String stepDesc;
-
-    private byte[] stepImage;
+    private String stepImage;
 
     public int getStepId() {
         return stepId;
@@ -32,11 +22,11 @@ public class RecipeContent implements Serializable {
     }
 
     public int getRecipeId() {
-        return recipeId;
+        return stepRecipeId;
     }
 
     public void setRecipeId(int recipeId) {
-        this.recipeId = recipeId;
+        this.stepRecipeId = recipeId;
     }
 
     public String getStepDesc() {
@@ -47,11 +37,11 @@ public class RecipeContent implements Serializable {
         this.stepDesc = stepDesc;
     }
 
-    public byte[] getStepImage() {
+    public String getImage() {
         return stepImage;
     }
 
-    public void setStepImage(byte[] stepImage) {
-        this.stepImage = stepImage;
+    public void setImage(String image) {
+        this.stepImage = image;
     }
 }
