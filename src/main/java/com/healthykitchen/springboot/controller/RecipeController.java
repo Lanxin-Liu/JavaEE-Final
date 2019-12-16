@@ -15,7 +15,6 @@ import com.healthykitchen.springboot.utils.DateUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,7 +48,7 @@ public class RecipeController {
     @Autowired
     private UserService userService;
     @Autowired
-    private RecipeStepDAO recipeStepDAO;
+    private RecipeStepDAO recipeContentDAO;
     @Autowired
     private  LikeDAO likeDAO;
 
@@ -70,10 +69,11 @@ public class RecipeController {
         return recipes;
     }
 
-    @GetMapping("api/steplist")
+    @PostMapping("api/steplist")
     @ResponseBody
-    public List<RecipeContent> getStepInRecipe(@RequestParam Recipe recipe){
-        List<RecipeContent> rs = recipeStepDAO.getRecipeStepList(recipe);
+    public List<RecipeContent> getStepInRecipe(@RequestParam int recipeId){
+        Recipe recipe = recipeService.getRecipeById(recipeId);
+        List<RecipeContent> rs = recipeContentDAO.getRecipeStepList(recipe);
         return rs;
     }
 
@@ -296,11 +296,10 @@ public class RecipeController {
     /**
      * 【主页】发布菜谱
      */
-    @PostMapping("api/release")
+    @PostMapping(value = "api/release")
     @ResponseBody
     public Result releaseRecipe(@RequestParam String recipeDesc, @RequestParam String recipeName, @RequestParam int size, @RequestParam String recipeTag, MultipartFile pic,
-                                @RequestParam MultipartFile[] picList,@RequestParam int userId,@RequestParam(value = "materialName")List<String> materialName,@RequestParam("materialCount") int[] materialCount,
-                                @RequestParam List<String> stepDesc) {
+                                @RequestParam int userId,@RequestParam(value = "materialName")String[] materialName,@RequestParam("materialCount") int[] materialCount) {
         try {
             Recipe r = new Recipe();
             DateUtil date = new DateUtil();
@@ -312,52 +311,15 @@ public class RecipeController {
             r.setRecipeImage(upload(pic));
             r.setRecipeTime(date.getTime());
             r.setRecipeUserId(uId);
-            System.out.println("succ");
             recipeService.addRecipe(r);
-            System.out.println("succ");
-//            for(RecipeMaterial rm:recipeMaterials){
-//                rm.setRecipeId(r.getRecipeId());
-//            }
-//            recipeService.addRecipeMaterial(recipeMaterials);
-//            addStepToRecipe(picList,recipeStepList,r.getRecipeId());
-            System.out.println(r.getRecipeId()+r.getRecipeName()+r.getRecipeTag()+r.getRecipeTime());
-            System.out.println(stepDesc.size());
-            for(int i=0;i<materialName.size();i++) {
+
+            for(int i=0;i<materialName.length;i++) {
                 RecipeMaterial rm = new RecipeMaterial();
                 rm.setRecipeId(r.getRecipeId());
-                rm.setMaterialName(materialName.get(i));
+                rm.setMaterialName(materialName[i]);
                 rm.setMaterialCount(materialCount[i]);
                 recipeService.addRecipeMaterial(rm);
-                System.out.println("succ");
             }
-            System.out.println("菜谱id为："+r.getRecipeId());
-            for(MultipartFile mf:picList){
-                System.out.println(mf.getName());
-            }
-            for(int i=0;i<stepDesc.size();i++) {
-                System.out.println("succ");
-                RecipeContent rc = new RecipeContent();
-                rc.setStepDesc(stepDesc.get(i));
-                System.out.println("菜谱id为："+r.getRecipeId());
-                rc.setImage(upload(picList[i]));
-                System.out.println("菜谱id为："+r.getRecipeId());
-                rc.setRecipeId(r.getRecipeId());
-                rc.setStepId(i);
-                System.out.println("菜谱id为："+r.getRecipeId());
-                recipeStepDAO.addRecipeStep(1,1,"dgks","sbad");
-//                recipeStepDAO.addRecipeStep(rc);
-                System.out.println("succ");
-            }
-            System.out.println("菜谱id为："+r.getRecipeId());
-//            for(int i=0;i<stepDesc.size();i++) {
-//                RecipeContent rc = new RecipeContent();
-//                rc.setStepDesc(stepDesc.get(i));
-//                rc.setImage(upload(picList.get(i)));
-//                rc.setRecipeId(r.getRecipeId());
-//                rc.setStepId(i);
-//                recipeStepDAO.addRecipeStep(rc);
-//                System.out.println("succ");
-//            }
             return ResultFactory.buildSuccessResult(r);
         } catch (Exception e) {
             return ResultFactory.buildFailResult("添加菜谱失败！");
@@ -366,31 +328,25 @@ public class RecipeController {
 
     @PostMapping("api/mupload")
     @ResponseBody
-    public Result uploadmore(MultipartFile[] picList,String[] stepDesc,@RequestParam int recipeId)
+    public void uploadmore(@RequestParam String[] stepDesc, @RequestParam MultipartFile picList)
     {
+        int recipeId = recipeDAO.getRecipeNum();
+        System.out.println(stepDesc.length);
         try{
-
-            for(int i=0;i<stepDesc.length;i++){
-                System.out.println("succ");
+            for(int i=0;i<stepDesc.length;i++) {
                 RecipeContent rc = new RecipeContent();
                 rc.setStepDesc(stepDesc[i]);
-                System.out.println("菜谱id为："+rc.getStepDesc());
-                rc.setImage(upload(picList[i]));
-                System.out.println("菜谱id"+rc.getImage());
+                rc.setImage(upload(picList));
                 rc.setRecipeId(recipeId);
                 rc.setStepId(i+1);
-                System.out.println("菜谱id为："+rc.getStepId());
-                System.out.println(rc.getRecipeId());
-                recipeStepDAO.addRecipeStep(1,2,"t","gkbm");
-                recipeStepDAO.addRecipeStep(rc.getStepId(),rc.getRecipeId(),rc.getStepDesc(),rc.getImage());
-                System.out.println("succ");
+                recipeContentDAO.addRecipeStep(rc.getStepId(),rc.getRecipeId(),rc.getStepDesc(),rc.getImage());
             }
-            return ResultFactory.buildSuccessResult("yes!");
         }
         catch (Exception e) {
-            return ResultFactory.buildFailResult("no!");
+            System.out.println("错了！");
         }
     }
+
 //    public void addStepToRecipe(List<MultipartFile> picList, List<RecipeContent> recipeContentList, int recipeId) {
 //        int i = 0;
 //        for(RecipeContent r: recipeContentList) {
@@ -511,10 +467,8 @@ public class RecipeController {
 //
 //    }
 
-    @PostMapping("api/covers")
-    @ResponseBody
     public String upload(MultipartFile file) {
-        String folder = "/Users/sienna99/Desktop/1";
+        String folder = "/Users/anonym_co/Desktop/1";
         File imageFolder = new File(folder);
         File f = new File(imageFolder, getRandomString(6) + file.getOriginalFilename()
                 .substring(file.getOriginalFilename().length() - 4));
