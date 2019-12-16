@@ -50,5 +50,8 @@ public interface RecipeDAO {
     @Update("UPDATE Recipe SET calorie=#{calorie} where recipe_id=#{recipeId}")
     void updateRecipeCalorie(Recipe recipe);
 
+    @Update("UPDATE Recipe SET like_num=#{likeNum} where recipe_id=#{recipeId}")
+    void updateRecipeLike(Recipe recipe);
+
 
 }

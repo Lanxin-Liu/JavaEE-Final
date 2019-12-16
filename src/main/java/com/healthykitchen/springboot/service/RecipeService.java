@@ -56,23 +56,43 @@ public class RecipeService {
         recipeDAO.addRecipe(recipe);
     }
 
-    public void addRecipeMaterial(List<RecipeMaterial> recipeMaterials){
-        for (RecipeMaterial rm:recipeMaterials){
-            recipeMaterialDAO.addRecipeMaterial(rm);
-        }
+    public void addRecipeMaterial(RecipeMaterial recipeMaterials){
+//        for (RecipeMaterial rm:recipeMaterials){
+////            System.out.println(rm.getRecipeId());
+////            System.out.println(rm.getMaterialCount());
+////            System.out.println(rm.getMaterialName());
+//            RecipeMaterial recipeMaterial=new RecipeMaterial();
+//            System.out.println("succ");
+//            recipeMaterial.setRmRecipeId(1);
+//            recipeMaterial.setRmMaterialCount(1099);
+//            recipeMaterial.setRmMaterialName("可乐");
+//            System.out.println("succ");
+////            recipeMaterialDAO.addRecipeMaterial(rm.getRmRecipeId(),rm.getRmMaterialName(),rm.getRmMaterialCount());
+//            int t1=rm.getRmRecipeId();
+//            String t2=rm.getRmMaterialName();
+//            int bb=rm.getRmMaterialCount();
+//            System.out.println("succ");
+////            recipeMaterialDAO.addRecipeMaterial(1,"test22",1);
+//            recipeMaterialDAO.addRecipeMaterial(recipeMaterial);
+////            recipeMaterialDAO.addRecipeMaterial(1,"test22",1);
+//            System.out.println("succ");
+//        }
+        recipeMaterialDAO.addRecipeMaterial(recipeMaterials);
     }
 
     public int getRecipeCalorie(Recipe recipe){
         int rId;
         rId=recipe.getRecipeId();
         List<RecipeMaterial> rm=new ArrayList<>();
-        Material m;
         rm=recipeMaterialDAO.getRecipeMaterial(rId);
+        System.out.println("该菜谱卡路里为"+0);
         int totc=0;//总卡路里
-        int count;
-        int ec;//单位卡路里
+        int count=0;
+        int ec=0;//单位卡路里
         for (RecipeMaterial i:rm){
+            Material m=new Material();
             m=materialDao.getMaterialCalorie(i.getMaterialName());
+            System.out.println(m.getCalorie());
             //System.out.println(m.getCalorie()+"aaaaa"+m.getMaterialName());
             ec=m.getCalorie();
             count=i.getMaterialCount();

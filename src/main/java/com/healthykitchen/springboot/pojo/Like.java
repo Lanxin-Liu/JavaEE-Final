@@ -10,40 +10,42 @@ import java.util.Date;
  * @version: v1.0
  */
 public class Like {
-    private int likeId;
-    private int likeRecipeId;
-    private int likeUserId;
-    private Date likeTime;
-
-    public int getId() {
+    public int getLikeId() {
         return likeId;
     }
 
-    public void setId(int id) {
-        this.likeId = id;
+    public void setLikeId(int likeId) {
+        this.likeId = likeId;
     }
 
-    public int getRecipeId() {
+    public int getLikeRecipeId() {
         return likeRecipeId;
     }
 
-    public void setRecipeId(int recipeId) {
-        this.likeRecipeId = recipeId;
+    public void setLikeRecipeId(int likeRecipeId) {
+        this.likeRecipeId = likeRecipeId;
     }
 
-    public int getUserId() {
+    public int getLikeUserId() {
         return likeUserId;
     }
 
-    public void setUserId(int userId) {
-        this.likeUserId = userId;
+    public void setLikeUserId(int likeUserId) {
+        this.likeUserId = likeUserId;
     }
 
-    public Date getTime() {
+    public String getLikeTime() {
         return likeTime;
     }
 
-    public void setTime(Date time) {
-        this.likeTime = time;
+    public void setLikeTime(String likeTime) {
+        this.likeTime = likeTime;
     }
+
+    private int likeId;
+    private int likeRecipeId;
+    private int likeUserId;
+    private String likeTime;
+
+
 }

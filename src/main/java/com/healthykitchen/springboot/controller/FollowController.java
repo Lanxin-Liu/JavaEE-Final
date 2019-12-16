@@ -10,6 +10,7 @@ import com.healthykitchen.springboot.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -56,7 +57,7 @@ public class FollowController {
      * @param followingUser【本用户关注的用户】
      * @return
      */
-    @GetMapping("api/follow")
+    @PostMapping("api/follow")
     @ResponseBody
     public Result follow(@RequestParam(value = "followingUserId")int followingUserId,@RequestParam(value = "userId")int userId) {
         //ResultFactory resultFactory=new ResultFactory();
@@ -80,13 +81,14 @@ public class FollowController {
         }
     }
 
+
     /**
      * 用户进行取关
-     * @param httpSession
-     * @param followingUser 【我们取关的用户】
+     * @param followingUserId
+     * @param userId
      * @return
      */
-    @GetMapping("/unfollow")
+    @PostMapping("/unfollow")
     @ResponseBody
     public Result unfollow(@RequestParam(value = "followingUserId")int followingUserId,@RequestParam(value = "userId")int userId) {
         //ResultFactory resultFactory=new ResultFactory();

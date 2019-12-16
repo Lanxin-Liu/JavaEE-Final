@@ -49,6 +49,8 @@ public class RecipeController {
     private UserService userService;
     @Autowired
     private RecipeStepDAO recipeStepDAO;
+    @Autowired
+    private  LikeDAO likeDAO;
 
 
     /**
@@ -201,14 +203,23 @@ public class RecipeController {
      */
     @PostMapping("api/like")
     @ResponseBody
-    public Result likeRecipe(@RequestParam(value = "recipeId") int rId, int userId) {
+    public Result likeRecipe(@RequestParam(value = "recipeId") int rId,@RequestParam(value = "userId")int userId) {
         try {
+            User user = userService.getuserInfoById(userId);
             int uId;
             uId = userId;
             Recipe recipe = recipeService.getRecipeById(rId);
-            collectService.addLikeToRecipe(recipe, uId);
+            Like like=new Like();
+
+            like.setLikeUserId(userId);
+            like.setLikeRecipeId(rId);
+            DateUtil date=new DateUtil();
+            like.setLikeTime(date.getTime());
+            likeDAO.insertLike(like);
+            System.out.println("success");
             recipe.setLikeNum(recipe.getLikeNum() + 1);
-            return ResultFactory.buildSuccessResult(recipe);
+            recipeDAO.updateRecipeLike(recipe);
+            return ResultFactory.buildSuccessResult(recipeService.getRecipeById(recipe.getRecipeId()));
 
         } catch(Exception e) {
             return ResultFactory.buildFailResult("点赞失败！");
@@ -232,18 +243,26 @@ public class RecipeController {
      */
     @PostMapping("api/collect")
     @ResponseBody
-    public Result collectRecipe(@RequestParam(value = "recipeId") int rId, @RequestParam int userId) {
+    public Result collectRecipe(@RequestParam(value = "recipeId") int rId, @RequestParam(value = "userId") int userId) {
         String cName="DEFAULT";
-        if(collectService.ifExist(userId, cName)) {
-            int recipeNums = collectionDAO.getRecipeNums(userId);
-            Collection c = new Collection();
-            c.setCollectionId(recipeNums+1);
-            c.setCollectionName(cName);
-            c.setCollectionRecipeId(rId);
-            c.setCollectionUserId(userId);
-            collectionDAO.addCollection(c);
-            return ResultFactory.buildSuccessResult(c);
-        } else {
+//        if(collectService.ifExist(userId, cName)) {
+//            int recipeNums = collectionDAO.getRecipeNums(userId);
+//            Collection c = new Collection();
+//            c.setCollectionId(recipeNums+1);
+//            c.setCollectionName(cName);
+//            c.setCollectionRecipeId(rId);
+//            c.setCollectionUserId(userId);
+//            collectionDAO.addCollection(c);
+//            return ResultFactory.buildSuccessResult(c);
+//        } else {
+        try{
+            Collection collection= new Collection();
+            collection.setCollectionName("DeFault");
+            collection.setCollectionUserId(userId);
+            collection.setCollectionRecipeId(rId);
+            collectionDAO.addCollection(collection);
+            return ResultFactory.buildSuccessResult(collection);
+        }catch (Exception e){
             return ResultFactory.buildFailResult("该收藏夹不存在！");
         }
     }
@@ -278,10 +297,8 @@ public class RecipeController {
      */
     @PostMapping("api/release")
     @ResponseBody
-    public Result releaseRecipe(@RequestParam MultipartFile pic, @RequestParam String recipeDesc, @RequestParam String recipeName,
-                                @RequestParam int size, @RequestParam String recipeTag,
-                                @RequestParam List<MultipartFile> picList,@RequestParam List<RecipeContent> recipeContentList
-            , int userId,@RequestParam List<RecipeMaterial> recipeMaterials) {
+    public Result releaseRecipe(@RequestParam String recipeDesc, @RequestParam String recipeName, @RequestParam int size, @RequestParam String recipeTag,
+                                @RequestParam List<MultipartFile> picList,@RequestParam int userId,@RequestParam(value = "materialName[]")List<String> materialName,@RequestParam("materialCount[]") int[] materialCount) {
         try {
             Recipe r = new Recipe();
             DateUtil date = new DateUtil();
@@ -290,15 +307,22 @@ public class RecipeController {
             r.setRecipeDesc(recipeDesc);
             r.setRecipeTag(recipeTag);
             r.setSize(size);
-            r.setRecipeImage(upload(pic));
+//            r.setRecipeImage(upload(pic));
             r.setRecipeTime(date.getTime());
             r.setRecipeUserId(uId);
             recipeService.addRecipe(r);
-            for(RecipeMaterial rm:recipeMaterials) {
+//            for(RecipeMaterial rm:recipeMaterials){
+//                rm.setRecipeId(r.getRecipeId());
+//            }
+//            recipeService.addRecipeMaterial(recipeMaterials);
+//            addStepToRecipe(picList,recipeStepList,r.getRecipeId());
+            for(int i=0;i<materialName.size();i++) {
+                RecipeMaterial rm = new RecipeMaterial();
                 rm.setRecipeId(r.getRecipeId());
+                rm.setMaterialName(materialName.get(i));
+                rm.setMaterialCount(materialCount[i]);
+                recipeService.addRecipeMaterial(rm);
             }
-            recipeService.addRecipeMaterial(recipeMaterials);
-            addStepToRecipe(picList, recipeContentList,r.getRecipeId());
             return ResultFactory.buildSuccessResult(r);
         } catch (Exception e) {
             return ResultFactory.buildFailResult("添加菜谱失败！");
@@ -332,7 +356,7 @@ public class RecipeController {
      */
     @PostMapping("api/addRecipeMaterial")
     @ResponseBody
-    public Result addReciepeMaterial(@RequestBody List<RecipeMaterial> recipeMaterials){
+    public Result addReciepeMaterial(@RequestParam(value = "recipeId")int recipeId,@RequestParam(value = "materialName[]")List<String> materialName,@RequestParam("materialCount[]") int[] materialCount){
         try{
 //            List<RecipeMaterial> recipeMaterials1=new ArrayList<>();
 //            RecipeMaterial temp=new RecipeMaterial();
@@ -341,12 +365,14 @@ public class RecipeController {
 //            temp.setMaterialName(materialName);
 //            temp.setMaterialCount(materialCount);
 //            recipeMaterials1.add(temp);
-            int rId=recipeDAO.getRecipeNum() ;
-            for(RecipeMaterial rm:recipeMaterials){
-                rm.setRecipeId(rId+1);
+            for(int i=0;i<materialName.size();i++) {
+                RecipeMaterial rm = new RecipeMaterial();
+                rm.setRecipeId(recipeId);
+                rm.setMaterialName(materialName.get(i));
+                rm.setMaterialCount(materialCount[i]);
+                recipeService.addRecipeMaterial(rm);
             }
-            recipeService.addRecipeMaterial(recipeMaterials);
-            return ResultFactory.buildSuccessResult(recipeMaterials);
+            return ResultFactory.buildSuccessResult("success");
         } catch (Exception e)
         {
             return ResultFactory.buildFailResult("添加食材失败！");

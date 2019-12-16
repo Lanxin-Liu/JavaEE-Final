@@ -15,9 +15,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface LikeDAO {
-    @Insert("insert into Like (like_recipe_id,like_user_id,like_time) values (#{likeRecipeId}, #{likeUserId}, #{likeTime})")
+    @Insert("insert into Love (like_recipe_id,like_user_id,like_time,like_id) values (#{likeRecipeId}, #{likeUserId}, #{likeTime},#{likeId})")
     void insertLike(Like like);
 
-    @Delete("delete from Like where like_recipe_id = #{recipeId} and like_user_id = #{userId}")
+    @Delete("delete from Love where like_recipe_id = #{recipeId} and like_user_id = #{userId}")
     void deleteLike(int recipeId, int userId);
 }
