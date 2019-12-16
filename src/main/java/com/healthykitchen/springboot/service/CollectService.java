@@ -9,6 +9,7 @@ import com.healthykitchen.springboot.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class CollectService {
     private CollectionDAO collectionDAO;
     @Autowired
     private LikeDAO likeDAO;
+    @Autowired
+    private  RecipeService recipeService;
 
     public CollectionDAO getCollectionDAO() {
         return collectionDAO;
@@ -56,7 +59,13 @@ public class CollectService {
     }
 
     public List<Recipe> getMyCollection(int UserId){
-        List<Recipe> recipes=collectionDAO.getMyCollection(UserId);
+        int[] recipeid=collectionDAO.getMyCollection(UserId);
+        List<Recipe> recipes=new ArrayList<>();
+        for (int i=0;i<recipeid.length;i++){
+            Recipe recipe=new Recipe();
+            recipe=recipeService.getRecipeById(recipeid[i]);
+            recipes.add(recipe);
+        }
         return recipes;
     }
 

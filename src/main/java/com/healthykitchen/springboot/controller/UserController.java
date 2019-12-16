@@ -1,5 +1,6 @@
 package com.healthykitchen.springboot.controller;
 
+import com.healthykitchen.springboot.dao.CollectionDAO;
 import com.healthykitchen.springboot.dao.RecipeDAO;
 import com.healthykitchen.springboot.dao.UserDAO;
 import com.healthykitchen.springboot.pojo.Collection;
@@ -42,6 +43,8 @@ public class UserController {
     private RecipeDAO recipeDAO;
     @Autowired
     private CollectService collectService;
+    @Autowired
+    private CollectionDAO collectionDAO;
 
 
     /**
@@ -144,7 +147,9 @@ public class UserController {
     @PostMapping("api/getUserCollection")
     @ResponseBody
     public List<Recipe> getUserCollection(@RequestParam(value = "userId")int userId){
+        System.out.println("collection");
         List<Recipe> recipes=collectService.getMyCollection(userId);
+        System.out.println("collection!!");
         return recipes;
     }
     /**

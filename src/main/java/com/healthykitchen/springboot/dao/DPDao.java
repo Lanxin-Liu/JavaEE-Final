@@ -27,6 +27,4 @@ public interface DPDao {
     List<DailyPlan> getUserDailyPlanByDate(String date, int userId);
 
 
-
-
 }

@@ -36,7 +36,7 @@ public interface RecipeDAO {
     @Select("SELECT distinct(recipe_id),recipe_name,recipe_time,recipe_tag,recipe_image,like_num,collect_num,size,recipe_user_id,recipe_desc FROM Recipe ,User_Info where User_Info.user_name=#{username} order by recipe_time desc;")
     List<Recipe> getRecipeByUserName(String username);
 
-    @Select("select * from Recipe where recipe_user_id=1 order by recipe_time desc")
+    @Select("select * from Recipe where recipe_user_id=#{userId} order by recipe_time desc")
     List<Recipe> getRecipeByUserId(int userId);
 
     @Select("SELECT distinct(recipe_id),recipe_name,recipe_time,recipe_tag,recipe_image,like_num,collect_num,size,recipe_user_id,recipe_desc FROM Recipe ,Tag where Tag.tag_name=#{tagName} and Recipe.recipe_tag=Tag.tag_id;")

@@ -29,15 +29,17 @@ public class RecipeService {
     private RecipeMaterialDAO recipeMaterialDAO;
     @Autowired
     private MaterialDao materialDao;
+    @Autowired
+    private RecipeStepDAO recipeStepDAO;
 
 
     public RecipeDAO getRecipeDAO() {
         return recipeDAO;
     }
 
-    public void addStep(RecipeContent rs) {
-        rsDAO.addRecipeStep(rs);
-    }
+//    public void addStep(RecipeContent rs) {
+//        rsDAO.addRecipeStep(rs);
+//    }
 
     public List<Comment> getRecipeComment(int recipeId){
         return commentDAO.getRecipeComment(recipeId);
@@ -78,6 +80,11 @@ public class RecipeService {
 //            System.out.println("succ");
 //        }
         recipeMaterialDAO.addRecipeMaterial(recipeMaterials);
+    }
+
+    public void addRecipetep(int a,int b, String c,String d){
+        System.out.println("hi!");
+        recipeStepDAO.addRecipeStep(a,b,c,d);
     }
 
     public int getRecipeCalorie(Recipe recipe){

@@ -23,10 +23,11 @@ public interface CollectionDAO {
     @Select("SELECT * FROM Collection where collection_name = #{collectionName} and collection_user_id = #{uId}")
     Collection getCollectionByUserIdAndName(int uId, String collectionName);
 
-    @Select("SELECT COUNT(collection_recipe_id) FROM Collection WHERE collection_user_id = #{uId}")
-    int getRecipeNums(int uId);
+    @Select("SELECT COUNT(collection_recipe_id) FROM Collection WHERE collection_user_id = #{userId}")
+    int getRecipeNums(int userId);
 
-    @Select("SELECT * FROM Collection where collection_user_id = #{collectionUserId}")
-    List<Recipe> getMyCollection(int collectionUserId);
+    @Select("SELECT collection_recipe_id FROM Collection where collection_user_id = #{collectionUserId}")
+    int[] getMyCollection(int collectionUserId);
+
 
 }

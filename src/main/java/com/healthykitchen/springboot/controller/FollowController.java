@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -30,11 +31,12 @@ public class FollowController {
      *
      * @return
      */
-    @GetMapping("api/followinglist")
+    @PostMapping("api/followinglist")
     @ResponseBody
     public List<User> getFollowingList(@RequestParam(value = "userId")int userId){
-        User user=userService.getuserInfoById(userId);
-        List<User> users=followService.getuserFollowing(user.getUserId());
+//        User user=userService.getuserInfoById(userId);
+        System.out.println("ok");
+        List<User> users=followService.getuserFollowing(userId);
         return users;
     }
 
@@ -43,7 +45,7 @@ public class FollowController {
      * @param httpSession
      * @return
      */
-    @GetMapping("api/followedlist")
+    @PostMapping("api/followedlist")
     @ResponseBody
     public List<User> getFollowedList(@RequestParam(value = "userId")int userId){
         User user=userService.getuserInfoById(userId);
@@ -63,22 +65,26 @@ public class FollowController {
         //ResultFactory resultFactory=new ResultFactory();
         User user=userService.getuserInfoById(userId);
         User followingUser=userService.getuserInfoById(followingUserId);
+        System.out.println("ok");
         //boolean exist=userService.existById(followingUserId);
-        try {
-            DateUtil dateUtil=new DateUtil();
-            Follow follow = new Follow();
-            String followTime = dateUtil.getTime();
-            follow.setFollowedUserId(user.getUserId());
-            follow.setFollowingUserId(followingUser.getUserId());
-            follow.setFollowTime(followTime);
-            followService.addFollow(follow);
-            followService.updateFollowing(user.getUserId());
-            followService.updateFollowed(followingUser.getUserId());
-            return ResultFactory.buildSuccessResult(follow);
-        } catch (Exception e)
-        {
-            return ResultFactory.buildFailResult("要关注的用户不存在");
-        }
+        DateUtil dateUtil=new DateUtil();
+        Follow follow = new Follow();
+        String followTime = dateUtil.getTime();
+        follow.setFollowedUserId(user.getUserId());
+        follow.setFollowingUserId(followingUser.getUserId());
+        follow.setFollowTime(followTime);
+        followService.addFollow(follow);
+        System.out.println("ok");
+        followService.updateFollowing(user.getUserId());
+        System.out.println("ok");
+        followService.updateFollowed(followingUser.getUserId());
+        System.out.println("ok");
+        List<User> users=followService.getuserFollowing(userId);
+        return ResultFactory.buildSuccessResult(follow);
+//        } catch (Exception e)
+//        {
+//            return ResultFactory.buildFailResult("要关注的用户不存在");
+//        }
     }
 
 
@@ -88,7 +94,7 @@ public class FollowController {
      * @param userId
      * @return
      */
-    @PostMapping("/unfollow")
+    @PostMapping("api/unfollow")
     @ResponseBody
     public Result unfollow(@RequestParam(value = "followingUserId")int followingUserId,@RequestParam(value = "userId")int userId) {
         //ResultFactory resultFactory=new ResultFactory();

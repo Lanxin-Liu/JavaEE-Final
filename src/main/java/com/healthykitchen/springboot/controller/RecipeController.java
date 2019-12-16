@@ -15,6 +15,7 @@ import com.healthykitchen.springboot.utils.DateUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -330,6 +331,9 @@ public class RecipeController {
                 System.out.println("succ");
             }
             System.out.println("菜谱id为："+r.getRecipeId());
+            for(MultipartFile mf:picList){
+                System.out.println(mf.getName());
+            }
             for(int i=0;i<stepDesc.size();i++) {
                 System.out.println("succ");
                 RecipeContent rc = new RecipeContent();
@@ -340,7 +344,8 @@ public class RecipeController {
                 rc.setRecipeId(r.getRecipeId());
                 rc.setStepId(i);
                 System.out.println("菜谱id为："+r.getRecipeId());
-                recipeStepDAO.addRecipeStep(rc);
+                recipeStepDAO.addRecipeStep(1,1,"dgks","sbad");
+//                recipeStepDAO.addRecipeStep(rc);
                 System.out.println("succ");
             }
             System.out.println("菜谱id为："+r.getRecipeId());
@@ -359,6 +364,33 @@ public class RecipeController {
         }
     }
 
+    @PostMapping("api/mupload")
+    @ResponseBody
+    public Result uploadmore(MultipartFile[] picList,String[] stepDesc,@RequestParam int recipeId)
+    {
+        try{
+
+            for(int i=0;i<stepDesc.length;i++){
+                System.out.println("succ");
+                RecipeContent rc = new RecipeContent();
+                rc.setStepDesc(stepDesc[i]);
+                System.out.println("菜谱id为："+rc.getStepDesc());
+                rc.setImage(upload(picList[i]));
+                System.out.println("菜谱id"+rc.getImage());
+                rc.setRecipeId(recipeId);
+                rc.setStepId(i+1);
+                System.out.println("菜谱id为："+rc.getStepId());
+                System.out.println(rc.getRecipeId());
+                recipeStepDAO.addRecipeStep(1,2,"t","gkbm");
+                recipeStepDAO.addRecipeStep(rc.getStepId(),rc.getRecipeId(),rc.getStepDesc(),rc.getImage());
+                System.out.println("succ");
+            }
+            return ResultFactory.buildSuccessResult("yes!");
+        }
+        catch (Exception e) {
+            return ResultFactory.buildFailResult("no!");
+        }
+    }
 //    public void addStepToRecipe(List<MultipartFile> picList, List<RecipeContent> recipeContentList, int recipeId) {
 //        int i = 0;
 //        for(RecipeContent r: recipeContentList) {

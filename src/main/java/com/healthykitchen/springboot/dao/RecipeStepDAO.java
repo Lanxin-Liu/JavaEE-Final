@@ -18,13 +18,14 @@ import java.util.List;
  */
 @Repository
 public interface RecipeStepDAO {
-    @Insert("insert into Recipe_Content (step_id, step_recipe_id, step_desc, step_image) values (#{stepId},#{stepRecipeId},#{stepDesc},#{stepImage})")
-    @Options(useGeneratedKeys=true, keyProperty="stepId")
-    void addRecipeStep(RecipeContent step);
+//    @Insert("insert into healthykitchen.RecipeContent (step_id, step_recipe_id, step_desc, step_image) values (#{stepId},#{stepRecipeId},#{stepDesc},#{stepImage})")
+//    void addRecipeStep(RecipeContent step);
+    @Insert("insert into healthykitchen.RecipeContent (step_id, step_recipe_id, step_desc, step_image) values (#{stepId},#{stepRecipeId},#{stepDesc},#{stepImage})")
+    void addRecipeStep(int stepId,int stepRecipeId,String stepDesc,String stepImage);
 
-    @Select("select count(*) from Recipe_Content where step_recipe_id = #{recipeId}")
+    @Select("select count(*) from healthykitchen.RecipeContent where step_recipe_id = #{recipeId}")
     int getRecipeStepNum(int recipeId);
 
-    @Select("select * from Recipe_Content where step_recipe_id = #{recipeId}")
+    @Select("select * from healthykitchen.RecipeContent where step_recipe_id = #{recipeId}")
     List<RecipeContent> getRecipeStepList(Recipe recipe);
 }
